@@ -92,6 +92,49 @@ jobs:
       - run: vp install --frozen-lockfile
       - run: vp run size
 
+  # --- PR previews (not part of the required gate) ---------------------
+
+  musea-preview:
+    if: github.event_name == 'pull_request'
+    runs-on: blacksmith-32vcpu-ubuntu-2404
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: "24"
+          cache: true
+      - run: vp install --frozen-lockfile
+      - run: vp run musea:build
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist-musea
+          destination_dir: pr/${{ github.event.number }}
+      - name: Comment the gallery link
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.number }}
+        run: |
+          URL="https://ubugeeei-prod.github.io/vue-calenadar-temporal/pr/${PR}/"
+          BODY="📅 **Musea gallery preview**: ${URL} (updated for $(git rev-parse --short HEAD))"
+          gh pr comment "$PR" --edit-last --body "$BODY" || gh pr comment "$PR" --body "$BODY"
+
+  pkg-pr-new:
+    if: github.event_name == 'pull_request'
+    runs-on: blacksmith-32vcpu-ubuntu-2404
+    steps:
+      - uses: actions/checkout@v4
+      - uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: "24"
+          cache: true
+      - run: vp install --frozen-lockfile
+      - run: vp run build
+      - run: vp dlx pkg-pr-new publish --compact
+
   # Aggregate gate: the only required status check. Job-level changes above
   # never require touching the branch ruleset.
   ci:

@@ -28,6 +28,9 @@ importers:
       '@vizejs/vite-plugin':
         specifier: ^0.291.0
         version: 0.291.0(vite@8.1.5(esbuild@0.28.1))(vue@3.6.0-rc.1(typescript@7.0.2))
+      '@vizejs/vite-plugin-musea':
+        specifier: ^0.291.0
+        version: 0.291.0(@vizejs/vite-plugin@0.291.0(vite@8.1.5(esbuild@0.28.1))(vue@3.6.0-rc.1(typescript@7.0.2)))(playwright@1.61.1)(vite@8.1.5(esbuild@0.28.1))
       '@voidzero-dev/vite-plus-core':
         specifier: latest
         version: 0.2.5(esbuild@0.28.1)(typescript@7.0.2)
@@ -1111,6 +1114,21 @@ packages:
   '@vizejs/native@0.291.0':
     resolution: {integrity: sha512-kEXiZcx8NYJN8xWsZFxrGMZxsdNwKfVQn/XTkbkI0MYr2Xj+Yx4TKP19FRd+MguVK8NIhOlFvt5PjtDB5hDplA==}
     engines: {node: '>=22'}
+
+  '@vizejs/vite-plugin-musea@0.291.0':
+    resolution: {integrity: sha512-wrNjnytFwIXBX1tZEn42UhOne03yKzeiyf4EoqZEcqnTlWC2j2sOBk6lFH1til+MVrs0v4yexLw264hmxa4EUQ==}
+    engines: {node: '>=22'}
+    hasBin: true
+    peerDependencies:
+      '@vizejs/vite-plugin': 0.291.0
+      axe-core: ^4.7.0
+      playwright: ^1.40.0
+      vite: ^7.3.0 || ^8.0.0
+    peerDependenciesMeta:
+      axe-core:
+        optional: true
+      playwright:
+        optional: true
 
   '@vizejs/vite-plugin@0.291.0':
     resolution: {integrity: sha512-ohKL5AExWG2Pk2/fMPe7bbn4m6Bx4fJ3JXkwVNGfNOID7O4AfD9nHpZQTyPeegXu8kZhs9rFAYQimnTQS7CdvA==}
@@ -2714,6 +2732,15 @@ snapshots:
       '@vizejs/native-linux-x64-musl': 0.291.0
       '@vizejs/native-win32-arm64-msvc': 0.291.0
       '@vizejs/native-win32-x64-msvc': 0.291.0
+
+  '@vizejs/vite-plugin-musea@0.291.0(@vizejs/vite-plugin@0.291.0(vite@8.1.5(esbuild@0.28.1))(vue@3.6.0-rc.1(typescript@7.0.2)))(playwright@1.61.1)(vite@8.1.5(esbuild@0.28.1))':
+    dependencies:
+      '@vizejs/native': 0.291.0
+      '@vizejs/vite-plugin': 0.291.0(vite@8.1.5(esbuild@0.28.1))(vue@3.6.0-rc.1(typescript@7.0.2))
+      pngjs: 7.0.0
+      vite: 8.1.5(esbuild@0.28.1)
+    optionalDependencies:
+      playwright: 1.61.1
 
   '@vizejs/vite-plugin@0.291.0(vite@8.1.5(esbuild@0.28.1))(vue@3.6.0-rc.1(typescript@7.0.2))':
     dependencies:
