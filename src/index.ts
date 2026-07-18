@@ -23,6 +23,15 @@ export {
 export type { CalendarMessages } from "./i18n/messages";
 export { englishMessages, mergeMessages } from "./i18n/messages";
 
+export type { MonthGrid, MonthGridDay, MonthGridOptions, MonthGridWeek } from "./month/month-grid";
+export { buildMonthGrid } from "./month/month-grid";
+
+export type { WeekGrid, WeekGridDay, WeekGridOptions } from "./week/week-grid";
+export { buildWeekGrid } from "./week/week-grid";
+
+export type { YearGrid, YearGridMonth, YearGridOptions } from "./year/year-grid";
+export { buildYearGrid } from "./year/year-grid";
+
 export type { DateRange, DayKey, DayOfWeek, MonthKey } from "./shared/date";
 export {
   clampDate,
