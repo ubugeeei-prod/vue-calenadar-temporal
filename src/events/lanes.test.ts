@@ -12,7 +12,9 @@ const segmentOf = (
   layout: ReturnType<typeof layoutEventLanes>,
   id: string,
 ): (typeof layout.segments)[number] => {
-  const segment = layout.segments.find((candidate) => candidate.event.id === id);
+  const segment = layout.segments.find(
+    (candidate) => candidate.event.id === id,
+  );
   if (segment === undefined) throw new Error(`missing segment ${id}`);
   return segment;
 };
@@ -21,7 +23,11 @@ describe("isLaneEvent", () => {
   it("selects all-day and multi-day events", () => {
     const [allDay, multiDay, timed] = normalizeEvents([
       { id: "a", start: date("2026-07-15") },
-      { id: "b", start: dateTime("2026-07-14T22:00"), end: dateTime("2026-07-15T02:00") },
+      {
+        id: "b",
+        start: dateTime("2026-07-14T22:00"),
+        end: dateTime("2026-07-15T02:00"),
+      },
       { id: "c", start: dateTime("2026-07-15T09:00") },
     ]);
     expect(allDay !== undefined && isLaneEvent(allDay)).toBe(true);
@@ -92,7 +98,9 @@ describe("layoutEventLanes", () => {
   });
 
   it("ignores events outside the week", () => {
-    const events = normalizeEvents([{ id: "faraway", start: date("2026-08-01") }]);
+    const events = normalizeEvents([
+      { id: "faraway", start: date("2026-08-01") },
+    ]);
     const layout = layoutEventLanes(events, week);
     expect(layout.segments).toHaveLength(0);
     expect(layout.laneCount).toBe(0);

@@ -28,13 +28,20 @@ export type UseCalendarEventsReturn<TEvent extends CalendarEventLike> = {
   /** Per-day buckets clipped to the visible range, sorted for display. */
   readonly index: ComputedRef<EventsByDay<TEvent>>;
   /** Events of one visible day (empty outside the range). */
-  readonly eventsOn: (date: Temporal.PlainDate) => readonly NormalizedEvent<TEvent>[];
+  readonly eventsOn: (
+    date: Temporal.PlainDate,
+  ) => readonly NormalizedEvent<TEvent>[];
   /** Timed events of one day — the week view's in-grid portion. */
-  readonly timedEventsOn: (date: Temporal.PlainDate) => readonly NormalizedEvent<TEvent>[];
+  readonly timedEventsOn: (
+    date: Temporal.PlainDate,
+  ) => readonly NormalizedEvent<TEvent>[];
   /** Spanning (all-day / multi-day) events within the visible range. */
   readonly laneEvents: ComputedRef<readonly NormalizedEvent<TEvent>[]>;
   /** Lane layout for one week row (month rows, all-day strip). */
-  readonly lanesFor: (week: DateRange, options?: EventLaneOptions) => EventLaneLayout<TEvent>;
+  readonly lanesFor: (
+    week: DateRange,
+    options?: EventLaneOptions,
+  ) => EventLaneLayout<TEvent>;
   /** Column/geometry layout for one day column of the time grid. */
   readonly placementsFor: (
     day: Temporal.PlainDate,
@@ -61,7 +68,9 @@ export function useCalendarEvents<TEvent extends CalendarEventLike>(
     }),
   );
 
-  const index = computed(() => indexEventsByDay(normalized.value, toValue(source.visibleRange)));
+  const index = computed(() =>
+    indexEventsByDay(normalized.value, toValue(source.visibleRange)),
+  );
 
   const laneEvents = computed(() => {
     const seen = new Set<string | number>();
@@ -76,15 +85,22 @@ export function useCalendarEvents<TEvent extends CalendarEventLike>(
     return spanning;
   });
 
-  function eventsOn(date: Temporal.PlainDate): readonly NormalizedEvent<TEvent>[] {
+  function eventsOn(
+    date: Temporal.PlainDate,
+  ): readonly NormalizedEvent<TEvent>[] {
     return eventsOnDay(index.value, date);
   }
 
-  function timedEventsOn(date: Temporal.PlainDate): readonly NormalizedEvent<TEvent>[] {
+  function timedEventsOn(
+    date: Temporal.PlainDate,
+  ): readonly NormalizedEvent<TEvent>[] {
     return eventsOn(date).filter((event) => !isLaneEvent(event));
   }
 
-  function lanesFor(week: DateRange, laneOptions?: EventLaneOptions): EventLaneLayout<TEvent> {
+  function lanesFor(
+    week: DateRange,
+    laneOptions?: EventLaneOptions,
+  ): EventLaneLayout<TEvent> {
     return layoutEventLanes(laneEvents.value, week, laneOptions);
   }
 
@@ -95,5 +111,13 @@ export function useCalendarEvents<TEvent extends CalendarEventLike>(
     return layoutTimeGridDay(timedEventsOn(day), day, gridOptions);
   }
 
-  return { normalized, index, eventsOn, timedEventsOn, laneEvents, lanesFor, placementsFor };
+  return {
+    normalized,
+    index,
+    eventsOn,
+    timedEventsOn,
+    laneEvents,
+    lanesFor,
+    placementsFor,
+  };
 }

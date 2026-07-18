@@ -11,12 +11,13 @@ export type MultipleDateValue = readonly Temporal.PlainDate[];
 export type RangeDateValue = DateRange | null;
 
 /** The v-model value shape for each selection mode. */
-export type DateSelectionValue<Mode extends DateSelectionMode = DateSelectionMode> =
-  Mode extends "single"
-    ? SingleDateValue
-    : Mode extends "multiple"
-      ? MultipleDateValue
-      : RangeDateValue;
+export type DateSelectionValue<
+  Mode extends DateSelectionMode = DateSelectionMode,
+> = Mode extends "single"
+  ? SingleDateValue
+  : Mode extends "multiple"
+    ? MultipleDateValue
+    : RangeDateValue;
 
 export type RangePickResult = {
   readonly pending: Temporal.PlainDate | null;
@@ -36,7 +37,10 @@ export type rangePreview = (
   pending: Temporal.PlainDate | null,
   hovered: Temporal.PlainDate | null,
 ) => RangeDateValue;
-export type selectionContains = (value: DateSelectionValue, date: Temporal.PlainDate) => boolean;
+export type selectionContains = (
+  value: DateSelectionValue,
+  date: Temporal.PlainDate,
+) => boolean;
 export type rangeEdge = (
   value: RangeDateValue,
   date: Temporal.PlainDate,
@@ -65,11 +69,13 @@ export const rangePreview: rangePreview = (pending, hovered) =>
   pending !== null && hovered !== null ? orderedRange(pending, hovered) : null;
 
 // `Array.isArray` alone does not narrow readonly arrays out of a union.
-const isDateList = (value: DateSelectionValue): value is MultipleDateValue => Array.isArray(value);
+const isDateList = (value: DateSelectionValue): value is MultipleDateValue =>
+  Array.isArray(value);
 
 export const selectionContains: selectionContains = (value, date) => {
   if (value === null) return false;
-  if (isDateList(value)) return value.some((candidate) => isSameDay(candidate, date));
+  if (isDateList(value))
+    return value.some((candidate) => isSameDay(candidate, date));
   if ("start" in value) return isBetween(date, value);
   return isSameDay(value, date);
 };

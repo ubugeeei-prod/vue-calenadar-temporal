@@ -18,7 +18,9 @@ export type RovingFocus = {
  * sanctioned imperative DOM touch, funneled through a template ref. Only
  * call it from event handlers — it is a no-op concern on the server.
  */
-export function useRovingFocus(root: MaybeRefOrGetter<HTMLElement | null>): RovingFocus {
+export function useRovingFocus(
+  root: MaybeRefOrGetter<HTMLElement | null>,
+): RovingFocus {
   async function focusActive(): Promise<void> {
     await nextTick();
     toValue(root)?.querySelector<HTMLElement>('[tabindex="0"]')?.focus();

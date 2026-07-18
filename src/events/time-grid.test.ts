@@ -20,7 +20,11 @@ const placementOf = (
 describe("layoutTimeGridDay", () => {
   it("computes fractional geometry on the full-day axis", () => {
     const events = normalizeEvents([
-      { id: "meeting", start: dateTime("2026-07-15T09:00"), end: dateTime("2026-07-15T10:30") },
+      {
+        id: "meeting",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T10:30"),
+      },
     ]);
     const [placement] = layoutTimeGridDay(events, day);
     expect(placement?.top).toBeCloseTo(9 / 24);
@@ -33,10 +37,26 @@ describe("layoutTimeGridDay", () => {
 
   it("splits overlapping events into columns within a cluster", () => {
     const events = normalizeEvents([
-      { id: "a", start: dateTime("2026-07-15T09:00"), end: dateTime("2026-07-15T11:00") },
-      { id: "b", start: dateTime("2026-07-15T10:00"), end: dateTime("2026-07-15T12:00") },
-      { id: "c", start: dateTime("2026-07-15T11:30"), end: dateTime("2026-07-15T13:00") },
-      { id: "solo", start: dateTime("2026-07-15T15:00"), end: dateTime("2026-07-15T16:00") },
+      {
+        id: "a",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T11:00"),
+      },
+      {
+        id: "b",
+        start: dateTime("2026-07-15T10:00"),
+        end: dateTime("2026-07-15T12:00"),
+      },
+      {
+        id: "c",
+        start: dateTime("2026-07-15T11:30"),
+        end: dateTime("2026-07-15T13:00"),
+      },
+      {
+        id: "solo",
+        start: dateTime("2026-07-15T15:00"),
+        end: dateTime("2026-07-15T16:00"),
+      },
     ]);
     const placements = layoutTimeGridDay(events, day);
 
@@ -62,8 +82,16 @@ describe("layoutTimeGridDay", () => {
 
   it("treats touching events as non-overlapping", () => {
     const events = normalizeEvents([
-      { id: "first", start: dateTime("2026-07-15T09:00"), end: dateTime("2026-07-15T10:00") },
-      { id: "second", start: dateTime("2026-07-15T10:00"), end: dateTime("2026-07-15T11:00") },
+      {
+        id: "first",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T10:00"),
+      },
+      {
+        id: "second",
+        start: dateTime("2026-07-15T10:00"),
+        end: dateTime("2026-07-15T11:00"),
+      },
     ]);
     const placements = layoutTimeGridDay(events, day);
     expect(placementOf(placements, "first").columnCount).toBe(1);
@@ -72,10 +100,21 @@ describe("layoutTimeGridDay", () => {
 
   it("clips events crossing the axis and flags continuation", () => {
     const events = normalizeEvents([
-      { id: "overnight", start: dateTime("2026-07-14T23:00"), end: dateTime("2026-07-15T01:00") },
-      { id: "late", start: dateTime("2026-07-15T19:00"), end: dateTime("2026-07-15T22:00") },
+      {
+        id: "overnight",
+        start: dateTime("2026-07-14T23:00"),
+        end: dateTime("2026-07-15T01:00"),
+      },
+      {
+        id: "late",
+        start: dateTime("2026-07-15T19:00"),
+        end: dateTime("2026-07-15T22:00"),
+      },
     ]);
-    const placements = layoutTimeGridDay(events, day, { startHour: 0, endHour: 20 });
+    const placements = layoutTimeGridDay(events, day, {
+      startHour: 0,
+      endHour: 20,
+    });
 
     const overnight = placementOf(placements, "overnight");
     expect(overnight.top).toBe(0);
@@ -91,16 +130,31 @@ describe("layoutTimeGridDay", () => {
   it("excludes all-day events and events outside the axis", () => {
     const events = normalizeEvents([
       { id: "allday", start: date("2026-07-15") },
-      { id: "dawn", start: dateTime("2026-07-15T05:00"), end: dateTime("2026-07-15T06:00") },
-      { id: "kept", start: dateTime("2026-07-15T09:00"), end: dateTime("2026-07-15T10:00") },
+      {
+        id: "dawn",
+        start: dateTime("2026-07-15T05:00"),
+        end: dateTime("2026-07-15T06:00"),
+      },
+      {
+        id: "kept",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T10:00"),
+      },
     ]);
-    const placements = layoutTimeGridDay(events, day, { startHour: 8, endHour: 20 });
+    const placements = layoutTimeGridDay(events, day, {
+      startHour: 8,
+      endHour: 20,
+    });
     expect(placements.map((placement) => placement.event.id)).toEqual(["kept"]);
   });
 
   it("enforces a minimum rendered duration", () => {
     const events = normalizeEvents([
-      { id: "blink", start: dateTime("2026-07-15T09:00"), end: dateTime("2026-07-15T09:05") },
+      {
+        id: "blink",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T09:05"),
+      },
     ]);
     const [placement] = layoutTimeGridDay(events, day, { minEventMinutes: 30 });
     expect(placement?.height).toBeCloseTo(0.5 / 24);

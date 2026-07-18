@@ -54,7 +54,11 @@ describe("buildWeekGrid", () => {
     expect(grid.startHour).toBe(8);
     expect(grid.endHour).toBe(20);
 
-    const degenerate = buildWeekGrid({ ...baseOptions, startHour: 30, endHour: -2 });
+    const degenerate = buildWeekGrid({
+      ...baseOptions,
+      startHour: 30,
+      endHour: -2,
+    });
     expect(degenerate.startHour).toBe(23);
     expect(degenerate.endHour).toBe(24);
     expect(degenerate.hours).toEqual([23]);

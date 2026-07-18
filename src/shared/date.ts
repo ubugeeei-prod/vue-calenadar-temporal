@@ -22,9 +22,18 @@ export type DateRange = {
 export type dayKey = (date: Temporal.PlainDate) => DayKey;
 export type monthKey = (month: Temporal.PlainYearMonth) => MonthKey;
 export type currentDate = (timeZone?: string) => Temporal.PlainDate;
-export type isSameDay = (a: Temporal.PlainDate, b: Temporal.PlainDate) => boolean;
-export type isSameMonth = (a: Temporal.PlainDate, b: Temporal.PlainDate) => boolean;
-export type isBefore = (a: Temporal.PlainDate, b: Temporal.PlainDate) => boolean;
+export type isSameDay = (
+  a: Temporal.PlainDate,
+  b: Temporal.PlainDate,
+) => boolean;
+export type isSameMonth = (
+  a: Temporal.PlainDate,
+  b: Temporal.PlainDate,
+) => boolean;
+export type isBefore = (
+  a: Temporal.PlainDate,
+  b: Temporal.PlainDate,
+) => boolean;
 export type isAfter = (a: Temporal.PlainDate, b: Temporal.PlainDate) => boolean;
 export type isBetween = (date: Temporal.PlainDate, range: DateRange) => boolean;
 export type clampDate = (
@@ -36,11 +45,23 @@ export type startOfWeek = (
   date: Temporal.PlainDate,
   firstDayOfWeek: DayOfWeek,
 ) => Temporal.PlainDate;
-export type endOfWeek = (date: Temporal.PlainDate, firstDayOfWeek: DayOfWeek) => Temporal.PlainDate;
-export type daysFrom = (start: Temporal.PlainDate, count: number) => readonly Temporal.PlainDate[];
+export type endOfWeek = (
+  date: Temporal.PlainDate,
+  firstDayOfWeek: DayOfWeek,
+) => Temporal.PlainDate;
+export type daysFrom = (
+  start: Temporal.PlainDate,
+  count: number,
+) => readonly Temporal.PlainDate[];
 export type daysInRange = (range: DateRange) => readonly Temporal.PlainDate[];
-export type isWeekend = (date: Temporal.PlainDate, weekendDays: readonly DayOfWeek[]) => boolean;
-export type orderedRange = (a: Temporal.PlainDate, b: Temporal.PlainDate) => DateRange;
+export type isWeekend = (
+  date: Temporal.PlainDate,
+  weekendDays: readonly DayOfWeek[],
+) => boolean;
+export type orderedRange = (
+  a: Temporal.PlainDate,
+  b: Temporal.PlainDate,
+) => DateRange;
 export type systemTimeZone = () => string;
 
 // --- Implementation ---
@@ -57,13 +78,17 @@ export const monthKey: monthKey = (month) => month.toString() as MonthKey;
  * server and client boundaries.
  */
 export const currentDate: currentDate = (timeZone) =>
-  timeZone === undefined ? Temporal.Now.plainDateISO() : Temporal.Now.plainDateISO(timeZone);
+  timeZone === undefined
+    ? Temporal.Now.plainDateISO()
+    : Temporal.Now.plainDateISO(timeZone);
 
 export const isSameDay: isSameDay = (a, b) => a.equals(b);
 
-export const isSameMonth: isSameMonth = (a, b) => a.year === b.year && a.month === b.month;
+export const isSameMonth: isSameMonth = (a, b) =>
+  a.year === b.year && a.month === b.month;
 
-export const isBefore: isBefore = (a, b) => Temporal.PlainDate.compare(a, b) < 0;
+export const isBefore: isBefore = (a, b) =>
+  Temporal.PlainDate.compare(a, b) < 0;
 
 export const isAfter: isAfter = (a, b) => Temporal.PlainDate.compare(a, b) > 0;
 
@@ -72,8 +97,10 @@ export const isBetween: isBetween = (date, range) =>
   Temporal.PlainDate.compare(date, range.end) <= 0;
 
 export const clampDate: clampDate = (date, min, max) => {
-  if (min !== undefined && Temporal.PlainDate.compare(date, min) < 0) return min;
-  if (max !== undefined && Temporal.PlainDate.compare(date, max) > 0) return max;
+  if (min !== undefined && Temporal.PlainDate.compare(date, min) < 0)
+    return min;
+  if (max !== undefined && Temporal.PlainDate.compare(date, max) > 0)
+    return max;
   return date;
 };
 
@@ -84,7 +111,9 @@ export const endOfWeek: endOfWeek = (date, firstDayOfWeek) =>
   startOfWeek(date, firstDayOfWeek).add({ days: 6 });
 
 export const daysFrom: daysFrom = (start, count) =>
-  Array.from({ length: Math.max(count, 0) }, (_, offset) => start.add({ days: offset }));
+  Array.from({ length: Math.max(count, 0) }, (_, offset) =>
+    start.add({ days: offset }),
+  );
 
 export const daysInRange: daysInRange = (range) =>
   daysFrom(range.start, range.start.until(range.end).days + 1);
@@ -94,7 +123,9 @@ export const isWeekend: isWeekend = (date, weekendDays) =>
 
 /** Normalizes two dates into an ordered inclusive range. */
 export const orderedRange: orderedRange = (a, b) =>
-  Temporal.PlainDate.compare(a, b) <= 0 ? { start: a, end: b } : { start: b, end: a };
+  Temporal.PlainDate.compare(a, b) <= 0
+    ? { start: a, end: b }
+    : { start: b, end: a };
 
 let cachedSystemTimeZone: string | undefined;
 

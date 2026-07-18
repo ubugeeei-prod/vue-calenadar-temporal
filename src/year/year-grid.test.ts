@@ -23,11 +23,14 @@ describe("buildYearGrid", () => {
 
   it("marks only the month containing today as current", () => {
     const grid = buildYearGrid(baseOptions);
-    expect(grid.months.filter((month) => month.isCurrent).map((month) => month.key)).toEqual([
-      "2026-07",
-    ]);
+    expect(
+      grid.months.filter((month) => month.isCurrent).map((month) => month.key),
+    ).toEqual(["2026-07"]);
 
-    const otherYear = buildYearGrid({ ...baseOptions, anchor: date("2027-03-01") });
+    const otherYear = buildYearGrid({
+      ...baseOptions,
+      anchor: date("2027-03-01"),
+    });
     expect(otherYear.months.some((month) => month.isCurrent)).toBe(false);
   });
 

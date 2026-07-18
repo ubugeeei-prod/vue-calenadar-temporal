@@ -13,7 +13,9 @@ describe("shiftPeriod", () => {
   });
 
   it("clamps impossible days instead of overflowing", () => {
-    expect(shiftPeriod("month", date("2026-01-31"), 1).toString()).toBe("2026-02-28");
+    expect(shiftPeriod("month", date("2026-01-31"), 1).toString()).toBe(
+      "2026-02-28",
+    );
   });
 });
 
@@ -47,13 +49,22 @@ describe("canShiftPeriod", () => {
     const max = date("2026-07-31");
     expect(canShiftPeriod("month", anchor, 1, 1, undefined, max)).toBe(false);
     expect(canShiftPeriod("week", anchor, 1, 1, undefined, max)).toBe(true);
-    expect(canShiftPeriod("week", date("2026-07-29"), 1, 1, undefined, max)).toBe(false);
+    expect(
+      canShiftPeriod("week", date("2026-07-29"), 1, 1, undefined, max),
+    ).toBe(false);
   });
 
   it("allows navigation into partially visible periods", () => {
     // Week 2026-06-29 … 2026-07-05 overlaps min by a few days.
-    expect(canShiftPeriod("week", date("2026-07-08"), -1, 1, date("2026-07-03"), undefined)).toBe(
-      true,
-    );
+    expect(
+      canShiftPeriod(
+        "week",
+        date("2026-07-08"),
+        -1,
+        1,
+        date("2026-07-03"),
+        undefined,
+      ),
+    ).toBe(true);
   });
 });

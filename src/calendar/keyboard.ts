@@ -73,7 +73,11 @@ export const resolveGridKey: resolveGridKey = (event, direction) => {
 };
 
 /** Resolves an intent into the focus/select effect to apply. */
-export const applyGridIntent: applyGridIntent = (intent, focused, firstDayOfWeek) => {
+export const applyGridIntent: applyGridIntent = (
+  intent,
+  focused,
+  firstDayOfWeek,
+) => {
   switch (intent.kind) {
     case "move-days":
       return { focus: focused.add({ days: intent.days }) };

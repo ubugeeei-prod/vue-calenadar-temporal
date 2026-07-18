@@ -26,7 +26,9 @@ describe("useMonthGrid", () => {
   it("exposes localized weekday headers aligned with the grid", () => {
     const source = makeSource();
     const { weekdays } = useMonthGrid(source, { weekdayStyle: "narrow" });
-    expect(weekdays.value.map((day) => day.dayOfWeek)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(weekdays.value.map((day) => day.dayOfWeek)).toEqual([
+      1, 2, 3, 4, 5, 6, 7,
+    ]);
     expect(weekdays.value[0]?.fullName).toBe("Monday");
 
     source.locale.value = "ja-JP";

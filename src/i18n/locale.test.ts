@@ -32,11 +32,19 @@ describe("getDateTimeFormat", () => {
 describe("formatPlainDate", () => {
   it("formats dates per locale", () => {
     const day = date("2026-07-18");
-    expect(formatPlainDate("en-US", day, { year: "numeric", month: "long", day: "numeric" })).toBe(
-      "July 18, 2026",
-    );
     expect(
-      formatPlainDate("ja-JP", day, { year: "numeric", month: "numeric", day: "numeric" }),
+      formatPlainDate("en-US", day, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+    ).toBe("July 18, 2026");
+    expect(
+      formatPlainDate("ja-JP", day, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      }),
     ).toBe("2026/7/18");
   });
 
@@ -48,7 +56,11 @@ describe("formatPlainDate", () => {
 
 describe("formatPlainDateRange", () => {
   it("formats an inclusive range", () => {
-    const text = formatPlainDateRange("en-US", date("2026-07-10"), date("2026-07-20"));
+    const text = formatPlainDateRange(
+      "en-US",
+      date("2026-07-10"),
+      date("2026-07-20"),
+    );
     expect(text).toContain("10");
     expect(text).toContain("20");
     expect(text).toContain("2026");
@@ -90,7 +102,15 @@ describe("weekdayNames", () => {
       "Sunday",
     ]);
     expect(weekdayNames("en-US", "long", 7)[0]).toBe("Sunday");
-    expect(weekdayNames("ja-JP", "narrow", 7)).toEqual(["日", "月", "火", "水", "木", "金", "土"]);
+    expect(weekdayNames("ja-JP", "narrow", 7)).toEqual([
+      "日",
+      "月",
+      "火",
+      "水",
+      "木",
+      "金",
+      "土",
+    ]);
   });
 });
 

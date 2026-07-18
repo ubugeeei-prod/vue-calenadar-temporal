@@ -46,11 +46,17 @@ describe("buildMonthGrid", () => {
     // February 2027 starts on Monday and has 28 days.
     const grid = buildMonthGrid({ ...baseOptions, month: month("2027-02") });
     expect(grid.weeks).toHaveLength(4);
-    expect(grid.weeks.flatMap((week) => week.days).every((day) => !day.isOutside)).toBe(true);
+    expect(
+      grid.weeks.flatMap((week) => week.days).every((day) => !day.isOutside),
+    ).toBe(true);
   });
 
   it("pads to six weeks with fixedWeekCount", () => {
-    const grid = buildMonthGrid({ ...baseOptions, month: month("2027-02"), fixedWeekCount: true });
+    const grid = buildMonthGrid({
+      ...baseOptions,
+      month: month("2027-02"),
+      fixedWeekCount: true,
+    });
     expect(grid.weeks).toHaveLength(6);
     expect(grid.range.start.toString()).toBe("2027-02-01");
     expect(grid.range.end.toString()).toBe("2027-03-14");

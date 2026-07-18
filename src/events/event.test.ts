@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { Temporal } from "../temporal";
-import { eventsOnDay, indexEventsByDay, normalizeEvent, normalizeEvents } from "./event";
+import {
+  eventsOnDay,
+  indexEventsByDay,
+  normalizeEvent,
+  normalizeEvents,
+} from "./event";
 
 const date = Temporal.PlainDate.from;
 const dateTime = Temporal.PlainDateTime.from;
@@ -52,7 +57,10 @@ describe("normalizeEvent — all-day", () => {
 
 describe("normalizeEvent — timed", () => {
   it("keeps wall-clock times and applies the default duration", () => {
-    const normalized = normalizeEvent({ id: 4, start: dateTime("2026-07-18T09:30") });
+    const normalized = normalizeEvent({
+      id: 4,
+      start: dateTime("2026-07-18T09:30"),
+    });
     expect(normalized.allDay).toBe(false);
     expect(normalized.start.toString()).toBe("2026-07-18T09:30:00");
     expect(normalized.end.toString()).toBe("2026-07-18T10:30:00");
@@ -98,17 +106,28 @@ describe("normalizeEvent — absolute inputs and time zones", () => {
   const instant = Temporal.Instant.from("2026-07-18T15:00:00Z");
 
   it("resolves Instant into the display time zone", () => {
-    const tokyo = normalizeEvent({ id: 9, start: instant }, { timeZone: TOKYO });
+    const tokyo = normalizeEvent(
+      { id: 9, start: instant },
+      { timeZone: TOKYO },
+    );
     expect(tokyo.start.toString()).toBe("2026-07-19T00:00:00");
     expect(tokyo.startDate.toString()).toBe("2026-07-19");
 
-    const newYork = normalizeEvent({ id: 9, start: instant }, { timeZone: "America/New_York" });
+    const newYork = normalizeEvent(
+      { id: 9, start: instant },
+      { timeZone: "America/New_York" },
+    );
     expect(newYork.start.toString()).toBe("2026-07-18T11:00:00");
   });
 
   it("re-zones ZonedDateTime input", () => {
-    const zoned = Temporal.ZonedDateTime.from("2026-07-18T10:00[America/New_York]");
-    const normalized = normalizeEvent({ id: 10, start: zoned }, { timeZone: TOKYO });
+    const zoned = Temporal.ZonedDateTime.from(
+      "2026-07-18T10:00[America/New_York]",
+    );
+    const normalized = normalizeEvent(
+      { id: 10, start: zoned },
+      { timeZone: TOKYO },
+    );
     expect(normalized.start.toString()).toBe("2026-07-18T23:00:00");
   });
 
@@ -129,8 +148,16 @@ describe("indexEventsByDay / eventsOnDay", () => {
   const range = { start: date("2026-07-13"), end: date("2026-07-19") };
   const events = normalizeEvents(
     [
-      { id: "timed", start: dateTime("2026-07-15T09:00"), end: dateTime("2026-07-15T10:00") },
-      { id: "later", start: dateTime("2026-07-15T13:00"), end: dateTime("2026-07-15T14:00") },
+      {
+        id: "timed",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T10:00"),
+      },
+      {
+        id: "later",
+        start: dateTime("2026-07-15T13:00"),
+        end: dateTime("2026-07-15T14:00"),
+      },
       { id: "allday", start: date("2026-07-15") },
       { id: "span", start: date("2026-07-14"), end: date("2026-07-16") },
       { id: "before-range", start: date("2026-07-01") },
@@ -141,13 +168,12 @@ describe("indexEventsByDay / eventsOnDay", () => {
   const index = indexEventsByDay(events, range);
 
   it("buckets events into every day they touch, clipped to the range", () => {
-    expect(eventsOnDay(index, date("2026-07-15")).map((event) => event.id)).toEqual([
-      "span",
-      "allday",
-      "timed",
-      "later",
-    ]);
-    expect(eventsOnDay(index, date("2026-07-13")).map((event) => event.id)).toEqual(["clipped"]);
+    expect(
+      eventsOnDay(index, date("2026-07-15")).map((event) => event.id),
+    ).toEqual(["span", "allday", "timed", "later"]);
+    expect(
+      eventsOnDay(index, date("2026-07-13")).map((event) => event.id),
+    ).toEqual(["clipped"]);
     expect(eventsOnDay(index, date("2026-07-01"))).toEqual([]);
     expect(eventsOnDay(index, date("2026-07-19"))).toEqual([]);
   });

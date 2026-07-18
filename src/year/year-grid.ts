@@ -43,7 +43,13 @@ export const buildYearGrid: buildYearGrid = (options) => {
       month,
       key: monthKey(month),
       isCurrent: today.year === month.year && today.month === month.month,
-      grid: buildMonthGrid({ month, today, firstDayOfWeek, weekendDays, fixedWeekCount: true }),
+      grid: buildMonthGrid({
+        month,
+        today,
+        firstDayOfWeek,
+        weekendDays,
+        fixedWeekCount: true,
+      }),
     };
   });
 
@@ -54,7 +60,9 @@ export const buildYearGrid: buildYearGrid = (options) => {
     months,
     range: {
       start: firstMonth?.month.toPlainDate({ day: 1 }) ?? anchor,
-      end: lastMonth?.month.toPlainDate({ day: lastMonth.month.daysInMonth }) ?? anchor,
+      end:
+        lastMonth?.month.toPlainDate({ day: lastMonth.month.daysInMonth }) ??
+        anchor,
     },
   };
 };

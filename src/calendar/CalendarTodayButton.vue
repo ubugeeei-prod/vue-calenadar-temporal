@@ -14,6 +14,8 @@ function onClick(): void {
 
 <template>
   <button type="button" data-vct="today-button" @click="onClick">
-    <slot :label="calendar.messages.value.today">{{ calendar.messages.value.today }}</slot>
+    <slot :label="calendar.messages.value.today">{{
+      calendar.messages.value.today
+    }}</slot>
   </button>
 </template>

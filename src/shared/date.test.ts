@@ -53,7 +53,9 @@ describe("clampDate", () => {
     expect(clampDate(date("2026-07-01"), min, max)).toEqual(min);
     expect(clampDate(date("2026-07-31"), min, max)).toEqual(max);
     expect(clampDate(date("2026-07-15"), min, max)).toEqual(date("2026-07-15"));
-    expect(clampDate(date("2026-07-01"), undefined, undefined)).toEqual(date("2026-07-01"));
+    expect(clampDate(date("2026-07-01"), undefined, undefined)).toEqual(
+      date("2026-07-01"),
+    );
   });
 });
 
@@ -90,9 +92,14 @@ describe("daysFrom / daysInRange", () => {
   });
 
   it("expands an inclusive range", () => {
-    const days = daysInRange({ start: date("2026-07-18"), end: date("2026-07-20") });
+    const days = daysInRange({
+      start: date("2026-07-18"),
+      end: date("2026-07-20"),
+    });
     expect(days).toHaveLength(3);
-    expect(daysInRange({ start: date("2026-07-18"), end: date("2026-07-18") })).toHaveLength(1);
+    expect(
+      daysInRange({ start: date("2026-07-18"), end: date("2026-07-18") }),
+    ).toHaveLength(1);
   });
 });
 

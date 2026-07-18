@@ -5,7 +5,11 @@ import { applyGridIntent, resolveGridKey } from "../calendar/keyboard";
 import type { CalendarEventLike, NormalizedEvent } from "../events/event";
 import type { EventLaneLayout, EventLaneSegment } from "../events/lanes";
 import type { NameStyle } from "../i18n/locale";
-import { formatDayNumber, formatInteger, formatPlainDate } from "../i18n/locale";
+import {
+  formatDayNumber,
+  formatInteger,
+  formatPlainDate,
+} from "../i18n/locale";
 import { isBetween } from "../shared/date";
 import { useRovingFocus } from "../shared/focus";
 import type { MonthGridDay, MonthGridWeek } from "./month-grid";
@@ -27,7 +31,10 @@ const {
 }>();
 
 const emit = defineEmits<{
-  "click:event": [event: NormalizedEvent<CalendarEventLike>, nativeEvent: MouseEvent];
+  "click:event": [
+    event: NormalizedEvent<CalendarEventLike>,
+    nativeEvent: MouseEvent,
+  ];
 }>();
 
 defineSlots<{
@@ -52,7 +59,10 @@ const weekLanes = computed<readonly EventLaneLayout<CalendarEventLike>[]>(() =>
     const last = week.days[week.days.length - 1];
     if (first === undefined || last === undefined)
       return { segments: [], laneCount: 0, overflow: [], hiddenEvents: [] };
-    return events.lanesFor({ start: first.date, end: last.date }, { maxLanes: maxEventLanes });
+    return events.lanesFor(
+      { start: first.date, end: last.date },
+      { maxLanes: maxEventLanes },
+    );
   }),
 );
 
@@ -63,7 +73,11 @@ function onKeydown(keyboardEvent: KeyboardEvent): void {
   const intent = resolveGridKey(keyboardEvent, calendar.direction.value);
   if (intent === undefined) return;
   keyboardEvent.preventDefault();
-  const effect = applyGridIntent(intent, calendar.focusedDate.value, calendar.firstDayOfWeek.value);
+  const effect = applyGridIntent(
+    intent,
+    calendar.focusedDate.value,
+    calendar.firstDayOfWeek.value,
+  );
   if (effect.focus !== undefined) {
     calendar.focusDate(effect.focus);
     // Roving focus lands on the new cell, whose @focus mirrors pointer hover.
@@ -90,9 +104,13 @@ function overflowAt(weekIndex: number, column: number): number {
 }
 
 function cellLabel(day: MonthGridDay): string {
-  const date = formatPlainDate(calendar.locale.value, day.date, { dateStyle: "full" });
+  const date = formatPlainDate(calendar.locale.value, day.date, {
+    dateStyle: "full",
+  });
   const count = events.eventsOn(day.date).length;
-  return count === 0 ? date : `${date}, ${calendar.messages.value.events(count)}`;
+  return count === 0
+    ? date
+    : `${date}, ${calendar.messages.value.events(count)}`;
 }
 
 function previewContains(day: MonthGridDay): boolean {
@@ -107,7 +125,9 @@ function eventText(segment: EventLaneSegment<CalendarEventLike>): string {
 }
 
 function weekNumberLabel(week: MonthGridWeek): string {
-  return week.weekNumber === undefined ? "" : formatInteger(calendar.locale.value, week.weekNumber);
+  return week.weekNumber === undefined
+    ? ""
+    : formatInteger(calendar.locale.value, week.weekNumber);
 }
 
 function flag(condition: boolean): "" | undefined {
@@ -124,14 +144,22 @@ function flag(condition: boolean): "" | undefined {
     role="grid"
     data-vct="month-grid"
     :aria-labelledby="ids.title"
-    :aria-multiselectable="calendar.selectionMode === 'single' ? undefined : 'true'"
+    :aria-multiselectable="
+      calendar.selectionMode === 'single' ? undefined : 'true'
+    "
     @keydown="onKeydown"
     @mouseleave="clearHover"
     @blur.capture="clearHover"
   >
     <div role="row" data-vct="weekdays-row">
-      <div v-if="showWeekNumbers" role="columnheader" data-vct="weeknumber-columnheader">
-        <span aria-hidden="true">{{ calendar.messages.value.weekNumberColumn }}</span>
+      <div
+        v-if="showWeekNumbers"
+        role="columnheader"
+        data-vct="weeknumber-columnheader"
+      >
+        <span aria-hidden="true">{{
+          calendar.messages.value.weekNumberColumn
+        }}</span>
       </div>
       <div
         v-for="weekday in weekdays"
@@ -139,7 +167,9 @@ function flag(condition: boolean): "" | undefined {
         role="columnheader"
         data-vct="weekday-columnheader"
         :aria-label="weekday.fullName"
-        :data-weekend="flag(calendar.weekendDays.value.includes(weekday.dayOfWeek))"
+        :data-weekend="
+          flag(calendar.weekendDays.value.includes(weekday.dayOfWeek))
+        "
       >
         {{ weekday.label }}
       </div>
@@ -193,7 +223,9 @@ function flag(condition: boolean): "" | undefined {
           :label="formatDayNumber(calendar.locale.value, day.date)"
           :day-events="events.eventsOn(day.date)"
         >
-          <span data-vct="day-number">{{ formatDayNumber(calendar.locale.value, day.date) }}</span>
+          <span data-vct="day-number">{{
+            formatDayNumber(calendar.locale.value, day.date)
+          }}</span>
         </slot>
         <div data-vct="day-events" aria-hidden="true">
           <!-- Lane/span are per-segment numeric geometry; custom properties on
@@ -205,17 +237,31 @@ function flag(condition: boolean): "" | undefined {
             type="button"
             tabindex="-1"
             data-vct="event-chip"
-            :style="{ '--vct-event-lane': segment.lane, '--vct-event-span': segment.span }"
+            :style="{
+              '--vct-event-lane': segment.lane,
+              '--vct-event-span': segment.span,
+            }"
             :data-all-day="flag(segment.event.allDay)"
             :data-continues-before="flag(segment.continuesBefore)"
             :data-continues-after="flag(segment.continuesAfter)"
-            @click.stop="(nativeEvent) => emit('click:event', segment.event, nativeEvent)"
+            @click.stop="
+              (nativeEvent) => emit('click:event', segment.event, nativeEvent)
+            "
           >
-            <slot name="event" :segment="segment" :day="day">{{ eventText(segment) }}</slot>
+            <slot name="event" :segment="segment" :day="day">{{
+              eventText(segment)
+            }}</slot>
           </button>
           <!-- eslint-enable vue/no-inline-style -->
-          <span v-if="overflowAt(weekIndex, columnIndex) > 0" data-vct="event-overflow">
-            {{ calendar.messages.value.moreEvents(overflowAt(weekIndex, columnIndex)) }}
+          <span
+            v-if="overflowAt(weekIndex, columnIndex) > 0"
+            data-vct="event-overflow"
+          >
+            {{
+              calendar.messages.value.moreEvents(
+                overflowAt(weekIndex, columnIndex),
+              )
+            }}
           </span>
         </div>
       </div>

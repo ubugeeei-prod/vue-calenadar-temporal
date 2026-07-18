@@ -21,7 +21,11 @@ const emit = defineEmits<{
 
 defineSlots<{
   monthLabel?: (props: { month: LabeledYearGridMonth }) => unknown;
-  day?: (props: { day: MonthGridDay; label: string; hasEvents: boolean }) => unknown;
+  day?: (props: {
+    day: MonthGridDay;
+    label: string;
+    hasEvents: boolean;
+  }) => unknown;
 }>();
 
 const { calendar, events, ids } = useCalendarContext();
@@ -37,7 +41,10 @@ function onDayClick(day: MonthGridDay, nativeEvent: MouseEvent): void {
   calendar.setView("month");
 }
 
-function onMonthClick(month: LabeledYearGridMonth, nativeEvent: MouseEvent): void {
+function onMonthClick(
+  month: LabeledYearGridMonth,
+  nativeEvent: MouseEvent,
+): void {
   emit("click:month", month.month, nativeEvent);
   if (!navigateOnDayClick) return;
   calendar.focusDate(month.month.toPlainDate({ day: 1 }));
@@ -45,9 +52,13 @@ function onMonthClick(month: LabeledYearGridMonth, nativeEvent: MouseEvent): voi
 }
 
 function dayLabel(day: MonthGridDay): string {
-  const date = formatPlainDate(calendar.locale.value, day.date, { dateStyle: "full" });
+  const date = formatPlainDate(calendar.locale.value, day.date, {
+    dateStyle: "full",
+  });
   const count = events.eventsOn(day.date).length;
-  return count === 0 ? date : `${date}, ${calendar.messages.value.events(count)}`;
+  return count === 0
+    ? date
+    : `${date}, ${calendar.messages.value.events(count)}`;
 }
 
 function hasEvents(day: MonthGridDay): boolean {
@@ -76,7 +87,11 @@ function flag(condition: boolean): "" | undefined {
       </button>
       <div data-vct="year-month-grid">
         <div v-if="showWeekdays" data-vct="year-weekdays" aria-hidden="true">
-          <span v-for="weekday in weekdays" :key="weekday.dayOfWeek" data-vct="year-weekday">
+          <span
+            v-for="weekday in weekdays"
+            :key="weekday.dayOfWeek"
+            data-vct="year-weekday"
+          >
             {{ weekday.label }}
           </span>
         </div>

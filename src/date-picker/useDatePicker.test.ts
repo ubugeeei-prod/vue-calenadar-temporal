@@ -49,7 +49,11 @@ describe("useDatePicker — close on select", () => {
   });
 
   it("keeps range mode open until the range completes", () => {
-    const picker = useDatePicker({ ...baseOptions, selectionMode: "range", initialOpen: true });
+    const picker = useDatePicker({
+      ...baseOptions,
+      selectionMode: "range",
+      initialOpen: true,
+    });
     picker.calendar.select(date("2026-07-10"));
     expect(picker.open.value).toBe(true);
     picker.calendar.select(date("2026-07-14"));
@@ -59,12 +63,20 @@ describe("useDatePicker — close on select", () => {
   });
 
   it("never auto-closes in multiple mode and can opt out entirely", () => {
-    const picker = useDatePicker({ ...baseOptions, selectionMode: "multiple", initialOpen: true });
+    const picker = useDatePicker({
+      ...baseOptions,
+      selectionMode: "multiple",
+      initialOpen: true,
+    });
     picker.calendar.select(date("2026-07-10"));
     picker.calendar.select(date("2026-07-11"));
     expect(picker.open.value).toBe(true);
 
-    const sticky = useDatePicker({ ...baseOptions, initialOpen: true, closeOnSelect: false });
+    const sticky = useDatePicker({
+      ...baseOptions,
+      initialOpen: true,
+      closeOnSelect: false,
+    });
     sticky.calendar.select(date("2026-07-20"));
     expect(sticky.open.value).toBe(true);
   });
@@ -75,7 +87,10 @@ describe("useDatePicker — formatted value", () => {
     const empty = useDatePicker(baseOptions);
     expect(empty.formattedValue.value).toBe("");
 
-    const multiple = useDatePicker({ ...baseOptions, selectionMode: "multiple" });
+    const multiple = useDatePicker({
+      ...baseOptions,
+      selectionMode: "multiple",
+    });
     multiple.calendar.select(date("2026-07-10"));
     multiple.calendar.select(date("2026-07-12"));
     expect(multiple.formattedValue.value).toBe("Jul 10, 2026 and Jul 12, 2026");

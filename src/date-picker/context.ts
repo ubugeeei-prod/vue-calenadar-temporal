@@ -17,7 +17,8 @@ export type DatePickerContext = {
 
 // --- Implementation ---
 
-export const DatePickerContextKey: InjectionKey<DatePickerContext> = Symbol("DatePickerContext");
+export const DatePickerContextKey: InjectionKey<DatePickerContext> =
+  Symbol("DatePickerContext");
 
 export function provideDatePickerContext(context: DatePickerContext): void {
   provide(DatePickerContextKey, context);

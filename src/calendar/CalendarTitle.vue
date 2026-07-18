@@ -14,7 +14,13 @@ const { calendar, ids } = useCalendarContext();
 </script>
 
 <template>
-  <div :id="ids.title" data-vct="title" role="heading" :aria-level="level" aria-live="polite">
+  <div
+    :id="ids.title"
+    data-vct="title"
+    role="heading"
+    :aria-level="level"
+    aria-live="polite"
+  >
     <slot :title="calendar.title.value">{{ calendar.title.value }}</slot>
   </div>
 </template>

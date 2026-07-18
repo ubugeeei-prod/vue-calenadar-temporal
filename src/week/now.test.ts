@@ -5,7 +5,9 @@ describe("axisFraction", () => {
   it("maps minutes onto the full-day axis", () => {
     expect(axisFraction(0, 0, 24)).toBe(0);
     expect(axisFraction(12 * 60, 0, 24)).toBeCloseTo(0.5);
-    expect(axisFraction(23 * 60 + 59, 0, 24)).toBeCloseTo((23 * 60 + 59) / 1440);
+    expect(axisFraction(23 * 60 + 59, 0, 24)).toBeCloseTo(
+      (23 * 60 + 59) / 1440,
+    );
   });
 
   it("maps onto a sliced axis and rejects outside minutes", () => {

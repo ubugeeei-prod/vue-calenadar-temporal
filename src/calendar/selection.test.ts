@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { Temporal } from "../temporal";
-import { pickRange, rangeEdge, rangePreview, selectionContains, toggleMultiple } from "./selection";
+import {
+  pickRange,
+  rangeEdge,
+  rangePreview,
+  selectionContains,
+  toggleMultiple,
+} from "./selection";
 
 const date = Temporal.PlainDate.from;
 
@@ -41,11 +47,18 @@ describe("rangePreview", () => {
 describe("selectionContains", () => {
   it("handles every value shape", () => {
     expect(selectionContains(null, date("2026-07-18"))).toBe(false);
-    expect(selectionContains(date("2026-07-18"), date("2026-07-18"))).toBe(true);
-    expect(selectionContains([date("2026-07-10"), date("2026-07-18")], date("2026-07-18"))).toBe(
+    expect(selectionContains(date("2026-07-18"), date("2026-07-18"))).toBe(
       true,
     );
-    expect(selectionContains([date("2026-07-10")], date("2026-07-18"))).toBe(false);
+    expect(
+      selectionContains(
+        [date("2026-07-10"), date("2026-07-18")],
+        date("2026-07-18"),
+      ),
+    ).toBe(true);
+    expect(selectionContains([date("2026-07-10")], date("2026-07-18"))).toBe(
+      false,
+    );
     const range = { start: date("2026-07-10"), end: date("2026-07-20") };
     expect(selectionContains(range, date("2026-07-15"))).toBe(true);
     expect(selectionContains(range, date("2026-07-21"))).toBe(false);

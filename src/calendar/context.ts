@@ -18,7 +18,8 @@ export type CalendarContext = {
 
 // --- Implementation ---
 
-export const CalendarContextKey: InjectionKey<CalendarContext> = Symbol("CalendarContext");
+export const CalendarContextKey: InjectionKey<CalendarContext> =
+  Symbol("CalendarContext");
 
 export function provideCalendarContext(context: CalendarContext): void {
   provide(CalendarContextKey, context);
