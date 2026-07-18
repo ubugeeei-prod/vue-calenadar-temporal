@@ -35,7 +35,11 @@ export default defineConfig({
         command: "vize check src",
       },
       build: {
-        command: "vp build && vue-tsc -p tsconfig.build.json",
+        // The declaration step tolerates a known upstream failure on generic
+        // SFCs (https://github.com/ubugeeei-prod/vize/issues/3065);
+        // finalize-dts.mjs asserts the output and patches those two files.
+        command:
+          "vp build && (vize check src --declaration || true) && node tools/finalize-dts.mjs",
       },
       ready: {
         command:
