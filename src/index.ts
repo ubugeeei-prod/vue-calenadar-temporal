@@ -72,3 +72,26 @@ export { isLaneEvent, layoutEventLanes } from "./events/lanes";
 
 export type { TimeGridOptions, TimeGridPlacement } from "./events/time-grid";
 export { layoutTimeGridDay } from "./events/time-grid";
+
+export { canShiftPeriod, periodRange, shiftPeriod } from "./calendar/calendar";
+
+export type {
+  DateSelectionMode,
+  DateSelectionValue,
+  MultipleDateValue,
+  RangeDateValue,
+  SingleDateValue,
+} from "./calendar/selection";
+export {
+  pickRange,
+  rangeEdge,
+  rangePreview,
+  selectionContains,
+  toggleMultiple,
+} from "./calendar/selection";
+
+export type { ControllableState } from "./shared/controllable";
+export { useControllableState } from "./shared/controllable";
+
+export type { UseCalendarOptions, UseCalendarReturn } from "./calendar/useCalendar";
+export { useCalendar } from "./calendar/useCalendar";
