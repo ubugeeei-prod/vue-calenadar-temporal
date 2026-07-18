@@ -16,6 +16,8 @@ export type CalendarMessages = {
   readonly weekNumberColumn: string;
   readonly weekNumber: (week: number) => string;
   readonly moreEvents: (count: number) => string;
+  /** Screen-reader suffix announcing how many events a day holds. */
+  readonly events: (count: number) => string;
   readonly allDay: string;
   readonly chooseDate: string;
   readonly close: string;
@@ -38,6 +40,7 @@ export const englishMessages: CalendarMessages = {
   weekNumberColumn: "Wk",
   weekNumber: (week) => `Week ${week}`,
   moreEvents: (count) => `+${count} more`,
+  events: (count) => (count === 1 ? "1 event" : `${count} events`),
   allDay: "All day",
   chooseDate: "Choose date",
   close: "Close",

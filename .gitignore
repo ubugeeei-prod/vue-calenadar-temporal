@@ -4,3 +4,5 @@ coverage/
 *.log
 .DS_Store
 .vite/
+*.vue.virtual.ts
+*.vue.ts

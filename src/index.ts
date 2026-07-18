@@ -7,6 +7,7 @@ export type { NameStyle, TextDirection } from "./i18n/locale";
 export {
   formatDayNumber,
   formatHour,
+  formatInteger,
   formatPlainDate,
   formatPlainDateRange,
   formatPlainTime,
@@ -124,3 +125,17 @@ export type {
   UseCalendarEventsReturn,
 } from "./events/useCalendarEvents";
 export { useCalendarEvents } from "./events/useCalendarEvents";
+
+export type { CalendarContext } from "./calendar/context";
+export { CalendarContextKey, provideCalendarContext, useCalendarContext } from "./calendar/context";
+
+export type { RovingFocus } from "./shared/focus";
+export { useRovingFocus } from "./shared/focus";
+
+export { default as CalendarRoot } from "./calendar/CalendarRoot.vue";
+export { default as CalendarHeader } from "./calendar/CalendarHeader.vue";
+export { default as CalendarTitle } from "./calendar/CalendarTitle.vue";
+export { default as CalendarPrevButton } from "./calendar/CalendarPrevButton.vue";
+export { default as CalendarNextButton } from "./calendar/CalendarNextButton.vue";
+export { default as CalendarTodayButton } from "./calendar/CalendarTodayButton.vue";
+export { default as CalendarMonthView } from "./month/CalendarMonthView.vue";
