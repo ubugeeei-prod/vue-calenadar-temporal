@@ -95,3 +95,32 @@ export { useControllableState } from "./shared/controllable";
 
 export type { UseCalendarOptions, UseCalendarReturn } from "./calendar/useCalendar";
 export { useCalendar } from "./calendar/useCalendar";
+
+export type { GridIntentEffect, GridKeyEventLike, GridKeyIntent } from "./calendar/keyboard";
+export { applyGridIntent, resolveGridKey } from "./calendar/keyboard";
+
+export type {
+  MonthGridSource,
+  UseMonthGridOptions,
+  UseMonthGridReturn,
+  WeekdayLabel,
+} from "./month/useMonthGrid";
+export { useMonthGrid } from "./month/useMonthGrid";
+
+export type {
+  HourLabel,
+  UseWeekGridOptions,
+  UseWeekGridReturn,
+  WeekGridSource,
+} from "./week/useWeekGrid";
+export { useWeekGrid } from "./week/useWeekGrid";
+
+export type { LabeledYearGridMonth, UseYearGridReturn, YearGridSource } from "./year/useYearGrid";
+export { useYearGrid } from "./year/useYearGrid";
+
+export type {
+  CalendarEventsSource,
+  UseCalendarEventsOptions,
+  UseCalendarEventsReturn,
+} from "./events/useCalendarEvents";
+export { useCalendarEvents } from "./events/useCalendarEvents";
