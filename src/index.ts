@@ -49,4 +49,20 @@ export {
   monthKey,
   orderedRange,
   startOfWeek,
+  systemTimeZone,
 } from "./shared/date";
+
+export type {
+  CalendarEventDateInput,
+  CalendarEventLike,
+  EventsByDay,
+  NormalizedEvent,
+  NormalizeEventsOptions,
+} from "./events/event";
+export {
+  compareEventsForDay,
+  eventsOnDay,
+  indexEventsByDay,
+  normalizeEvent,
+  normalizeEvents,
+} from "./events/event";
