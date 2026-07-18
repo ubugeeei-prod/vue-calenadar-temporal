@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  # OIDC token for npm trusted publishing.
+  id-token: write
+  # GitHub Release creation.
+  contents: write
+
+jobs:
+  publish:
+    runs-on: blacksmith-32vcpu-ubuntu-2404
+    steps:
+      - uses: actions/checkout@v4
+      - uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: "24"
+          cache: true
+      - run: vp install --frozen-lockfile
+
+      # Trusted publishing needs npm >= 11.5.1.
+      - run: npm install -g npm@latest && npm --version
+
+      - name: Verify the tag matches package.json
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "tag $GITHUB_REF_NAME does not match package.json $PKG_VERSION"
+            exit 1
+          fi
+
+      - run: vp run build
+
+      # No token: authentication happens through the OIDC trusted publisher
+      # configured for this repository + workflow on npmjs.com.
+      - run: npm publish
+
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes

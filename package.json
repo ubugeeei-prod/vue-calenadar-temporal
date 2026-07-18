@@ -11,6 +11,10 @@
     "temporal",
     "vue"
   ],
+  "homepage": "https://github.com/ubugeeei-prod/vue-calenadar-temporal#readme",
+  "bugs": {
+    "url": "https://github.com/ubugeeei-prod/vue-calenadar-temporal/issues"
+  },
   "license": "MIT",
   "author": "ubugeeei <ubuge1122@gmail.com>",
   "repository": {
@@ -33,6 +37,9 @@
     "./styles/base.css": "./dist/styles/base.css",
     "./styles/theme.css": "./dist/styles/theme.css",
     "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "temporal-polyfill-lite": "^0.4.2"
