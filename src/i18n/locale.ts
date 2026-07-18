@@ -45,6 +45,7 @@ export type monthNames = (locale: string, style: NameStyle) => readonly string[]
 export type localeFirstDayOfWeek = (locale: string) => DayOfWeek;
 export type localeWeekendDays = (locale: string) => readonly DayOfWeek[];
 export type localeTextDirection = (locale: string) => TextDirection;
+export type formatInteger = (locale: string, value: number) => string;
 
 // --- Implementation ---
 
@@ -173,6 +174,16 @@ export const localeFirstDayOfWeek: localeFirstDayOfWeek = (locale) => {
 export const localeWeekendDays: localeWeekendDays = (locale) => {
   const weekend = weekInfoOf(locale)?.weekend?.filter(isDayOfWeek);
   return weekend !== undefined && weekend.length > 0 ? weekend : [6, 7];
+};
+
+const numberFormatCache = new Map<string, Intl.NumberFormat>();
+
+/** Locale-aware integer rendering (week numbers, counters). */
+export const formatInteger: formatInteger = (locale, value) => {
+  const cached = numberFormatCache.get(locale);
+  const format = cached ?? new Intl.NumberFormat(locale, { useGrouping: false });
+  if (cached === undefined) numberFormatCache.set(locale, format);
+  return format.format(value);
 };
 
 const RTL_LANGUAGES = new Set([

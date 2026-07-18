@@ -7,6 +7,8 @@ describe("mergeMessages", () => {
     expect(englishMessages.previous("month")).toBe("Previous month");
     expect(englishMessages.next("year")).toBe("Next year");
     expect(englishMessages.moreEvents(3)).toBe("+3 more");
+    expect(englishMessages.events(1)).toBe("1 event");
+    expect(englishMessages.events(4)).toBe("4 events");
   });
 
   it("merges partial overrides over the defaults", () => {

@@ -3,6 +3,7 @@ import { Temporal } from "../temporal";
 import {
   formatDayNumber,
   formatHour,
+  formatInteger,
   formatPlainDate,
   formatPlainDateRange,
   formatPlainTime,
@@ -122,6 +123,14 @@ describe("localeTextDirection", () => {
     expect(localeTextDirection("ja-JP")).toBe("ltr");
     expect(localeTextDirection("ar-EG")).toBe("rtl");
     expect(localeTextDirection("he-IL")).toBe("rtl");
+  });
+});
+
+describe("formatInteger", () => {
+  it("localizes digits without grouping", () => {
+    expect(formatInteger("en-US", 29)).toBe("29");
+    expect(formatInteger("ar-EG", 29)).toMatch(/[٠-٩]/u);
+    expect(formatInteger("en-US", 1000)).toBe("1000");
   });
 });
 
