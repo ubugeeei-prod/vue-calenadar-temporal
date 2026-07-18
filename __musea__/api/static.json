@@ -485,11 +485,17 @@
             "control": "number",
             "required": false,
             "options": []
+          },
+          {
+            "name": "rangeDragSelect",
+            "control": "boolean",
+            "required": false,
+            "options": []
           }
         ],
         "groups": [],
-        "json": "{\n  \"title\": \"Month view\",\n  \"controls\": [\n    {\n      \"name\": \"fixedWeekCount\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"weekdayStyle\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"showWeekNumbers\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"maxEventLanes\",\n      \"control\": \"number\",\n      \"required\": false,\n      \"options\": []\n    }\n  ]\n}",
-        "typescript": "export interface MonthViewProps {\n  fixedWeekCount?: boolean;\n  weekdayStyle?: string;\n  showWeekNumbers?: boolean;\n  maxEventLanes?: number;\n}\n"
+        "json": "{\n  \"title\": \"Month view\",\n  \"controls\": [\n    {\n      \"name\": \"fixedWeekCount\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"weekdayStyle\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"showWeekNumbers\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"maxEventLanes\",\n      \"control\": \"number\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"rangeDragSelect\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    }\n  ]\n}",
+        "typescript": "export interface MonthViewProps {\n  fixedWeekCount?: boolean;\n  weekdayStyle?: string;\n  showWeekNumbers?: boolean;\n  maxEventLanes?: number;\n  rangeDragSelect?: boolean;\n}\n"
       },
       "analysis": {
         "props": [
@@ -511,6 +517,11 @@
           {
             "name": "maxEventLanes",
             "type": "number",
+            "required": false
+          },
+          {
+            "name": "rangeDragSelect",
+            "type": "boolean",
             "required": false
           }
         ],
