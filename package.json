@@ -45,12 +45,15 @@
     "temporal-polyfill-lite": "^0.4.2"
   },
   "devDependencies": {
+    "@size-limit/preset-small-lib": "^12.1.0",
     "@vitest/browser": "4.1.10",
     "@vitest/browser-playwright": "4.1.10",
     "@vizejs/vite-plugin": "^0.291.0",
     "@voidzero-dev/vite-plus-core": "latest",
     "@vue/server-renderer": "3.6.0-rc.1",
+    "lightningcss": "^1.32.0",
     "playwright": "^1.61.1",
+    "size-limit": "^12.1.0",
     "typescript": "^7.0.2",
     "vite-plus": "^0.2.5",
     "vitest": "4.1.10",
@@ -61,6 +64,39 @@
   "peerDependencies": {
     "vue": "^3.5.0 || ^3.6.0-0"
   },
+  "size-limit": [
+    {
+      "name": "everything, incl. the Temporal ponyfill",
+      "path": "dist/index.js",
+      "limit": "30 kB"
+    },
+    {
+      "name": "library code only (ponyfill excluded)",
+      "path": "dist/index.js",
+      "ignore": [
+        "temporal-polyfill-lite"
+      ],
+      "limit": "12 kB"
+    },
+    {
+      "name": "tree-shaken: useCalendar only",
+      "path": "dist/index.js",
+      "import": "{ useCalendar }",
+      "ignore": [
+        "temporal-polyfill-lite"
+      ],
+      "limit": "3 kB"
+    },
+    {
+      "name": "tree-shaken: DatePicker",
+      "path": "dist/index.js",
+      "import": "{ DatePickerRoot, DatePickerTrigger, DatePickerContent }",
+      "ignore": [
+        "temporal-polyfill-lite"
+      ],
+      "limit": "9 kB"
+    }
+  ],
   "engines": {
     "node": ">=22"
   },

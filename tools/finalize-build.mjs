@@ -10,9 +10,10 @@
  *    parameters: https://github.com/ubugeeei-prod/vize/issues/3065
  * 4. Copies the opt-in stylesheets to `dist/styles/`.
  */
-import { cp, readdir, rm, stat } from "node:fs/promises";
+import { cp, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { transform } from "lightningcss";
 
 const TYPES_ROOT = path.resolve("dist/types/src");
 const OVERRIDES_ROOT = path.resolve("types-overrides");
@@ -48,11 +49,44 @@ async function removeTestDeclarations(directory) {
   }
 }
 
+/**
+ * Copies the stylesheets and minifies them with Lightning CSS — the source
+ * stays readable, the distribution stays small. A generous byte budget
+ * guards against accidental bloat.
+ */
+const STYLES_BUDGET_BYTES = 16_000;
+
 async function copyStyles() {
   await cp(STYLES_SOURCE, STYLES_TARGET, { recursive: true });
   await rm(path.join(STYLES_TARGET, "styles.browser.test.ts"), {
     force: true,
   });
+
+  let totalBytes = 0;
+
+  for (const entry of await readdir(STYLES_TARGET)) {
+    if (!entry.endsWith(".css")) continue;
+
+    const file = path.join(STYLES_TARGET, entry);
+    const { code } = transform({
+      filename: entry,
+      code: await readFile(file),
+      minify: true,
+    });
+
+    await writeFile(file, code);
+    totalBytes += code.length;
+  }
+
+  if (totalBytes > STYLES_BUDGET_BYTES) {
+    console.error(
+      `[finalize-build] stylesheets grew to ${totalBytes} B ` +
+        `(budget: ${STYLES_BUDGET_BYTES} B)`,
+    );
+    process.exit(1);
+  }
+
+  console.log(`[finalize-build] stylesheets minified: ${totalBytes} B total`);
 }
 
 await assertRequiredOutput();

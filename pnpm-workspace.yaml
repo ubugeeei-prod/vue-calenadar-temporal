@@ -10,3 +10,7 @@ overrides:
 minimumReleaseAgeExclude:
   - vue
   - "@vue/*"
+
+# size-limit measures through esbuild, which needs its postinstall.
+allowBuilds:
+  esbuild: true
