@@ -351,6 +351,9 @@
 
   [data-vct="time-grid"] {
     border-block-start: 1px solid var(--vct-line);
+    /* The hour labels sit on their lines (translated up); give the first
+       one headroom so it never clips under the header. */
+    padding-block-start: 0.625rem;
   }
 
   [data-vct="day-column"] {
@@ -514,6 +517,36 @@
 
   [data-vct="date-picker-trigger"][data-empty] {
     color: var(--vct-text-muted);
+  }
+
+  /* Inside the popover the month view drops its card skin and gridlines —
+     one surface, one voice. */
+  [data-vct="date-picker-content"] {
+    --vct-line: transparent;
+
+    & [data-vct="month-grid"] {
+      background: none;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      border-radius: 0;
+    }
+
+    & [data-vct="header"] {
+      padding-block-end: 0.5rem;
+    }
+
+    & [data-vct="title"] {
+      font-size: 1rem;
+    }
+
+    & [data-vct="day-number"] {
+      margin-block-start: 0;
+    }
+
+    & [data-vct="weekday-columnheader"] {
+      padding-block: 0.3rem;
+    }
   }
 
   [data-vct="date-picker-content"] {

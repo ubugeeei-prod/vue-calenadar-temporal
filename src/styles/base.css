@@ -237,6 +237,18 @@
     inset-inline-start: 0;
     z-index: 30;
     min-inline-size: 18rem;
+
+    /* Compact picker grammar: tight square cells, no event area. */
+    & [data-vct="day"] {
+      min-block-size: 2.4rem;
+      padding: 0.125rem;
+      align-items: center;
+      justify-content: center;
+    }
+
+    & [data-vct="day-events"] {
+      display: none;
+    }
   }
 
   /* ------------------------------------------------------------------ */
