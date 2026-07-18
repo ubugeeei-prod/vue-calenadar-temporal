@@ -19,6 +19,11 @@ jobs:
           node-version: "24"
           cache: true
       - run: vp install --frozen-lockfile
+      - uses: useblacksmith/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: vp exec playwright install --with-deps chromium
       - run: vp check
       - run: vp run lint
       - run: vp run typecheck
