@@ -20,5 +20,8 @@ export default defineConfig({
   ],
   build: {
     outDir: "dist-musea",
+    // Keep `light-dark()` intact in the bundled preview CSS; the default
+    // Lightning CSS minifier polyfills it destructively without targets.
+    cssMinify: "esbuild",
   },
 });

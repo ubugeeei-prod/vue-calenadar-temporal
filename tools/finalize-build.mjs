@@ -79,6 +79,14 @@ async function copyStyles() {
         filename: entry.name,
         code: await readFile(entryPath),
         minify: true,
+        // Modern targets so `light-dark()` and friends ship natively —
+        // without them Lightning CSS rewrites light-dark() into its
+        // variable polyfill, which breaks when files load standalone.
+        targets: {
+          chrome: 123 << 16,
+          firefox: 120 << 16,
+          safari: (17 << 16) | (5 << 8),
+        },
       });
 
       await writeFile(entryPath, code);
