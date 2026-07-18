@@ -139,3 +139,8 @@ export { default as CalendarPrevButton } from "./calendar/CalendarPrevButton.vue
 export { default as CalendarNextButton } from "./calendar/CalendarNextButton.vue";
 export { default as CalendarTodayButton } from "./calendar/CalendarTodayButton.vue";
 export { default as CalendarMonthView } from "./month/CalendarMonthView.vue";
+export { default as CalendarWeekView } from "./week/CalendarWeekView.vue";
+export { default as CalendarYearView } from "./year/CalendarYearView.vue";
+
+export type { NowIndicator, UseNowIndicatorOptions } from "./week/now";
+export { axisFraction, useNowIndicator } from "./week/now";
