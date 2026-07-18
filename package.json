@@ -49,6 +49,7 @@
     "@vitest/browser": "4.1.10",
     "@vitest/browser-playwright": "4.1.10",
     "@vizejs/vite-plugin": "^0.291.0",
+    "@vizejs/vite-plugin-musea": "^0.291.0",
     "@voidzero-dev/vite-plus-core": "latest",
     "@vue/server-renderer": "3.6.0-rc.1",
     "lightningcss": "^1.32.0",

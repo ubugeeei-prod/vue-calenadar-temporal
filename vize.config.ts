@@ -7,6 +7,11 @@ export default defineConfig({
   vite: {
     scanPatterns: ["src/**/*.vue"],
   },
+  musea: {
+    include: ["src/**/*.art.vue"],
+    exclude: ["node_modules/**", "dist/**"],
+    basePath: "/__musea__",
+  },
   linter: {
     preset: "opinionated",
   },

@@ -1,9 +1,15 @@
 import { playwright } from "@vitest/browser-playwright";
 import vize from "@vizejs/vite-plugin";
+import { musea } from "@vizejs/vite-plugin-musea";
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
-  plugins: [vize()],
+  plugins: [
+    vize(),
+    // Component gallery at /__musea__ — dev server only, so the library
+    // build stays untouched.
+    { ...musea({ previewCss: ["src/styles/style.css"] }), apply: "serve" },
+  ],
   build: {
     lib: {
       entry: "src/index.ts",
@@ -89,6 +95,17 @@ export default defineConfig({
         // finalize-dts.mjs asserts the output and patches those two files.
         command:
           "vp build && (vize check src --declaration || true) && node tools/finalize-build.mjs",
+      },
+      "musea:build": {
+        command: "vp build --config vite.config.musea.ts",
+      },
+      vrt: {
+        // Needs a running dev server: `vp dev` in another shell first.
+        command:
+          "vp exec musea-vrt --ci --a11y --base-url http://localhost:5173",
+      },
+      "vrt:update": {
+        command: "vp exec musea-vrt --update --base-url http://localhost:5173",
       },
       size: {
         command: "vp run build && vp exec size-limit",
