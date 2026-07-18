@@ -1,0 +1,51 @@
+/**
+ * vue-calendar-temporal — themes/glass.css (opt-in, the default sample)
+ *
+ * Glassmorphism: translucent frosted cards over whatever your app paints
+ * behind them, a saturated accent, soft deep shadows. Looks best on a
+ * gradient or imagery backdrop. Automatic light/dark via `light-dark()`.
+ */
+@import "./_shell.css";
+
+@layer vct.theme {
+  [data-vct="root"],
+  [data-vct="date-picker"],
+  [data-vct="date-picker-content"] {
+    --vct-accent: light-dark(oklch(0.55 0.19 278), oklch(0.75 0.15 278));
+    --vct-on-accent: light-dark(oklch(0.99 0 0), oklch(0.18 0.03 278));
+    --vct-surface: light-dark(oklch(0.98 0.005 270), oklch(0.2 0.015 270));
+    --vct-surface-raised: light-dark(oklch(1 0 0), oklch(0.25 0.02 270));
+    --vct-text: light-dark(oklch(0.25 0.02 275), oklch(0.95 0.01 275));
+    --vct-text-muted: color-mix(in oklch, var(--vct-text), transparent 45%);
+    --vct-hairline: color-mix(in oklch, var(--vct-text), transparent 86%);
+    --vct-line: color-mix(in oklch, var(--vct-text), transparent 91%);
+    --vct-hover: light-dark(oklch(1 0 0 / 0.55), oklch(1 0 0 / 0.07));
+    --vct-range: color-mix(in oklch, var(--vct-accent), transparent 86%);
+    --vct-today: var(--vct-accent);
+    --vct-now: light-dark(oklch(0.62 0.19 25), oklch(0.7 0.17 25));
+
+    --vct-card-bg: light-dark(oklch(1 0 0 / 0.62), oklch(0.26 0.02 270 / 0.5));
+    --vct-card-border: 1px solid
+      light-dark(oklch(1 0 0 / 0.65), oklch(1 0 0 / 0.12));
+    --vct-card-filter: blur(24px) saturate(1.5);
+    --vct-shadow: 0 12px 40px -12px
+      light-dark(oklch(0.3 0.05 278 / 0.25), oklch(0 0 0 / 0.5));
+
+    --vct-radius: 16px;
+    --vct-radius-small: 8px;
+    --vct-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    --vct-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --vct-ease-pop: cubic-bezier(0.32, 1.36, 0.5, 1);
+    --vct-duration-fast: 120ms;
+    --vct-duration: 200ms;
+    --vct-duration-slow: 320ms;
+  }
+
+  /* Frosted pills for spanning events; timed blocks get a glass tint too. */
+  [data-vct="time-event"] {
+    background: color-mix(in oklch, var(--vct-accent), transparent 82%);
+    color: color-mix(in oklch, var(--vct-accent), var(--vct-text) 20%);
+    backdrop-filter: blur(8px);
+  }
+}

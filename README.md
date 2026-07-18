@@ -41,7 +41,7 @@ import {
   CalendarMonthView,
   Temporal,
 } from "vue-calendar-temporal";
-// Opt-in styles (structure + calm default theme, light/dark automatic):
+// Opt-in styles (structure + glassmorphic default, light/dark automatic):
 import "vue-calendar-temporal/style.css";
 
 const selected = shallowRef<Temporal.PlainDate | null>(null);
@@ -133,17 +133,23 @@ your editor's hover is the reference manual.
 
 ## Styling
 
-Three opt-in sheets, all inside `vct.*` cascade layers so plain user CSS
-always wins:
+Opt-in sheets, all inside `vct.*` cascade layers so plain user CSS always
+wins. `style.css` = `base.css` + the glass theme; or pair `base.css` with
+any theme:
 
-| import                            | contents                                                                  |
-| --------------------------------- | ------------------------------------------------------------------------- |
-| `vue-calendar-temporal/style.css` | everything below (the one-liner)                                          |
-| `…/styles/base.css`               | structure only — grid geometry, event positioning; bring your own theme   |
-| `…/styles/theme.css`              | the default look — oklch + `light-dark()`, one accent, soft settle easing |
+| import                            | look                                                      |
+| --------------------------------- | --------------------------------------------------------- |
+| `vue-calendar-temporal/style.css` | the one-liner: structure + **glass**                      |
+| `…/styles/base.css`               | structure only — bring your own theme                     |
+| `…/styles/themes/glass.css`       | glassmorphic: frosted translucent cards, deep soft shadow |
+| `…/styles/themes/simple.css`      | quiet hairlines, near-zero shadow                         |
+| `…/styles/themes/material.css`    | tonal surfaces, level-1 elevation, state layers           |
+| `…/styles/themes/flat.css`        | no borders, no shadows — tint blocks only                 |
+| `…/styles/themes/solid.css`       | 2px strokes, hard offset shadows, pop accent              |
 
-Theming is custom-property overrides only (`--vct-accent`,
-`--vct-radius`, `--vct-ease-out`, …); dark mode follows `color-scheme`.
+Every theme is a token sheet over one shared shell: custom-property
+overrides (`--vct-accent`, `--vct-radius`, `--vct-ease-out`, …) restyle any
+of them, and light/dark is automatic via `color-scheme` + `light-dark()`.
 Headless usage: skip the CSS entirely and style the `data-vct="…"` /
 `data-*` state attributes yourself.
 

@@ -1,0 +1,51 @@
+/**
+ * vue-calendar-temporal — themes/flat.css (opt-in)
+ *
+ * Flat: no borders on the outside, no shadows, no blur — hierarchy comes
+ * from tint blocks and faint interior gridlines only. Automatic light/dark
+ * via `light-dark()`.
+ */
+@import "./_shell.css";
+
+@layer vct.theme {
+  [data-vct="root"],
+  [data-vct="date-picker"],
+  [data-vct="date-picker-content"] {
+    --vct-accent: light-dark(oklch(0.55 0.17 250), oklch(0.75 0.13 250));
+    --vct-on-accent: light-dark(oklch(0.99 0 0), oklch(0.17 0.02 250));
+    --vct-surface: light-dark(oklch(0.985 0.002 250), oklch(0.19 0.008 250));
+    --vct-surface-raised: light-dark(
+      oklch(0.955 0.004 250),
+      oklch(0.235 0.01 250)
+    );
+    --vct-text: light-dark(oklch(0.26 0.01 250), oklch(0.93 0.008 250));
+    --vct-text-muted: color-mix(in oklch, var(--vct-text), transparent 44%);
+    --vct-hairline: color-mix(in oklch, var(--vct-text), transparent 90%);
+    --vct-line: color-mix(in oklch, var(--vct-text), transparent 94%);
+    --vct-hover: color-mix(in oklch, var(--vct-text), transparent 94%);
+    --vct-range: color-mix(in oklch, var(--vct-accent), transparent 88%);
+    --vct-today: var(--vct-accent);
+    --vct-now: light-dark(oklch(0.62 0.19 25), oklch(0.7 0.17 25));
+
+    --vct-card-bg: var(--vct-surface-raised);
+    --vct-card-border: none;
+    --vct-card-filter: none;
+    --vct-shadow: none;
+
+    --vct-radius: 10px;
+    --vct-radius-small: 5px;
+    --vct-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    --vct-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --vct-ease-pop: var(--vct-ease-out);
+    --vct-duration-fast: 100ms;
+    --vct-duration: 160ms;
+    --vct-duration-slow: 240ms;
+  }
+
+  /* Flat means flat: hover never lifts, only tints. */
+  [data-vct="time-event"]:hover {
+    translate: 0 0;
+    box-shadow: none;
+  }
+}

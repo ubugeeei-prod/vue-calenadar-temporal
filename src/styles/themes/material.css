@@ -1,0 +1,46 @@
+/**
+ * vue-calendar-temporal — themes/material.css (opt-in)
+ *
+ * Material-flavored: tonal surfaces tinted by the primary, level-1
+ * elevation, 8% state layers, rounded-but-grounded shapes. Automatic
+ * light/dark via `light-dark()`.
+ */
+@import "./_shell.css";
+
+@layer vct.theme {
+  [data-vct="root"],
+  [data-vct="date-picker"],
+  [data-vct="date-picker-content"] {
+    --vct-accent: light-dark(oklch(0.48 0.13 290), oklch(0.8 0.1 290));
+    --vct-on-accent: light-dark(oklch(1 0 0), oklch(0.25 0.05 290));
+    --vct-surface: light-dark(oklch(0.98 0.008 290), oklch(0.21 0.012 290));
+    --vct-surface-raised: light-dark(
+      color-mix(in oklch, oklch(0.48 0.13 290), white 94%),
+      color-mix(in oklch, oklch(0.8 0.1 290), oklch(0.22 0.01 290) 92%)
+    );
+    --vct-text: light-dark(oklch(0.25 0.015 290), oklch(0.93 0.01 290));
+    --vct-text-muted: color-mix(in oklch, var(--vct-text), transparent 42%);
+    --vct-hairline: color-mix(in oklch, var(--vct-text), transparent 88%);
+    --vct-line: color-mix(in oklch, var(--vct-text), transparent 92%);
+    --vct-hover: color-mix(in oklch, var(--vct-accent), transparent 92%);
+    --vct-range: color-mix(in oklch, var(--vct-accent), transparent 86%);
+    --vct-today: var(--vct-accent);
+    --vct-now: light-dark(oklch(0.6 0.2 25), oklch(0.72 0.17 25));
+
+    --vct-card-bg: var(--vct-surface-raised);
+    --vct-card-border: 1px solid transparent;
+    --vct-card-filter: none;
+    --vct-shadow:
+      0 1px 2px oklch(0 0 0 / 0.18), 0 1px 3px 1px oklch(0 0 0 / 0.1);
+
+    --vct-radius: 16px;
+    --vct-radius-small: 8px;
+    --vct-font: Roboto, ui-sans-serif, system-ui, sans-serif;
+
+    --vct-ease-out: cubic-bezier(0.2, 0, 0, 1);
+    --vct-ease-pop: cubic-bezier(0.3, 1.3, 0.4, 1);
+    --vct-duration-fast: 100ms;
+    --vct-duration: 200ms;
+    --vct-duration-slow: 300ms;
+  }
+}

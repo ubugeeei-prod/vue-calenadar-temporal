@@ -1,0 +1,42 @@
+/**
+ * vue-calendar-temporal — themes/simple.css (opt-in)
+ *
+ * The quiet one: solid surfaces, hairline gridlines, one desaturated
+ * accent, barely-there shadow. When the calendar should recede into a
+ * product instead of performing. Automatic light/dark via `light-dark()`.
+ */
+@import "./_shell.css";
+
+@layer vct.theme {
+  [data-vct="root"],
+  [data-vct="date-picker"],
+  [data-vct="date-picker-content"] {
+    --vct-accent: light-dark(oklch(0.52 0.15 262), oklch(0.74 0.12 262));
+    --vct-on-accent: light-dark(oklch(0.99 0 0), oklch(0.17 0.02 262));
+    --vct-surface: light-dark(oklch(0.99 0.002 250), oklch(0.19 0.01 260));
+    --vct-surface-raised: light-dark(oklch(1 0 0), oklch(0.22 0.012 260));
+    --vct-text: light-dark(oklch(0.24 0.012 260), oklch(0.94 0.008 260));
+    --vct-text-muted: color-mix(in oklch, var(--vct-text), transparent 46%);
+    --vct-hairline: color-mix(in oklch, var(--vct-text), transparent 90%);
+    --vct-line: color-mix(in oklch, var(--vct-text), transparent 93%);
+    --vct-hover: color-mix(in oklch, var(--vct-text), transparent 96%);
+    --vct-range: color-mix(in oklch, var(--vct-accent), transparent 90%);
+    --vct-today: var(--vct-accent);
+    --vct-now: light-dark(oklch(0.62 0.19 25), oklch(0.7 0.17 25));
+
+    --vct-card-bg: var(--vct-surface-raised);
+    --vct-card-border: 1px solid var(--vct-hairline);
+    --vct-card-filter: none;
+    --vct-shadow: 0 1px 2px oklch(0.2 0.01 260 / 0.04);
+
+    --vct-radius: 12px;
+    --vct-radius-small: 6px;
+    --vct-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    --vct-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --vct-ease-pop: cubic-bezier(0.32, 1.36, 0.5, 1);
+    --vct-duration-fast: 120ms;
+    --vct-duration: 200ms;
+    --vct-duration-slow: 320ms;
+  }
+}
