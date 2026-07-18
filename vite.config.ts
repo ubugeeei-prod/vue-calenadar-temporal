@@ -83,6 +83,10 @@ export default defineConfig({
         command:
           "vp build && (vize check src --declaration || true) && node tools/finalize-build.mjs",
       },
+      release: {
+        // `vp run release minor` — see tools/release.mjs for the full flow.
+        command: "node tools/release.mjs",
+      },
       ready: {
         command:
           "vp fmt && vp check && vp run lint && vp run typecheck && vp test run && vp run build",
