@@ -33,12 +33,16 @@
     "temporal-polyfill-lite": "^0.4.2"
   },
   "devDependencies": {
+    "@vitest/browser": "4.1.10",
+    "@vitest/browser-playwright": "4.1.10",
     "@vizejs/vite-plugin": "^0.291.0",
     "@voidzero-dev/vite-plus-core": "latest",
     "@vue/server-renderer": "3.6.0-rc.1",
+    "playwright": "^1.61.1",
     "typescript": "^7.0.2",
     "vite-plus": "^0.2.5",
     "vitest": "4.1.10",
+    "vitest-browser-vue": "^2.1.0",
     "vize": "^0.291.0",
     "vue": "3.6.0-rc.1"
   },

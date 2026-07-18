@@ -1,3 +1,4 @@
+import { playwright } from "@vitest/browser-playwright";
 import vize from "@vizejs/vite-plugin";
 import { defineConfig } from "vite-plus";
 
@@ -14,8 +15,49 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["src/**/*.test.ts"],
-    environment: "node",
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "unit",
+          environment: "node",
+          include: ["src/**/*.test.ts"],
+          exclude: ["src/**/*.browser.test.ts"],
+        },
+      },
+      {
+        extends: true,
+        // Keep a single copy of Vue in the browser client: pre-bundled and
+        // raw ESM copies would break identity checks (e.g. EMPTY_OBJ in
+        // useTemplateRef).
+        optimizeDeps: {
+          exclude: [
+            "vue",
+            "@vue/runtime-dom",
+            "@vue/runtime-core",
+            "@vue/reactivity",
+            "@vue/shared",
+            "@vue/server-renderer",
+            "@vue/compiler-dom",
+            "@vue/compiler-core",
+            "@vue/compiler-ssr",
+            "@vue/compiler-sfc",
+            "vitest-browser-vue",
+          ],
+        },
+        test: {
+          name: "browser",
+          include: ["src/**/*.browser.test.ts"],
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            screenshotFailures: false,
+            instances: [{ browser: "chromium" }],
+          },
+        },
+      },
+    ],
   },
   lint: {
     ignorePatterns: ["dist/**"],

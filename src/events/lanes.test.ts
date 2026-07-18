@@ -105,4 +105,27 @@ describe("layoutEventLanes", () => {
     expect(layout.segments).toHaveLength(0);
     expect(layout.laneCount).toBe(0);
   });
+  it("hides everything when maxLanes is zero", () => {
+    const events = normalizeEvents([
+      { id: "a", start: date("2026-07-14") },
+      { id: "b", start: date("2026-07-15"), end: date("2026-07-16") },
+    ]);
+    const layout = layoutEventLanes(events, week, { maxLanes: 0 });
+    expect(layout.segments).toHaveLength(0);
+    expect(layout.hiddenEvents).toHaveLength(2);
+    expect(layout.overflow).toEqual([0, 1, 1, 1, 0, 0, 0]);
+  });
+
+  it("works on rows narrower than a week (5-day work week)", () => {
+    const workWeek = { start: date("2026-07-13"), end: date("2026-07-17") };
+    const events = normalizeEvents([
+      { id: "spill", start: date("2026-07-16"), end: date("2026-07-19") },
+    ]);
+    const layout = layoutEventLanes(events, workWeek);
+    expect(layout.overflow).toHaveLength(5);
+    const [segment] = layout.segments;
+    expect(segment?.startColumn).toBe(3);
+    expect(segment?.span).toBe(2);
+    expect(segment?.continuesAfter).toBe(true);
+  });
 });

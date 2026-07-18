@@ -4,6 +4,7 @@ import {
   formatDayNumber,
   formatHour,
   formatInteger,
+  formatPlainDateList,
   formatPlainDate,
   formatPlainDateRange,
   formatPlainTime,
@@ -159,5 +160,34 @@ describe("resolveLocale", () => {
     expect(resolveLocale("ja-JP")).toBe("ja-JP");
     expect(resolveLocale(new Intl.Locale("fr-CA"))).toBe("fr-CA");
     expect(resolveLocale()).toBeTypeOf("string");
+  });
+});
+describe("additional locales", () => {
+  it("localizes month and weekday names beyond English", () => {
+    expect(monthNames("fr-FR", "long")[0]).toBe("janvier");
+    expect(monthNames("de-DE", "long")[2]).toBe("März");
+    expect(weekdayNames("fr-FR", "long", 1)[0]).toBe("lundi");
+  });
+
+  it("respects 24-hour locales for hour labels", () => {
+    expect(formatHour("en-GB", 13)).toBe("13");
+    expect(formatHour("de-DE", 13)).toMatch(/13/u);
+  });
+
+  it("derives Monday starts across European locales", () => {
+    expect(localeFirstDayOfWeek("fr-FR")).toBe(1);
+    expect(localeFirstDayOfWeek("es-ES")).toBe(1);
+  });
+});
+
+describe("formatPlainDateList", () => {
+  it("joins dates with locale-aware conjunctions", () => {
+    const dates = [date("2026-07-10"), date("2026-07-12")];
+    expect(formatPlainDateList("en-US", dates)).toBe(
+      "Jul 10, 2026 and Jul 12, 2026",
+    );
+    const japanese = formatPlainDateList("ja-JP", dates);
+    expect(japanese).toContain("2026/07/10");
+    expect(japanese).toContain("2026/07/12");
   });
 });

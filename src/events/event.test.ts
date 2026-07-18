@@ -144,6 +144,36 @@ describe("normalizeEvent — absolute inputs and time zones", () => {
   });
 });
 
+describe("normalizeEvent — DST boundaries", () => {
+  it("resolves instants across a spring-forward gap", () => {
+    // America/New_York jumps 02:00 → 03:00 on 2026-03-08.
+    const beforeGap = normalizeEvent(
+      { id: 1, start: Temporal.Instant.from("2026-03-08T06:59:00Z") },
+      { timeZone: "America/New_York" },
+    );
+    expect(beforeGap.start.toString()).toBe("2026-03-08T01:59:00");
+
+    const afterGap = normalizeEvent(
+      { id: 2, start: Temporal.Instant.from("2026-03-08T07:30:00Z") },
+      { timeZone: "America/New_York" },
+    );
+    expect(afterGap.start.toString()).toBe("2026-03-08T03:30:00");
+  });
+
+  it("swaps absolute endpoints that reverse after zone conversion", () => {
+    const normalized = normalizeEvent(
+      {
+        id: 3,
+        start: Temporal.Instant.from("2026-07-18T12:00:00Z"),
+        end: Temporal.Instant.from("2026-07-18T10:00:00Z"),
+      },
+      { timeZone: "UTC" },
+    );
+    expect(normalized.start.toString()).toBe("2026-07-18T10:00:00");
+    expect(normalized.end.toString()).toBe("2026-07-18T12:00:00");
+  });
+});
+
 describe("indexEventsByDay / eventsOnDay", () => {
   const range = { start: date("2026-07-13"), end: date("2026-07-19") };
   const events = normalizeEvents(

@@ -75,4 +75,14 @@ describe("buildMonthGrid", () => {
     // 2026-01-01 is a Thursday, so the first row is ISO week 1.
     expect(grid.weeks[0]?.weekNumber).toBe(1);
   });
+  it("carries ISO week 53 across the year boundary", () => {
+    const grid = buildMonthGrid({ ...baseOptions, month: month("2026-12") });
+    const lastWeek = grid.weeks[grid.weeks.length - 1];
+    // The final row's Thursday is 2026-12-31 → ISO week 53 of 2026.
+    expect(lastWeek?.weekNumber).toBe(53);
+    const outsideDays = grid.weeks
+      .flatMap((week) => week.days)
+      .filter((day) => day.isOutside);
+    expect(outsideDays.some((day) => day.key === "2027-01-03")).toBe(true);
+  });
 });

@@ -159,4 +159,43 @@ describe("layoutTimeGridDay", () => {
     const [placement] = layoutTimeGridDay(events, day, { minEventMinutes: 30 });
     expect(placement?.height).toBeCloseTo(0.5 / 24);
   });
+  it("gives identical intervals one column each", () => {
+    const events = normalizeEvents([
+      {
+        id: "a",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T10:00"),
+      },
+      {
+        id: "b",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T10:00"),
+      },
+      {
+        id: "c",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T10:00"),
+      },
+    ]);
+    const placements = layoutTimeGridDay(events, day);
+    expect(placements.map((placement) => placement.column).sort()).toEqual([
+      0, 1, 2,
+    ]);
+    expect(placements.every((placement) => placement.columnCount === 3)).toBe(
+      true,
+    );
+    expect(placements[0]?.width).toBeCloseTo(1 / 3);
+  });
+
+  it("keeps zero-length events visible via the minimum duration", () => {
+    const events = normalizeEvents([
+      {
+        id: "instantaneous",
+        start: dateTime("2026-07-15T09:00"),
+        end: dateTime("2026-07-15T09:00"),
+      },
+    ]);
+    const [placement] = layoutTimeGridDay(events, day);
+    expect(placement?.height).toBeCloseTo(15 / 1440);
+  });
 });
