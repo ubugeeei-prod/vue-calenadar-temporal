@@ -81,10 +81,21 @@ jobs:
       - run: vp install --frozen-lockfile
       - run: vp run build
 
+  size:
+    runs-on: blacksmith-32vcpu-ubuntu-2404
+    steps:
+      - uses: actions/checkout@v4
+      - uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: "24"
+          cache: true
+      - run: vp install --frozen-lockfile
+      - run: vp run size
+
   # Aggregate gate: the only required status check. Job-level changes above
   # never require touching the branch ruleset.
   ci:
-    needs: [check, lint, typecheck, test-unit, test-browser, build]
+    needs: [check, lint, typecheck, test-unit, test-browser, build, size]
     if: always()
     runs-on: blacksmith-32vcpu-ubuntu-2404
     steps:

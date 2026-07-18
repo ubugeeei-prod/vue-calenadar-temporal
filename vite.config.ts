@@ -8,10 +8,17 @@ export default defineConfig({
     lib: {
       entry: "src/index.ts",
       formats: ["es"],
-      fileName: () => "index.js",
     },
     rollupOptions: {
       external: ["vue", "temporal-polyfill-lite"],
+      output: {
+        // One output module per source module: consumers' bundlers can
+        // tree-shake at file granularity (a DatePicker-only app never pays
+        // for the week view).
+        preserveModules: true,
+        preserveModulesRoot: "src",
+        entryFileNames: "[name].js",
+      },
     },
   },
   test: {
@@ -82,6 +89,9 @@ export default defineConfig({
         // finalize-dts.mjs asserts the output and patches those two files.
         command:
           "vp build && (vize check src --declaration || true) && node tools/finalize-build.mjs",
+      },
+      size: {
+        command: "vp run build && vp exec size-limit",
       },
       release: {
         // `vp run release minor` — see tools/release.mjs for the full flow.
