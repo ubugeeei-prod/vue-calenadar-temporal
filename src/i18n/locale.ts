@@ -46,6 +46,11 @@ export type localeFirstDayOfWeek = (locale: string) => DayOfWeek;
 export type localeWeekendDays = (locale: string) => readonly DayOfWeek[];
 export type localeTextDirection = (locale: string) => TextDirection;
 export type formatInteger = (locale: string, value: number) => string;
+export type formatPlainDateList = (
+  locale: string,
+  dates: readonly Temporal.PlainDate[],
+  options?: Intl.DateTimeFormatOptions,
+) => string;
 
 // --- Implementation ---
 
@@ -174,6 +179,20 @@ export const localeFirstDayOfWeek: localeFirstDayOfWeek = (locale) => {
 export const localeWeekendDays: localeWeekendDays = (locale) => {
   const weekend = weekInfoOf(locale)?.weekend?.filter(isDayOfWeek);
   return weekend !== undefined && weekend.length > 0 ? weekend : [6, 7];
+};
+
+const listFormatCache = new Map<string, Intl.ListFormat>();
+
+/** Locale-aware "a, b, and c" list of dates (multiple-selection display). */
+export const formatPlainDateList: formatPlainDateList = (
+  locale,
+  dates,
+  options = { dateStyle: "medium" },
+) => {
+  const cached = listFormatCache.get(locale);
+  const list = cached ?? new Intl.ListFormat(locale, { style: "long", type: "conjunction" });
+  if (cached === undefined) listFormatCache.set(locale, list);
+  return list.format(dates.map((date) => formatPlainDate(locale, date, options)));
 };
 
 const numberFormatCache = new Map<string, Intl.NumberFormat>();
