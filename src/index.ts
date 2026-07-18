@@ -144,3 +144,17 @@ export { default as CalendarYearView } from "./year/CalendarYearView.vue";
 
 export type { NowIndicator, UseNowIndicatorOptions } from "./week/now";
 export { axisFraction, useNowIndicator } from "./week/now";
+
+export type { UseDatePickerOptions, UseDatePickerReturn } from "./date-picker/useDatePicker";
+export { useDatePicker } from "./date-picker/useDatePicker";
+
+export type { DatePickerContext } from "./date-picker/context";
+export {
+  DatePickerContextKey,
+  provideDatePickerContext,
+  useDatePickerContext,
+} from "./date-picker/context";
+
+export { default as DatePickerRoot } from "./date-picker/DatePickerRoot.vue";
+export { default as DatePickerTrigger } from "./date-picker/DatePickerTrigger.vue";
+export { default as DatePickerContent } from "./date-picker/DatePickerContent.vue";
