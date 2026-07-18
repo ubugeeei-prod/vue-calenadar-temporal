@@ -276,11 +276,13 @@ export const formatYearMonth: formatYearMonth = (
 /**
  * The day-of-month numeral in the locale's numbering system — `"18"` in
  * `en-US`, `"١٨"` in `ar-EG`. This is what day cells render.
+ *
+ * Deliberately a bare numeral: `Intl.DateTimeFormat` with `day: "numeric"`
+ * would append counters in some locales (`"18日"` in Japanese), and no real
+ * calendar prints those on every cell.
  */
 export const formatDayNumber: formatDayNumber = (locale, date) =>
-  getDateTimeFormat(locale, inUtc({ day: "numeric" })).format(
-    plainDateEpoch(date),
-  );
+  formatInteger(locale, date.day);
 
 /**
  * Formats a wall-clock time, honoring the locale's hour cycle —

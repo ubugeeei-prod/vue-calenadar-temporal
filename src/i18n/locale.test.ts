@@ -75,8 +75,10 @@ describe("formatYearMonth / formatDayNumber", () => {
     expect(formatYearMonth("ja-JP", month)).toBe("2026年7月");
   });
 
-  it("localizes day numerals", () => {
+  it("localizes day numerals as bare numbers", () => {
     expect(formatDayNumber("en-US", date("2026-07-18"))).toBe("18");
+    // No "18日"-style counters: real calendars never label every cell.
+    expect(formatDayNumber("ja-JP", date("2026-07-18"))).toBe("18");
     expect(formatDayNumber("ar-EG", date("2026-07-18"))).toMatch(/[٠-٩]/u);
   });
 });
