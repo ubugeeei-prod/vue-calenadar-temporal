@@ -1,0 +1,256 @@
+/**
+ * vue-calendar-temporal — base.css (opt-in)
+ *
+ * Structure only: grid geometry, event positioning math, scroll areas, and
+ * the popover anchor. No colors, no typography — pair it with theme.css or
+ * your own theme. Everything lives in the `vct.base` cascade layer so plain
+ * user CSS always wins.
+ *
+ * Knobs (override on any ancestor):
+ *   --vct-day-min-block:  month cell minimum height   (default 6.5rem)
+ *   --vct-hour-block:     height of one hour row      (default 3rem)
+ *   --vct-gutter-inline:  time gutter width           (default 3.5rem)
+ *   --vct-chip-block:     event chip height           (default 1.25rem)
+ *   --vct-chip-gap:       gap between stacked chips   (default 2px)
+ */
+@layer vct.base {
+  [data-vct="root"],
+  [data-vct="date-picker"] {
+    --vct-day-min-block: 6.5rem;
+    --vct-hour-block: 3rem;
+    --vct-gutter-inline: 3.5rem;
+    --vct-chip-block: 1.25rem;
+    --vct-chip-gap: 2px;
+
+    container-type: inline-size;
+    display: block;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Month view                                                          */
+  /* ------------------------------------------------------------------ */
+
+  [data-vct="month-grid"] {
+    display: block;
+    inline-size: 100%;
+
+    & [data-vct="weekdays-row"],
+    & [data-vct="week-row"] {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+    }
+
+    & [data-vct="weeknumber-columnheader"],
+    & [data-vct="weeknumber"] {
+      inline-size: 2.5rem;
+      grid-auto-columns: unset;
+    }
+  }
+
+  [data-vct="day"] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-block-size: var(--vct-day-min-block);
+    padding: 0.25rem;
+    cursor: pointer;
+  }
+
+  [data-vct="day-events"] {
+    position: relative;
+    inline-size: 100%;
+    flex: 1;
+    margin-block-start: 0.25rem;
+  }
+
+  /* Chips are absolutely positioned from their lane, and may span across
+     neighboring cells (the row is the visual canvas). */
+  [data-vct="event-chip"] {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: calc(
+      var(--vct-event-lane) * (var(--vct-chip-block) + var(--vct-chip-gap))
+    );
+    inline-size: calc(
+      var(--vct-event-span) * 100% + (var(--vct-event-span) - 1) * 1px
+    );
+    block-size: var(--vct-chip-block);
+    z-index: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  [data-vct="event-overflow"] {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Week view (time grid)                                               */
+  /* ------------------------------------------------------------------ */
+
+  [data-vct="week-grid"] {
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+
+    & [data-vct="week-header"],
+    & [data-vct="allday-row"] {
+      display: grid;
+      grid-template-columns:
+        var(--vct-gutter-inline)
+        repeat(var(--vct-day-count), minmax(0, 1fr));
+    }
+  }
+
+  [data-vct="week-day-header"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    padding-block: 0.375rem;
+  }
+
+  [data-vct="allday-lanes"] {
+    position: relative;
+    grid-column: 2 / -1;
+    display: grid;
+    grid-template-columns: repeat(var(--vct-day-count), minmax(0, 1fr));
+    min-block-size: calc(
+      var(--vct-lane-count) * (var(--vct-chip-block) + var(--vct-chip-gap))
+    );
+  }
+
+  [data-vct="allday-event"] {
+    position: absolute;
+    inset-inline-start: calc(
+      var(--vct-event-column) / var(--vct-day-count) * 100%
+    );
+    inset-block-start: calc(
+      var(--vct-event-lane) * (var(--vct-chip-block) + var(--vct-chip-gap))
+    );
+    inline-size: calc(
+      var(--vct-event-span) / var(--vct-day-count) * 100% - 2px
+    );
+    block-size: var(--vct-chip-block);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  [data-vct="time-grid"] {
+    display: grid;
+    grid-template-columns:
+      var(--vct-gutter-inline)
+      repeat(var(--vct-day-count), minmax(0, 1fr));
+    overflow-y: auto;
+  }
+
+  [data-vct="hour-label"] {
+    block-size: var(--vct-hour-block);
+  }
+
+  [data-vct="day-column"] {
+    position: relative;
+  }
+
+  [data-vct="hour-slots"] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  [data-vct="hour-slot"] {
+    display: block;
+    inline-size: 100%;
+    block-size: var(--vct-hour-block);
+    padding: 0;
+  }
+
+  [data-vct="time-event"] {
+    position: absolute;
+    inset-block-start: calc(var(--vct-event-top) * 100%);
+    block-size: max(calc(var(--vct-event-height) * 100% - 2px), 1rem);
+    inset-inline-start: calc(var(--vct-event-left) * 100% + 2px);
+    inline-size: calc(var(--vct-event-width) * 100% - 4px);
+    z-index: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  [data-vct="now-line"] {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(var(--vct-now-fraction) * 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Year view                                                           */
+  /* ------------------------------------------------------------------ */
+
+  [data-vct="year-grid"] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  [data-vct="year-weekdays"],
+  [data-vct="year-week"] {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  [data-vct="year-weekday"],
+  [data-vct="year-day"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    padding: 0;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Date picker popover                                                 */
+  /* ------------------------------------------------------------------ */
+
+  [data-vct="date-picker"] {
+    position: relative;
+    display: inline-block;
+  }
+
+  [data-vct="date-picker-content"] {
+    position: absolute;
+    inset-block-start: calc(100% + 0.5rem);
+    inset-inline-start: 0;
+    z-index: 30;
+    min-inline-size: 18rem;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Compact containers                                                  */
+  /* ------------------------------------------------------------------ */
+
+  @container (max-width: 40rem) {
+    [data-vct="month-grid"] {
+      --vct-day-min-block: 4.5rem;
+      --vct-chip-block: 1.05rem;
+    }
+
+    [data-vct="year-grid"] {
+      gap: 0.75rem;
+    }
+  }
+}

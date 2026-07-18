@@ -21,12 +21,17 @@
     "dist"
   ],
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/types/src/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./style.css": "./dist/styles/style.css",
+    "./styles/base.css": "./dist/styles/base.css",
+    "./styles/theme.css": "./dist/styles/theme.css",
     "./package.json": "./package.json"
   },
   "dependencies": {
