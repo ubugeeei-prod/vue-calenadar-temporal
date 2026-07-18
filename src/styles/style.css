@@ -1,0 +1,12 @@
+/**
+ * vue-calendar-temporal — style.css (opt-in)
+ *
+ * The one-liner: structural layout + the default theme.
+ *
+ *   import "vue-calendar-temporal/style.css";
+ *
+ * Prefer picking layers yourself? Import "…/styles/base.css" alone and bring
+ * your own theme on top.
+ */
+@import "./base.css";
+@import "./theme.css";

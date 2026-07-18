@@ -81,7 +81,7 @@ export default defineConfig({
         // SFCs (https://github.com/ubugeeei-prod/vize/issues/3065);
         // finalize-dts.mjs asserts the output and patches those two files.
         command:
-          "vp build && (vize check src --declaration || true) && node tools/finalize-dts.mjs",
+          "vp build && (vize check src --declaration || true) && node tools/finalize-build.mjs",
       },
       ready: {
         command:
