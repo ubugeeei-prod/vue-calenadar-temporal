@@ -41,6 +41,7 @@ export type daysFrom = (start: Temporal.PlainDate, count: number) => readonly Te
 export type daysInRange = (range: DateRange) => readonly Temporal.PlainDate[];
 export type isWeekend = (date: Temporal.PlainDate, weekendDays: readonly DayOfWeek[]) => boolean;
 export type orderedRange = (a: Temporal.PlainDate, b: Temporal.PlainDate) => DateRange;
+export type systemTimeZone = () => string;
 
 // --- Implementation ---
 
@@ -94,3 +95,17 @@ export const isWeekend: isWeekend = (date, weekendDays) =>
 /** Normalizes two dates into an ordered inclusive range. */
 export const orderedRange: orderedRange = (a, b) =>
   Temporal.PlainDate.compare(a, b) <= 0 ? { start: a, end: b } : { start: b, end: a };
+
+let cachedSystemTimeZone: string | undefined;
+
+/**
+ * The system time zone id, resolved once per process.
+ *
+ * Looking it up is expensive with the ponyfill, and a stable value also keeps
+ * server-rendered output deterministic within a process. Pass explicit
+ * `timeZone` options when you need a different zone.
+ */
+export const systemTimeZone: systemTimeZone = () => {
+  cachedSystemTimeZone ??= Temporal.Now.timeZoneId();
+  return cachedSystemTimeZone;
+};
