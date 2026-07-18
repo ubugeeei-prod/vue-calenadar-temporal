@@ -24,10 +24,10 @@
     --vct-today: var(--vct-accent);
     --vct-now: light-dark(oklch(0.62 0.19 25), oklch(0.7 0.17 25));
 
-    --vct-card-bg: light-dark(oklch(1 0 0 / 0.8), oklch(0.25 0.02 270 / 0.65));
+    --vct-card-bg: light-dark(oklch(1 0 0 / 0.66), oklch(0.25 0.02 270 / 0.55));
     --vct-card-border: 1px solid
       light-dark(oklch(1 0 0 / 0.65), oklch(1 0 0 / 0.12));
-    --vct-card-filter: blur(16px) saturate(1.35);
+    --vct-card-filter: blur(20px) saturate(1.4);
     --vct-shadow: 0 8px 28px -10px
       light-dark(oklch(0.3 0.05 278 / 0.25), oklch(0 0 0 / 0.5));
 
@@ -40,6 +40,16 @@
     --vct-duration-fast: 120ms;
     --vct-duration: 200ms;
     --vct-duration-slow: 320ms;
+  }
+
+  /* The glass edge: a light inner highlight on every frosted surface. */
+  [data-vct="month-grid"],
+  [data-vct="week-grid"],
+  [data-vct="year-month"],
+  [data-vct="date-picker-content"] {
+    box-shadow:
+      var(--vct-shadow),
+      inset 0 1px 0 light-dark(oklch(1 0 0 / 0.55), oklch(1 0 0 / 0.09));
   }
 
   /* Frosted pills for spanning events; timed blocks get a glass tint too. */
