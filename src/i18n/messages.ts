@@ -1,13 +1,40 @@
+/**
+ * The message catalog: every user-facing string the components render or
+ * announce to assistive technology.
+ *
+ * The components never hardcode prose — they read it from a
+ * {@link CalendarMessages} value, whose defaults are English. Localize by
+ * merging a partial override (hand-written, or wired to vue-i18n or any
+ * other i18n system); entries that vary with a count or a view are
+ * functions, so plural rules and word order stay fully in your hands.
+ *
+ * @example
+ * ```ts
+ * const messages = mergeMessages({
+ *   today: "今日",
+ *   moreEvents: (count) => `他${count}件`,
+ *   previous: (view) => (view === "month" ? "前の月" : "前へ"),
+ * });
+ * ```
+ */
 import type { CalendarView } from "../shared/view";
 
 // --- Types & Signatures ---
 
 /**
- * Every user-facing string the components render or announce.
+ * Every string the calendar UI needs.
  *
- * Defaults are English; pass a partial override (e.g. wired to vue-i18n) to
- * localize. Functions receive raw values so plural and ordering rules stay
- * fully in the caller's control.
+ * | Key | Where it appears |
+ * | --- | --- |
+ * | `today` | Today button label |
+ * | `previous` / `next` | Nav button `aria-label`s, per view |
+ * | `weekNumberColumn` | Week-number column header |
+ * | `weekNumber` | Week-number row header `aria-label` |
+ * | `moreEvents` | "+N more" overflow indicator |
+ * | `events` | Screen-reader event-count suffix on day cells |
+ * | `allDay` | All-day strip gutter label and event `aria-label`s |
+ * | `chooseDate` | Date-picker trigger placeholder and dialog label |
+ * | `close` | Close affordances |
  */
 export type CalendarMessages = {
   readonly today: string;
@@ -35,6 +62,12 @@ const VIEW_NOUNS: Record<CalendarView, string> = {
   year: "year",
 };
 
+/**
+ * The built-in English catalog.
+ *
+ * Exposed so overrides can delegate to it — e.g. wrap `previous` for one
+ * view and fall back for the rest.
+ */
 export const englishMessages: CalendarMessages = {
   today: "Today",
   previous: (view) => `Previous ${VIEW_NOUNS[view]}`,
@@ -48,6 +81,14 @@ export const englishMessages: CalendarMessages = {
   close: "Close",
 };
 
+/**
+ * Merges partial overrides over {@link englishMessages}.
+ *
+ * With no argument the English catalog comes back as-is — the same
+ * instance, so referential equality holds for memoization.
+ *
+ * @default englishMessages
+ */
 export const mergeMessages: mergeMessages = (overrides) =>
   overrides === undefined
     ? englishMessages
