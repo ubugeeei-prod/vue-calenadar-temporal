@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [
     vize(),
     musea({
-      previewCss: ["src/styles/style.css"],
+      previewCss: ["src/styles/style.css", "src/styles/musea-preview.css"],
       storybookOutDir: "dist-musea",
     }),
   ],

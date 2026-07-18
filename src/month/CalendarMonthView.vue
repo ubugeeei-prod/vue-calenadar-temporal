@@ -20,14 +20,32 @@ const {
   weekdayStyle = "short",
   showWeekNumbers = false,
   maxEventLanes = undefined,
+  rangeDragSelect = true,
 } = defineProps<{
-  /** Always render six weeks for a stable height. */
+  /**
+   * Always render six weeks for a stable height.
+   *
+   * @default false
+   */
   fixedWeekCount?: boolean;
-  /** Weekday header style. Default: "short". */
+  /**
+   * Weekday header style.
+   *
+   * @default "short"
+   */
   weekdayStyle?: NameStyle;
+  /** @default false */
   showWeekNumbers?: boolean;
   /** Cap stacked event lanes per week; the rest becomes "+N more". */
   maxEventLanes?: number;
+  /**
+   * In range mode, press a day and drag to sweep out the range in one
+   * gesture (the click–click flow keeps working alongside). Set `false`
+   * to allow only the two-click flow.
+   *
+   * @default true
+   */
+  rangeDragSelect?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -90,6 +108,49 @@ function clearHover(): void {
   calendar.hoverDate(null);
 }
 
+// Drag state is handler-local plumbing — deliberately not reactive.
+let dragActive = false;
+let dragStartKey: string | null = null;
+
+function dragEnabled(): boolean {
+  return rangeDragSelect && calendar.selectionMode === "range";
+}
+
+function onDayClick(day: MonthGridDay): void {
+  // With dragging on, the pointer handlers own range selection; the click
+  // that follows pointerup must not double-fire it.
+  if (dragEnabled()) return;
+  calendar.select(day.date);
+}
+
+function onDayPointerDown(day: MonthGridDay, pointerEvent: PointerEvent): void {
+  if (!dragEnabled() || pointerEvent.button !== 0) return;
+  if (calendar.isDateDisabled(day.date)) return;
+
+  // Begins the pending range — or completes it when one is already open
+  // (which is exactly the second half of the click–click flow).
+  calendar.select(day.date);
+  dragActive = calendar.pendingRangeStart.value !== null;
+  dragStartKey = day.key;
+}
+
+function onDayPointerUp(day: MonthGridDay): void {
+  if (!dragEnabled() || !dragActive) return;
+  dragActive = false;
+
+  const swept = day.key !== dragStartKey;
+  dragStartKey = null;
+  if (swept && calendar.pendingRangeStart.value !== null) {
+    calendar.select(day.date);
+  }
+}
+
+function onGridPointerLeave(): void {
+  dragActive = false;
+  dragStartKey = null;
+  clearHover();
+}
+
 function segmentsStartingAt(
   weekIndex: number,
   column: number,
@@ -148,7 +209,7 @@ function flag(condition: boolean): "" | undefined {
       calendar.selectionMode === 'single' ? undefined : 'true'
     "
     @keydown="onKeydown"
-    @mouseleave="clearHover"
+    @pointerleave="onGridPointerLeave"
     @blur.capture="clearHover"
   >
     <div role="row" data-vct="weekdays-row">
@@ -213,7 +274,9 @@ function flag(condition: boolean): "" | undefined {
         :data-disabled="flag(calendar.isDateDisabled(day.date))"
         :data-range-edge="calendar.rangeEdgeOf(day.date) ?? undefined"
         :data-preview="flag(previewContains(day))"
-        @click="() => calendar.select(day.date)"
+        @click="() => onDayClick(day)"
+        @pointerdown="(pointerEvent) => onDayPointerDown(day, pointerEvent)"
+        @pointerup="() => onDayPointerUp(day)"
         @mouseenter="() => calendar.hoverDate(day.date)"
         @focus="() => calendar.hoverDate(day.date)"
       >

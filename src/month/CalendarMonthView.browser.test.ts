@@ -191,3 +191,95 @@ describe("CalendarMonthView — range selection preview", () => {
     expect(previewed.length).toBe(4);
   });
 });
+describe("CalendarMonthView — drag range selection", () => {
+  const firePointer = (element: Element, type: string): void => {
+    element.dispatchEvent(new PointerEvent(type, { bubbles: true, button: 0 }));
+  };
+
+  it("sweeps a range in one press-drag-release gesture", async () => {
+    const onUpdate = vi.fn();
+    const screen = renderMonth({
+      selectionMode: "range",
+      "onUpdate:modelValue": onUpdate,
+    });
+
+    const start = screen
+      .getByRole("gridcell", { name: "Monday, July 13, 2026" })
+      .element();
+    const end = screen
+      .getByRole("gridcell", { name: "Thursday, July 16, 2026" })
+      .element();
+
+    firePointer(start, "pointerdown");
+    end.dispatchEvent(new MouseEvent("mouseenter"));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Mid-drag the swept days preview.
+    const gridElement = screen.getByRole("grid").element() as HTMLElement;
+    expect(gridElement.querySelectorAll("[data-preview]").length).toBe(4);
+
+    firePointer(end, "pointerup");
+
+    const range = onUpdate.mock.lastCall?.[0] as {
+      start: { day: number };
+      end: { day: number };
+    };
+    expect(range.start.day).toBe(13);
+    expect(range.end.day).toBe(16);
+  });
+
+  it("leaves the click–click flow intact and honors the opt-out", async () => {
+    const onUpdate = vi.fn();
+    const screen = renderMonth(
+      { selectionMode: "range", "onUpdate:modelValue": onUpdate },
+      { rangeDragSelect: false },
+    );
+
+    const start = screen
+      .getByRole("gridcell", { name: "Monday, July 13, 2026" })
+      .element();
+    const end = screen
+      .getByRole("gridcell", { name: "Thursday, July 16, 2026" })
+      .element();
+
+    // Pointer-only gestures do nothing when dragging is disabled…
+    firePointer(start, "pointerdown");
+    firePointer(end, "pointerup");
+    expect(onUpdate).not.toHaveBeenCalled();
+
+    // …while real clicks still build the range in two taps.
+    await screen
+      .getByRole("gridcell", { name: "Monday, July 13, 2026" })
+      .click();
+    await screen
+      .getByRole("gridcell", { name: "Thursday, July 16, 2026" })
+      .click();
+
+    const range = onUpdate.mock.lastCall?.[0] as {
+      start: { day: number };
+      end: { day: number };
+    };
+    expect(range.start.day).toBe(13);
+    expect(range.end.day).toBe(16);
+  });
+
+  it("keeps a plain press-release on one day as the pending first pick", async () => {
+    const onUpdate = vi.fn();
+    const screen = renderMonth({
+      selectionMode: "range",
+      "onUpdate:modelValue": onUpdate,
+    });
+
+    const day = screen
+      .getByRole("gridcell", { name: "Monday, July 13, 2026" })
+      .element();
+
+    firePointer(day, "pointerdown");
+    firePointer(day, "pointerup");
+    day.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+    // First pick clears the model (null) and stays pending — no range yet.
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    expect(onUpdate.mock.lastCall?.[0]).toBeNull();
+  });
+});

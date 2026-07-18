@@ -61,6 +61,8 @@ async function copyStyles() {
   await rm(path.join(STYLES_TARGET, "styles.browser.test.ts"), {
     force: true,
   });
+  // Gallery-only backdrop; not part of the distributed styles.
+  await rm(path.join(STYLES_TARGET, "musea-preview.css"), { force: true });
 
   let totalBytes = 0;
 

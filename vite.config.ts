@@ -9,7 +9,12 @@ export default defineConfig(({ mode }) => ({
     vize({ vapor: mode === "vapor" }),
     // Component gallery at /__musea__ — dev server only, so the library
     // build stays untouched.
-    { ...musea({ previewCss: ["src/styles/style.css"] }), apply: "serve" },
+    {
+      ...musea({
+        previewCss: ["src/styles/style.css", "src/styles/musea-preview.css"],
+      }),
+      apply: "serve",
+    },
   ],
   build: {
     outDir: mode === "vapor" ? "dist/vapor" : "dist",

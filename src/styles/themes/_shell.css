@@ -522,9 +522,11 @@
   /* Inside the popover the month view drops its card skin and gridlines —
      one surface, one voice. */
   [data-vct="date-picker-content"] {
-    --vct-line: transparent;
-
     & [data-vct="month-grid"] {
+      /* Set on the descendant so it beats the theme's token sheet, which
+         re-declares --vct-line on the content root itself. */
+      --vct-line: transparent;
+
       background: none;
       border: none;
       box-shadow: none;
