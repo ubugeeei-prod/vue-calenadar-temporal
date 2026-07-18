@@ -1,6 +1,6 @@
 {
   "name": "vue-calendar-temporal",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Temporal-powered, headless-first calendar and date picker library for Vue",
   "keywords": [
     "a11y",
