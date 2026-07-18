@@ -1,0 +1,60 @@
+{
+  "name": "vue-calendar-temporal",
+  "version": "0.0.0",
+  "description": "Temporal-powered, headless-first calendar and date picker library for Vue",
+  "keywords": [
+    "a11y",
+    "calendar",
+    "date-picker",
+    "headless",
+    "i18n",
+    "temporal",
+    "vue"
+  ],
+  "license": "MIT",
+  "author": "ubugeeei <ubuge1122@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ubugeeei-prod/vue-calenadar-temporal.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/types/src/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "dev": "vp dev",
+    "fmt": "vp fmt",
+    "lint": "vize lint src",
+    "typecheck": "vize check src",
+    "test": "vp test",
+    "build": "vp build && vize check src --declaration && find dist/types -name '*.test.d.ts' -delete",
+    "ready": "vp fmt && vp check && vize lint src && vize check src && vp test run && vp run build"
+  },
+  "dependencies": {
+    "temporal-polyfill-lite": "^0.4.2"
+  },
+  "devDependencies": {
+    "@vizejs/vite-plugin": "^0.291.0",
+    "@voidzero-dev/vite-plus-core": "latest",
+    "@vue/server-renderer": "3.6.0-rc.1",
+    "vite-plus": "^0.2.5",
+    "vitest": "4.1.10",
+    "vize": "^0.291.0",
+    "vue": "3.6.0-rc.1"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0 || ^3.6.0-0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.33.0"
+}
