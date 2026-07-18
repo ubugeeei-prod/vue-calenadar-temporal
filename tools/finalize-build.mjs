@@ -54,7 +54,7 @@ async function removeTestDeclarations(directory) {
  * stays readable, the distribution stays small. A generous byte budget
  * guards against accidental bloat.
  */
-const STYLES_BUDGET_BYTES = 16_000;
+const STYLES_BUDGET_BYTES = 30_000;
 
 async function copyStyles() {
   await cp(STYLES_SOURCE, STYLES_TARGET, { recursive: true });
@@ -64,19 +64,37 @@ async function copyStyles() {
 
   let totalBytes = 0;
 
-  for (const entry of await readdir(STYLES_TARGET)) {
-    if (!entry.endsWith(".css")) continue;
+  async function minifyDirectory(directory) {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+      const entryPath = path.join(directory, entry.name);
 
-    const file = path.join(STYLES_TARGET, entry);
-    const { code } = transform({
-      filename: entry,
-      code: await readFile(file),
-      minify: true,
-    });
+      if (entry.isDirectory()) {
+        await minifyDirectory(entryPath);
+        continue;
+      }
 
-    await writeFile(file, code);
-    totalBytes += code.length;
+      if (!entry.name.endsWith(".css")) continue;
+
+      const { code } = transform({
+        filename: entry.name,
+        code: await readFile(entryPath),
+        minify: true,
+        // Modern targets so `light-dark()` and friends ship natively —
+        // without them Lightning CSS rewrites light-dark() into its
+        // variable polyfill, which breaks when files load standalone.
+        targets: {
+          chrome: 123 << 16,
+          firefox: 120 << 16,
+          safari: (17 << 16) | (5 << 8),
+        },
+      });
+
+      await writeFile(entryPath, code);
+      totalBytes += code.length;
+    }
   }
+
+  await minifyDirectory(STYLES_TARGET);
 
   if (totalBytes > STYLES_BUDGET_BYTES) {
     console.error(

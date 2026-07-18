@@ -1,12 +1,13 @@
 /**
  * vue-calendar-temporal — style.css (opt-in)
  *
- * The one-liner: structural layout + the default theme.
+ * The one-liner: structural layout + the glassmorphic default theme.
  *
  *   import "vue-calendar-temporal/style.css";
  *
- * Prefer picking layers yourself? Import "…/styles/base.css" alone and bring
- * your own theme on top.
+ * Prefer another look? Pair base.css with any sheet in styles/themes/:
+ * glass (this one), simple, material, flat, solid — or bring your own on
+ * top of base.css alone.
  */
 @import "./base.css";
-@import "./theme.css";
+@import "./themes/glass.css";

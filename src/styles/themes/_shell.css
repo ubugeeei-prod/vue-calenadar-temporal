@@ -1,0 +1,602 @@
+/**
+ * vue-calendar-temporal — themes/_shell.css (internal)
+ *
+ * The component skin every theme shares: typography, gridlines, alignment,
+ * chips, focus, motion. Themes import this and then only speak in tokens —
+ * a theme is a token sheet plus a few material-specific overrides.
+ *
+ * Token contract every theme must define on the roots:
+ *   colors    --vct-accent --vct-on-accent --vct-surface --vct-surface-raised
+ *             --vct-text --vct-text-muted --vct-hairline --vct-line
+ *             --vct-hover --vct-range --vct-today --vct-now
+ *   card      --vct-card-bg --vct-card-border --vct-card-filter --vct-shadow
+ *   shape     --vct-radius --vct-radius-small --vct-font
+ *   motion    --vct-ease-out --vct-ease-pop
+ *             --vct-duration-fast --vct-duration --vct-duration-slow
+ *
+ * Alignment rule: weekday headers and day numerals are both centered — one
+ * axis, no ragged columns. Gridlines are real (`--vct-line`); themes choose
+ * how loud they are.
+ */
+@layer vct.theme {
+  /*
+   * Dark mode follows the *app*, not the OS: `light-dark()` resolves
+   * against the inherited `color-scheme`. Declare it once at your app root
+   * (e.g. `:root { color-scheme: light dark }` to follow the system, or
+   * `dark` to force) and every theme flips with correct contrast.
+   */
+  [data-vct="root"],
+  [data-vct="date-picker"],
+  [data-vct="date-picker-content"] {
+    color: var(--vct-text);
+    font-family: var(--vct-font);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  /* -- chrome --------------------------------------------------------- */
+
+  [data-vct="header"] {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding-block-end: 0.875rem;
+  }
+
+  [data-vct="title"] {
+    font-size: 1.25rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    margin-inline-end: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-vct="prev-button"],
+  [data-vct="next-button"],
+  [data-vct="today-button"],
+  [data-vct="date-picker-trigger"] {
+    appearance: none;
+    border: 1px solid transparent;
+    background: none;
+    color: inherit;
+    font: inherit;
+    border-radius: var(--vct-radius-small);
+    padding: 0.35rem 0.7rem;
+    cursor: pointer;
+    transition:
+      background-color var(--vct-duration-fast) var(--vct-ease-out),
+      border-color var(--vct-duration-fast) var(--vct-ease-out),
+      translate var(--vct-duration-fast) var(--vct-ease-out);
+
+    &:hover:not(:disabled) {
+      background: var(--vct-hover);
+    }
+
+    &:active:not(:disabled) {
+      translate: 0 1px;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+  }
+
+  [data-vct="today-button"],
+  [data-vct="date-picker-trigger"] {
+    border-color: var(--vct-hairline);
+  }
+
+  [data-vct="prev-button"],
+  [data-vct="next-button"] {
+    inline-size: 2.125rem;
+    block-size: 2.125rem;
+    display: inline-grid;
+    place-items: center;
+    padding: 0;
+    font-size: 1.05rem;
+    color: var(--vct-text-muted);
+
+    &:hover:not(:disabled) {
+      color: var(--vct-text);
+    }
+  }
+
+  /* -- cards ---------------------------------------------------------- */
+
+  [data-vct="month-grid"],
+  [data-vct="week-grid"],
+  [data-vct="year-month"] {
+    background: var(--vct-card-bg);
+    border: var(--vct-card-border);
+    border-radius: var(--vct-radius);
+    box-shadow: var(--vct-shadow);
+    backdrop-filter: var(--vct-card-filter);
+  }
+
+  [data-vct="month-grid"],
+  [data-vct="week-grid"] {
+    overflow: clip;
+    max-block-size: 100%;
+  }
+
+  /* -- month view ----------------------------------------------------- */
+
+  [data-vct="weekday-columnheader"],
+  [data-vct="weeknumber-columnheader"] {
+    padding-block: 0.55rem 0.45rem;
+    text-align: center;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--vct-text-muted);
+  }
+
+  /* Real gridlines: rows and columns, tuned per theme via --vct-line. */
+  [data-vct="month-grid"] [data-vct="week-row"] {
+    border-block-start: 1px solid var(--vct-line);
+  }
+
+  [data-vct="day"] {
+    border-inline-start: 1px solid var(--vct-line);
+    gap: 0.125rem;
+    transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
+
+    &:first-child {
+      border-inline-start: none;
+    }
+
+    &:hover {
+      background: var(--vct-hover);
+    }
+
+    &[data-selected],
+    &[data-preview] {
+      background: var(--vct-range);
+    }
+
+    &[data-disabled] {
+      cursor: default;
+      opacity: 0.38;
+    }
+  }
+
+  [data-vct="weeknumber"] {
+    display: grid;
+    place-items: center;
+    font-size: 0.6875rem;
+    color: var(--vct-text-muted);
+    font-variant-numeric: tabular-nums;
+    border-inline-start: 1px solid var(--vct-line);
+
+    &:first-child {
+      border-inline-start: none;
+    }
+  }
+
+  /* Centered numerals, same axis as the weekday headers above them. */
+  [data-vct="day-number"] {
+    display: inline-grid;
+    place-items: center;
+    align-self: center;
+    min-inline-size: 1.7rem;
+    block-size: 1.7rem;
+    margin-block-start: 0.125rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    transition:
+      background-color var(--vct-duration) var(--vct-ease-out),
+      color var(--vct-duration) var(--vct-ease-out);
+  }
+
+  [data-vct="day"][data-outside] [data-vct="day-number"] {
+    opacity: 0.35;
+  }
+
+  [data-vct="day"][data-today] [data-vct="day-number"] {
+    background: var(--vct-today);
+    color: var(--vct-on-accent);
+    font-weight: 600;
+  }
+
+  [data-vct="day"][data-range-edge] [data-vct="day-number"] {
+    background: var(--vct-accent);
+    color: var(--vct-on-accent);
+    font-weight: 600;
+  }
+
+  /* Timed events read as dot + text; all-day spans read as solid pills. */
+  [data-vct="event-chip"] {
+    border: none;
+    font: inherit;
+    font-size: 0.71rem;
+    font-weight: 500;
+    line-height: var(--vct-chip-block);
+    padding-inline: 0.45rem 0.3rem;
+    border-radius: var(--vct-radius-small);
+    background: none;
+    color: var(--vct-text);
+    transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
+
+    &::before {
+      content: "";
+      display: inline-block;
+      inline-size: 6px;
+      block-size: 6px;
+      margin-inline-end: 0.3rem;
+      border-radius: 999px;
+      background: var(--vct-accent);
+      vertical-align: 1px;
+    }
+
+    &:hover {
+      background: var(--vct-hover);
+    }
+
+    &[data-all-day] {
+      background: var(--vct-accent);
+      color: var(--vct-on-accent);
+      padding-inline: 0.5rem;
+
+      &::before {
+        display: none;
+      }
+
+      &:hover {
+        filter: brightness(1.07);
+      }
+
+      &[data-continues-before] {
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
+      }
+
+      &[data-continues-after] {
+        border-start-end-radius: 0;
+        border-end-end-radius: 0;
+      }
+    }
+  }
+
+  [data-vct="event-overflow"] {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--vct-text-muted);
+    padding-inline: 0.45rem;
+  }
+
+  /* -- week view ------------------------------------------------------ */
+
+  [data-vct="week-day-header"] {
+    border-inline-start: 1px solid var(--vct-line);
+
+    &:nth-child(2) {
+      border-inline-start: none;
+    }
+
+    & [data-vct="week-day-name"] {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--vct-text-muted);
+    }
+
+    & [data-vct="week-day-number"] {
+      display: inline-grid;
+      place-items: center;
+      min-inline-size: 2rem;
+      block-size: 2rem;
+      border-radius: 999px;
+      font-size: 1.0625rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      transition: background-color var(--vct-duration) var(--vct-ease-out);
+    }
+
+    &[data-today] [data-vct="week-day-number"] {
+      background: var(--vct-today);
+      color: var(--vct-on-accent);
+    }
+  }
+
+  [data-vct="allday-row"] {
+    border-block-start: 1px solid var(--vct-line);
+    padding-block: 0.3rem;
+  }
+
+  [data-vct="gutter-label"],
+  [data-vct="hour-label"] {
+    text-align: end;
+    padding-inline-end: 0.6rem;
+    font-size: 0.6875rem;
+    color: var(--vct-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-vct="gutter-label"] {
+    align-self: center;
+  }
+
+  [data-vct="hour-label"] {
+    transform: translateY(-0.55em);
+  }
+
+  [data-vct="allday-event"] {
+    border: none;
+    font: inherit;
+    font-size: 0.71rem;
+    font-weight: 500;
+    line-height: var(--vct-chip-block);
+    padding-inline: 0.55rem;
+    border-radius: 999px;
+    background: var(--vct-accent);
+    color: var(--vct-on-accent);
+    transition: filter var(--vct-duration-fast) var(--vct-ease-out);
+
+    &:hover {
+      filter: brightness(1.07);
+    }
+
+    &[data-continues-before] {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+    }
+
+    &[data-continues-after] {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+  }
+
+  [data-vct="time-grid"] {
+    border-block-start: 1px solid var(--vct-line);
+    /* The hour labels sit on their lines (translated up); give the first
+       one headroom so it never clips under the header. */
+    padding-block-start: 0.625rem;
+  }
+
+  [data-vct="day-column"] {
+    border-inline-start: 1px solid var(--vct-line);
+  }
+
+  [data-vct="hour-slot"] {
+    appearance: none;
+    border: none;
+    background: none;
+    border-block-start: 1px solid var(--vct-line);
+    cursor: pointer;
+    transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
+
+    &:hover {
+      background: var(--vct-hover);
+    }
+  }
+
+  [data-vct="time-event"] {
+    border: none;
+    font: inherit;
+    border-radius: var(--vct-radius-small);
+    border-inline-start: 3px solid var(--vct-accent);
+    background: color-mix(
+      in oklch,
+      var(--vct-accent),
+      var(--vct-surface-raised) 88%
+    );
+    color: color-mix(in oklch, var(--vct-accent), var(--vct-text) 25%);
+    padding: 0.25rem 0.45rem;
+    gap: 0.0625rem;
+    transition:
+      box-shadow var(--vct-duration) var(--vct-ease-out),
+      translate var(--vct-duration) var(--vct-ease-out);
+
+    & [data-vct="time-event-title"] {
+      font-size: 0.7375rem;
+      font-weight: 600;
+    }
+
+    & [data-vct="time-event-time"] {
+      font-size: 0.675rem;
+      opacity: 0.7;
+      font-variant-numeric: tabular-nums;
+    }
+
+    &:hover {
+      translate: 0 -1px;
+      box-shadow: var(--vct-shadow);
+    }
+
+    &[data-clip-top] {
+      border-start-start-radius: 0;
+      border-start-end-radius: 0;
+    }
+
+    &[data-clip-bottom] {
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
+    }
+  }
+
+  [data-vct="now-line"] {
+    border-block-start: 2px solid var(--vct-now);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: -4px;
+      inset-block-start: -5px;
+      inline-size: 8px;
+      block-size: 8px;
+      border-radius: 999px;
+      background: var(--vct-now);
+    }
+  }
+
+  /* -- year view ------------------------------------------------------ */
+
+  [data-vct="year-month"] {
+    padding: 0.875rem;
+    transition: border-color var(--vct-duration) var(--vct-ease-out);
+
+    &[data-current] {
+      border-color: color-mix(in oklch, var(--vct-accent), transparent 45%);
+    }
+  }
+
+  [data-vct="year-month-label"] {
+    appearance: none;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    padding: 0.125rem 0.4rem;
+    margin-block-end: 0.4rem;
+    border-radius: var(--vct-radius-small);
+    cursor: pointer;
+    transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
+
+    &:hover {
+      background: var(--vct-hover);
+    }
+  }
+
+  [data-vct="year-weekday"] {
+    font-size: 0.59rem;
+    color: var(--vct-text-muted);
+  }
+
+  [data-vct="year-day"] {
+    position: relative;
+    appearance: none;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 0.71rem;
+    font-variant-numeric: tabular-nums;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
+
+    &:hover:not(:disabled) {
+      background: var(--vct-hover);
+    }
+
+    &[data-outside] {
+      opacity: 0.3;
+    }
+
+    &[data-today] {
+      background: var(--vct-today);
+      color: var(--vct-on-accent);
+      font-weight: 600;
+    }
+
+    &[data-selected]:not([data-today]) {
+      background: var(--vct-range);
+    }
+
+    &[data-has-events]:not([data-today])::after {
+      content: "";
+      position: absolute;
+      inset-block-end: 1px;
+      inline-size: 4px;
+      block-size: 4px;
+      border-radius: 999px;
+      background: var(--vct-accent);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
+
+  /* -- date picker ---------------------------------------------------- */
+
+  [data-vct="date-picker-trigger"][data-empty] {
+    color: var(--vct-text-muted);
+  }
+
+  /* Inside the popover the month view drops its card skin and gridlines —
+     one surface, one voice. */
+  [data-vct="date-picker-content"] {
+    --vct-line: transparent;
+
+    & [data-vct="month-grid"] {
+      background: none;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      border-radius: 0;
+    }
+
+    & [data-vct="header"] {
+      padding-block-end: 0.5rem;
+    }
+
+    & [data-vct="title"] {
+      font-size: 1rem;
+    }
+
+    & [data-vct="day-number"] {
+      margin-block-start: 0;
+    }
+
+    & [data-vct="weekday-columnheader"] {
+      padding-block: 0.3rem;
+    }
+  }
+
+  [data-vct="date-picker-content"] {
+    padding: 0.875rem;
+    background: var(--vct-card-bg);
+    border: var(--vct-card-border);
+    border-radius: var(--vct-radius);
+    box-shadow: var(--vct-shadow);
+    backdrop-filter: var(--vct-card-filter);
+
+    /* Enter softly: fade + settle, driven by @starting-style. */
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    transition:
+      opacity var(--vct-duration) var(--vct-ease-out),
+      translate var(--vct-duration-slow) var(--vct-ease-pop),
+      scale var(--vct-duration-slow) var(--vct-ease-pop);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 -0.35rem;
+      scale: 0.98;
+    }
+  }
+
+  /* -- focus ---------------------------------------------------------- */
+
+  [data-vct="day"]:focus-visible,
+  [data-vct="event-chip"]:focus-visible,
+  [data-vct="allday-event"]:focus-visible,
+  [data-vct="time-event"]:focus-visible,
+  [data-vct="year-day"]:focus-visible,
+  [data-vct="year-month-label"]:focus-visible,
+  [data-vct="prev-button"]:focus-visible,
+  [data-vct="next-button"]:focus-visible,
+  [data-vct="today-button"]:focus-visible,
+  [data-vct="date-picker-trigger"]:focus-visible {
+    outline: 2px solid var(--vct-accent);
+    outline-offset: 1px;
+    z-index: 2;
+  }
+
+  /* -- motion preferences --------------------------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-vct="root"] *,
+    [data-vct="date-picker"] *,
+    [data-vct="date-picker-content"] {
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
