@@ -33,6 +33,10 @@
       "types": "./dist/types/src/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./vapor": {
+      "types": "./dist/types/src/index.d.ts",
+      "default": "./dist/vapor/index.js"
+    },
     "./style.css": "./dist/styles/style.css",
     "./styles/base.css": "./dist/styles/base.css",
     "./styles/theme.css": "./dist/styles/theme.css",

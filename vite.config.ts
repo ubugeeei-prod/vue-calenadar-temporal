@@ -3,14 +3,16 @@ import vize from "@vizejs/vite-plugin";
 import { musea } from "@vizejs/vite-plugin-musea";
 import { defineConfig } from "vite-plus";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
-    vize(),
+    // `--mode vapor` compiles every SFC to Vapor output (Vue >= 3.6).
+    vize({ vapor: mode === "vapor" }),
     // Component gallery at /__musea__ — dev server only, so the library
     // build stays untouched.
     { ...musea({ previewCss: ["src/styles/style.css"] }), apply: "serve" },
   ],
   build: {
+    outDir: mode === "vapor" ? "dist/vapor" : "dist",
     lib: {
       entry: "src/index.ts",
       formats: ["es"],
@@ -90,11 +92,12 @@ export default defineConfig({
         command: "vize check src",
       },
       build: {
-        // The declaration step tolerates a known upstream failure on generic
+        // vdom build, then the Vapor twin, then declarations. The
+        // declaration step tolerates a known upstream failure on generic
         // SFCs (https://github.com/ubugeeei-prod/vize/issues/3065);
-        // finalize-dts.mjs asserts the output and patches those two files.
+        // finalize-build.mjs asserts the output and patches those two files.
         command:
-          "vp build && (vize check src --declaration || true) && node tools/finalize-build.mjs",
+          "vp build && vp build --mode vapor && (vize check src --declaration || true) && node tools/finalize-build.mjs",
       },
       "musea:build": {
         command: "vp build --config vite.config.musea.ts",
@@ -120,4 +123,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
