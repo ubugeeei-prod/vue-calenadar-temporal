@@ -66,3 +66,9 @@ export {
   normalizeEvent,
   normalizeEvents,
 } from "./events/event";
+
+export type { EventLaneLayout, EventLaneOptions, EventLaneSegment } from "./events/lanes";
+export { isLaneEvent, layoutEventLanes } from "./events/lanes";
+
+export type { TimeGridOptions, TimeGridPlacement } from "./events/time-grid";
+export { layoutTimeGridDay } from "./events/time-grid";
