@@ -1,0 +1,179 @@
+[
+  {
+    "path": "/home/runner/_work/vue-calenadar-temporal/vue-calenadar-temporal/src/date-picker/DatePicker.art.vue",
+    "metadata": {
+      "title": "Date picker",
+      "component": "./DatePickerRoot.vue",
+      "category": "Date picker",
+      "tags": [
+        "date-picker",
+        "dialog",
+        "form"
+      ],
+      "status": "ready"
+    },
+    "variants": [
+      {
+        "name": "Single date",
+        "template": "<DatePickerRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"en-US\">\n      <DatePickerTrigger />\n      <DatePickerContent />\n    </DatePickerRoot>",
+        "isDefault": true,
+        "skipVrt": false
+      },
+      {
+        "name": "Range",
+        "template": "<DatePickerRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      selection-mode=\"range\"\n      locale=\"en-US\"\n    >\n      <DatePickerTrigger />\n      <DatePickerContent />\n    </DatePickerRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      },
+      {
+        "name": "Multiple, Japanese",
+        "template": "<DatePickerRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      selection-mode=\"multiple\"\n      locale=\"ja-JP\"\n    >\n      <DatePickerTrigger />\n      <DatePickerContent />\n    </DatePickerRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      },
+      {
+        "name": "Bounded (this month only)",
+        "template": "<DatePickerRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :min-date=\"today.with({ day: 1 })\"\n      :max-date=\"today.with({ day: today.daysInMonth })\"\n      initial-open\n      locale=\"en-US\"\n    >\n      <DatePickerTrigger />\n      <DatePickerContent />\n    </DatePickerRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      }
+    ],
+    "hasScriptSetup": true,
+    "scriptSetupContent": "import { Temporal } from \"../temporal\";\nimport DatePickerContent from \"./DatePickerContent.vue\";\nimport DatePickerRoot from \"./DatePickerRoot.vue\";\nimport DatePickerTrigger from \"./DatePickerTrigger.vue\";\n\ndefineArt(\"./DatePickerRoot.vue\", {\n  title: \"Date picker\",\n  category: \"Date picker\",\n  tags: [\"date-picker\", \"dialog\", \"form\"],\n});\n\nconst today = Temporal.PlainDate.from(\"2026-07-18\");",
+    "scriptSetupIsolated": true,
+    "hasScript": false,
+    "styleCount": 0,
+    "styleBlocks": [],
+    "isInline": false
+  },
+  {
+    "path": "/home/runner/_work/vue-calenadar-temporal/vue-calenadar-temporal/src/month/CalendarMonthView.art.vue",
+    "metadata": {
+      "title": "Month view",
+      "component": "./CalendarMonthView.vue",
+      "category": "Views",
+      "tags": [
+        "calendar",
+        "month",
+        "events"
+      ],
+      "status": "ready"
+    },
+    "variants": [
+      {
+        "name": "Default",
+        "template": "<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"en-US\">\n      <CalendarHeader>\n        <CalendarTitle />\n        <CalendarTodayButton />\n        <CalendarPrevButton />\n        <CalendarNextButton />\n      </CalendarHeader>\n      <CalendarMonthView />\n    </CalendarRoot>",
+        "isDefault": true,
+        "skipVrt": false
+      },
+      {
+        "name": "With events",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :events=\"events\"\n      locale=\"en-US\"\n    >\n      <CalendarMonthView :max-event-lanes=\"3\" />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      },
+      {
+        "name": "Week numbers, Japanese",
+        "template": "<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ja-JP\">\n      <CalendarMonthView show-week-numbers fixed-week-count />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      },
+      {
+        "name": "Range selection",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      selection-mode=\"range\"\n      locale=\"en-US\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      },
+      {
+        "name": "RTL (Arabic)",
+        "template": "<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ar-EG\">\n      <CalendarMonthView />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      }
+    ],
+    "hasScriptSetup": true,
+    "scriptSetupContent": "import CalendarHeader from \"../calendar/CalendarHeader.vue\";\nimport CalendarNextButton from \"../calendar/CalendarNextButton.vue\";\nimport CalendarPrevButton from \"../calendar/CalendarPrevButton.vue\";\nimport CalendarRoot from \"../calendar/CalendarRoot.vue\";\nimport CalendarTitle from \"../calendar/CalendarTitle.vue\";\nimport CalendarTodayButton from \"../calendar/CalendarTodayButton.vue\";\nimport { Temporal } from \"../temporal\";\nimport CalendarMonthView from \"./CalendarMonthView.vue\";\n\ndefineArt(\"./CalendarMonthView.vue\", {\n  title: \"Month view\",\n  category: \"Views\",\n  tags: [\"calendar\", \"month\", \"events\"],\n});\n\nconst today = Temporal.PlainDate.from(\"2026-07-18\");\n\nconst events = [\n  {\n    id: \"conf\",\n    title: \"Design conference\",\n    start: Temporal.PlainDate.from(\"2026-07-14\"),\n    end: Temporal.PlainDate.from(\"2026-07-16\"),\n  },\n  {\n    id: \"standup\",\n    title: \"Standup\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T09:00\"),\n  },\n  {\n    id: \"review\",\n    title: \"Design review\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T13:00\"),\n  },\n  {\n    id: \"retro\",\n    title: \"Retro\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T17:00\"),\n  },\n  {\n    id: \"trip\",\n    title: \"Kyoto trip\",\n    start: Temporal.PlainDate.from(\"2026-07-24\"),\n    end: Temporal.PlainDate.from(\"2026-07-27\"),\n  },\n];",
+    "scriptSetupIsolated": true,
+    "hasScript": false,
+    "styleCount": 0,
+    "styleBlocks": [],
+    "isInline": false
+  },
+  {
+    "path": "/home/runner/_work/vue-calenadar-temporal/vue-calenadar-temporal/src/week/CalendarWeekView.art.vue",
+    "metadata": {
+      "title": "Week view",
+      "component": "./CalendarWeekView.vue",
+      "category": "Views",
+      "tags": [
+        "calendar",
+        "week",
+        "time-grid",
+        "events"
+      ],
+      "status": "ready"
+    },
+    "variants": [
+      {
+        "name": "Full week",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :events=\"events\"\n      initial-view=\"week\"\n      locale=\"en-US\"\n    >\n      <CalendarWeekView :start-hour=\"7\" :end-hour=\"21\" />\n    </CalendarRoot>",
+        "isDefault": true,
+        "skipVrt": false
+      },
+      {
+        "name": "Working hours",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :events=\"events\"\n      initial-view=\"week\"\n      locale=\"en-US\"\n    >\n      <CalendarWeekView :start-hour=\"9\" :end-hour=\"18\" />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      },
+      {
+        "name": "Three-day (mobile)",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :events=\"events\"\n      initial-view=\"week\"\n      locale=\"ja-JP\"\n    >\n      <CalendarWeekView :days=\"3\" :start-hour=\"8\" :end-hour=\"20\" />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      }
+    ],
+    "hasScriptSetup": true,
+    "scriptSetupContent": "import CalendarRoot from \"../calendar/CalendarRoot.vue\";\nimport { Temporal } from \"../temporal\";\nimport CalendarWeekView from \"./CalendarWeekView.vue\";\n\ndefineArt(\"./CalendarWeekView.vue\", {\n  title: \"Week view\",\n  category: \"Views\",\n  tags: [\"calendar\", \"week\", \"time-grid\", \"events\"],\n});\n\nconst today = Temporal.PlainDate.from(\"2026-07-18\");\n\nconst events = [\n  {\n    id: \"offsite\",\n    title: \"Team offsite\",\n    start: Temporal.PlainDate.from(\"2026-07-14\"),\n    end: Temporal.PlainDate.from(\"2026-07-16\"),\n  },\n  {\n    id: \"kickoff\",\n    title: \"Kickoff\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T09:00\"),\n    end: Temporal.PlainDateTime.from(\"2026-07-15T10:30\"),\n  },\n  {\n    id: \"sync\",\n    title: \"Design sync\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T09:30\"),\n    end: Temporal.PlainDateTime.from(\"2026-07-15T10:00\"),\n  },\n  {\n    id: \"lunch\",\n    title: \"Lunch\",\n    start: Temporal.PlainDateTime.from(\"2026-07-16T12:00\"),\n    end: Temporal.PlainDateTime.from(\"2026-07-16T13:00\"),\n  },\n];",
+    "scriptSetupIsolated": true,
+    "hasScript": false,
+    "styleCount": 0,
+    "styleBlocks": [],
+    "isInline": false
+  },
+  {
+    "path": "/home/runner/_work/vue-calenadar-temporal/vue-calenadar-temporal/src/year/CalendarYearView.art.vue",
+    "metadata": {
+      "title": "Year view",
+      "component": "./CalendarYearView.vue",
+      "category": "Views",
+      "tags": [
+        "calendar",
+        "year",
+        "overview"
+      ],
+      "status": "ready"
+    },
+    "variants": [
+      {
+        "name": "Default",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :events=\"events\"\n      initial-view=\"year\"\n      locale=\"en-US\"\n    >\n      <CalendarYearView />\n    </CalendarRoot>",
+        "isDefault": true,
+        "skipVrt": false
+      },
+      {
+        "name": "Japanese",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :events=\"events\"\n      initial-view=\"year\"\n      locale=\"ja-JP\"\n    >\n      <CalendarYearView />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      }
+    ],
+    "hasScriptSetup": true,
+    "scriptSetupContent": "import CalendarRoot from \"../calendar/CalendarRoot.vue\";\nimport { Temporal } from \"../temporal\";\nimport CalendarYearView from \"./CalendarYearView.vue\";\n\ndefineArt(\"./CalendarYearView.vue\", {\n  title: \"Year view\",\n  category: \"Views\",\n  tags: [\"calendar\", \"year\", \"overview\"],\n});\n\nconst today = Temporal.PlainDate.from(\"2026-07-18\");\n\nconst events = [\n  {\n    id: \"launch\",\n    title: \"Launch\",\n    start: Temporal.PlainDate.from(\"2026-03-14\"),\n  },\n  { id: \"conf\", title: \"Conf\", start: Temporal.PlainDate.from(\"2026-07-14\") },\n  { id: \"trip\", title: \"Trip\", start: Temporal.PlainDate.from(\"2026-11-02\") },\n];",
+    "scriptSetupIsolated": true,
+    "hasScript": false,
+    "styleCount": 0,
+    "styleBlocks": [],
+    "isInline": false
+  }
+]
