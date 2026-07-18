@@ -8,7 +8,9 @@ import type { CalendarEventLike, NormalizedEvent } from "./event";
  * rendered hour axis — multiply by the column height/width (or map to grid
  * rows) to draw it.
  */
-export type TimeGridPlacement<TEvent extends CalendarEventLike = CalendarEventLike> = {
+export type TimeGridPlacement<
+  TEvent extends CalendarEventLike = CalendarEventLike,
+> = {
   readonly event: NormalizedEvent<TEvent>;
   /** Offset from the axis start, `0 ≤ top < 1`. */
   readonly top: number;
@@ -56,10 +58,16 @@ const DEFAULT_MIN_EVENT_MINUTES = 15;
  * the day, beyond 1440 after it — so axis clipping can tell true spill-over
  * from an exact midnight end.
  */
-const minuteOffset = (dateTime: Temporal.PlainDateTime, day: Temporal.PlainDate): number => {
+const minuteOffset = (
+  dateTime: Temporal.PlainDateTime,
+  day: Temporal.PlainDate,
+): number => {
   const dayDifference = day.until(dateTime.toPlainDate()).days;
   return (
-    dayDifference * MINUTES_PER_DAY + dateTime.hour * 60 + dateTime.minute + dateTime.second / 60
+    dayDifference * MINUTES_PER_DAY +
+    dateTime.hour * 60 +
+    dateTime.minute +
+    dateTime.second / 60
   );
 };
 
@@ -71,7 +79,9 @@ type Interval<TEvent extends CalendarEventLike> = {
   readonly clipBottom: boolean;
 };
 
-export const layoutTimeGridDay: layoutTimeGridDay = <TEvent extends CalendarEventLike>(
+export const layoutTimeGridDay: layoutTimeGridDay = <
+  TEvent extends CalendarEventLike,
+>(
   events: readonly NormalizedEvent<TEvent>[],
   day: Temporal.PlainDate,
   options?: TimeGridOptions,
@@ -89,7 +99,10 @@ export const layoutTimeGridDay: layoutTimeGridDay = <TEvent extends CalendarEven
     const rawEnd = minuteOffset(event.end, day);
     if (rawEnd <= axisStart || rawStart >= axisEnd) continue;
     const startMinute = Math.max(rawStart, axisStart);
-    const endMinute = Math.min(Math.max(rawEnd, startMinute + minEventMinutes), axisEnd);
+    const endMinute = Math.min(
+      Math.max(rawEnd, startMinute + minEventMinutes),
+      axisEnd,
+    );
     intervals.push({
       event,
       startMinute,
@@ -106,7 +119,11 @@ export const layoutTimeGridDay: layoutTimeGridDay = <TEvent extends CalendarEven
   });
 
   const placements: TimeGridPlacement<TEvent>[] = [];
-  let cluster: { intervals: Interval<TEvent>[]; columns: number[]; assigned: number[] } = {
+  let cluster: {
+    intervals: Interval<TEvent>[];
+    columns: number[];
+    assigned: number[];
+  } = {
     intervals: [],
     columns: [],
     assigned: [],
@@ -133,8 +150,11 @@ export const layoutTimeGridDay: layoutTimeGridDay = <TEvent extends CalendarEven
   };
 
   for (const interval of intervals) {
-    if (interval.startMinute >= clusterEnd && cluster.intervals.length > 0) flushCluster();
-    let column = cluster.columns.findIndex((endsAt) => endsAt <= interval.startMinute);
+    if (interval.startMinute >= clusterEnd && cluster.intervals.length > 0)
+      flushCluster();
+    let column = cluster.columns.findIndex(
+      (endsAt) => endsAt <= interval.startMinute,
+    );
     if (column === -1) column = cluster.columns.length;
     cluster.columns[column] = interval.endMinute;
     cluster.intervals.push(interval);

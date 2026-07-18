@@ -23,7 +23,9 @@ export type CalendarMessages = {
   readonly close: string;
 };
 
-export type mergeMessages = (overrides?: Partial<CalendarMessages>) => CalendarMessages;
+export type mergeMessages = (
+  overrides?: Partial<CalendarMessages>,
+) => CalendarMessages;
 
 // --- Implementation ---
 
@@ -47,4 +49,6 @@ export const englishMessages: CalendarMessages = {
 };
 
 export const mergeMessages: mergeMessages = (overrides) =>
-  overrides === undefined ? englishMessages : { ...englishMessages, ...overrides };
+  overrides === undefined
+    ? englishMessages
+    : { ...englishMessages, ...overrides };

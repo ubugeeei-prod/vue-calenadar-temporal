@@ -29,15 +29,6 @@
     },
     "./package.json": "./package.json"
   },
-  "scripts": {
-    "dev": "vp dev",
-    "fmt": "vp fmt",
-    "lint": "vize lint src",
-    "typecheck": "vize check src",
-    "test": "vp test",
-    "build": "vp build && vue-tsc -p tsconfig.build.json",
-    "ready": "vp fmt && vp check && vize lint src && vize check src && vp test run && vp run build"
-  },
   "dependencies": {
     "temporal-polyfill-lite": "^0.4.2"
   },
@@ -58,5 +49,5 @@
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@11.14.0"
 }

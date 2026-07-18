@@ -37,12 +37,19 @@ const {
 }>();
 
 const emit = defineEmits<{
-  "click:event": [event: NormalizedEvent<CalendarEventLike>, nativeEvent: MouseEvent];
+  "click:event": [
+    event: NormalizedEvent<CalendarEventLike>,
+    nativeEvent: MouseEvent,
+  ];
   "click:slot": [dateTime: Temporal.PlainDateTime, nativeEvent: MouseEvent];
 }>();
 
 defineSlots<{
-  dayHeader?: (props: { day: WeekGridDay; label: string; weekday: string }) => unknown;
+  dayHeader?: (props: {
+    day: WeekGridDay;
+    label: string;
+    weekday: string;
+  }) => unknown;
   alldayEvent?: (props: { segment: EventLaneSegment }) => unknown;
   event?: (props: { placement: TimeGridPlacement }) => unknown;
 }>();
@@ -61,7 +68,9 @@ const now = useNowIndicator({
   endHour: () => grid.value.endHour,
 });
 
-const allDayLanes = computed(() => events.lanesFor(grid.value.range, { maxLanes: maxAllDayLanes }));
+const allDayLanes = computed(() =>
+  events.lanesFor(grid.value.range, { maxLanes: maxAllDayLanes }),
+);
 
 const placementsByDay = computed(() =>
   grid.value.days.map((day) =>
@@ -78,7 +87,9 @@ function weekdayLabel(day: WeekGridDay): string {
 }
 
 function headerLabel(day: WeekGridDay): string {
-  return formatPlainDate(calendar.locale.value, day.date, { dateStyle: "full" });
+  return formatPlainDate(calendar.locale.value, day.date, {
+    dateStyle: "full",
+  });
 }
 
 /** Default chip text: a `title` field when present, otherwise the id. */
@@ -103,8 +114,16 @@ function allDayEventLabel(segment: EventLaneSegment): string {
   return `${eventText(segment.event)}, ${calendar.messages.value.allDay}, ${range}`;
 }
 
-function onSlotClick(day: WeekGridDay, hour: number, nativeEvent: MouseEvent): void {
-  emit("click:slot", day.date.toPlainDateTime(new Temporal.PlainTime(hour)), nativeEvent);
+function onSlotClick(
+  day: WeekGridDay,
+  hour: number,
+  nativeEvent: MouseEvent,
+): void {
+  emit(
+    "click:slot",
+    day.date.toPlainDateTime(new Temporal.PlainTime(hour)),
+    nativeEvent,
+  );
 }
 
 function nowVisibleOn(day: WeekGridDay): boolean {
@@ -156,7 +175,10 @@ function flag(condition: boolean): "" | undefined {
 
     <div v-if="allDayLanes.segments.length > 0" data-vct="allday-row">
       <div data-vct="gutter-label">{{ calendar.messages.value.allDay }}</div>
-      <div data-vct="allday-lanes" :style="{ '--vct-lane-count': allDayLanes.laneCount }">
+      <div
+        data-vct="allday-lanes"
+        :style="{ '--vct-lane-count': allDayLanes.laneCount }"
+      >
         <button
           v-for="segment in allDayLanes.segments"
           :key="segment.event.id"
@@ -170,16 +192,24 @@ function flag(condition: boolean): "" | undefined {
           :aria-label="allDayEventLabel(segment)"
           :data-continues-before="flag(segment.continuesBefore)"
           :data-continues-after="flag(segment.continuesAfter)"
-          @click="(nativeEvent) => emit('click:event', segment.event, nativeEvent)"
+          @click="
+            (nativeEvent) => emit('click:event', segment.event, nativeEvent)
+          "
         >
-          <slot name="alldayEvent" :segment="segment">{{ eventText(segment.event) }}</slot>
+          <slot name="alldayEvent" :segment="segment">{{
+            eventText(segment.event)
+          }}</slot>
         </button>
       </div>
     </div>
 
     <div data-vct="time-grid">
       <div data-vct="time-gutter" aria-hidden="true">
-        <div v-for="entry in hourLabels" :key="entry.hour" data-vct="hour-label">
+        <div
+          v-for="entry in hourLabels"
+          :key="entry.hour"
+          data-vct="hour-label"
+        >
           {{ entry.label }}
         </div>
       </div>
@@ -214,12 +244,19 @@ function flag(condition: boolean): "" | undefined {
           :aria-label="timedEventLabel(placement)"
           :data-clip-top="flag(placement.clipTop)"
           :data-clip-bottom="flag(placement.clipBottom)"
-          @click="(nativeEvent) => emit('click:event', placement.event, nativeEvent)"
+          @click="
+            (nativeEvent) => emit('click:event', placement.event, nativeEvent)
+          "
         >
           <slot name="event" :placement="placement">
-            <span data-vct="time-event-title">{{ eventText(placement.event) }}</span>
+            <span data-vct="time-event-title">{{
+              eventText(placement.event)
+            }}</span>
             <span data-vct="time-event-time">{{
-              formatPlainTime(calendar.locale.value, placement.event.start.toPlainTime())
+              formatPlainTime(
+                calendar.locale.value,
+                placement.event.start.toPlainTime(),
+              )
             }}</span>
           </slot>
         </button>

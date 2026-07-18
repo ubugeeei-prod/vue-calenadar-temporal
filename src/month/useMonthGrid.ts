@@ -61,7 +61,11 @@ export function useMonthGrid(
   const weekdays = computed<readonly WeekdayLabel[]>(() => {
     const locale = toValue(source.locale);
     const firstDayOfWeek = toValue(source.firstDayOfWeek);
-    const labels = weekdayNames(locale, toValue(options.weekdayStyle) ?? "short", firstDayOfWeek);
+    const labels = weekdayNames(
+      locale,
+      toValue(options.weekdayStyle) ?? "short",
+      firstDayOfWeek,
+    );
     const fullNames = weekdayNames(locale, "long", firstDayOfWeek);
     return labels.map((label, index) => ({
       dayOfWeek: (((firstDayOfWeek - 1 + index) % 7) + 1) as DayOfWeek,

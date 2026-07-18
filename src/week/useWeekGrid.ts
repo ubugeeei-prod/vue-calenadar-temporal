@@ -56,7 +56,10 @@ export function useWeekGrid(
 
   const hourLabels = computed<readonly HourLabel[]>(() => {
     const locale = toValue(source.locale);
-    return grid.value.hours.map((hour) => ({ hour, label: formatHour(locale, hour) }));
+    return grid.value.hours.map((hour) => ({
+      hour,
+      label: formatHour(locale, hour),
+    }));
   });
 
   return { grid, hourLabels };

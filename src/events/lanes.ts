@@ -9,7 +9,9 @@ import type { CalendarEventLike, NormalizedEvent } from "./event";
  * chips). Used both by the month view rows and by the week view's all-day
  * strip.
  */
-export type EventLaneSegment<TEvent extends CalendarEventLike = CalendarEventLike> = {
+export type EventLaneSegment<
+  TEvent extends CalendarEventLike = CalendarEventLike,
+> = {
   readonly event: NormalizedEvent<TEvent>;
   /** 0-based day column where the bar starts within the row. */
   readonly startColumn: number;
@@ -23,7 +25,9 @@ export type EventLaneSegment<TEvent extends CalendarEventLike = CalendarEventLik
   readonly continuesAfter: boolean;
 };
 
-export type EventLaneLayout<TEvent extends CalendarEventLike = CalendarEventLike> = {
+export type EventLaneLayout<
+  TEvent extends CalendarEventLike = CalendarEventLike,
+> = {
   readonly segments: readonly EventLaneSegment<TEvent>[];
   /** Number of lanes used by visible segments. */
   readonly laneCount: number;
@@ -52,7 +56,8 @@ export type isLaneEvent = (event: NormalizedEvent) => boolean;
 
 // --- Implementation ---
 
-export const isLaneEvent: isLaneEvent = (event) => event.allDay || event.spanDays > 1;
+export const isLaneEvent: isLaneEvent = (event) =>
+  event.allDay || event.spanDays > 1;
 
 type Clipped<TEvent extends CalendarEventLike> = {
   readonly event: NormalizedEvent<TEvent>;
@@ -73,10 +78,16 @@ const clipToWeek = <TEvent extends CalendarEventLike>(
   ) {
     return undefined;
   }
-  const continuesBefore = Temporal.PlainDate.compare(event.startDate, week.start) < 0;
-  const continuesAfter = Temporal.PlainDate.compare(event.endDate, week.end) > 0;
-  const startColumn = continuesBefore ? 0 : week.start.until(event.startDate).days;
-  const endColumn = continuesAfter ? weekLength - 1 : week.start.until(event.endDate).days;
+  const continuesBefore =
+    Temporal.PlainDate.compare(event.startDate, week.start) < 0;
+  const continuesAfter =
+    Temporal.PlainDate.compare(event.endDate, week.end) > 0;
+  const startColumn = continuesBefore
+    ? 0
+    : week.start.until(event.startDate).days;
+  const endColumn = continuesAfter
+    ? weekLength - 1
+    : week.start.until(event.endDate).days;
   return {
     event,
     startColumn,
@@ -86,7 +97,10 @@ const clipToWeek = <TEvent extends CalendarEventLike>(
   };
 };
 
-const compareClipped = (a: Clipped<CalendarEventLike>, b: Clipped<CalendarEventLike>): number => {
+const compareClipped = (
+  a: Clipped<CalendarEventLike>,
+  b: Clipped<CalendarEventLike>,
+): number => {
   if (a.startColumn !== b.startColumn) return a.startColumn - b.startColumn;
   if (a.span !== b.span) return b.span - a.span;
   if (a.event.allDay !== b.event.allDay) return a.event.allDay ? -1 : 1;
@@ -95,7 +109,9 @@ const compareClipped = (a: Clipped<CalendarEventLike>, b: Clipped<CalendarEventL
   return String(a.event.id) < String(b.event.id) ? -1 : 1;
 };
 
-export const layoutEventLanes: layoutEventLanes = <TEvent extends CalendarEventLike>(
+export const layoutEventLanes: layoutEventLanes = <
+  TEvent extends CalendarEventLike,
+>(
   events: readonly NormalizedEvent<TEvent>[],
   week: DateRange,
   options?: EventLaneOptions,
@@ -115,7 +131,9 @@ export const layoutEventLanes: layoutEventLanes = <TEvent extends CalendarEventL
   const hiddenEvents: NormalizedEvent<TEvent>[] = [];
 
   for (const segment of clipped) {
-    let lane = laneEnds.findIndex((firstFree) => firstFree <= segment.startColumn);
+    let lane = laneEnds.findIndex(
+      (firstFree) => firstFree <= segment.startColumn,
+    );
     if (lane === -1) lane = laneEnds.length;
     if (lane >= maxLanes) {
       hiddenEvents.push(segment.event);

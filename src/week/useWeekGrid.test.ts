@@ -16,7 +16,10 @@ const makeSource = () => ({
 describe("useWeekGrid", () => {
   it("builds the focused week and localized hour labels", () => {
     const source = makeSource();
-    const { grid, hourLabels } = useWeekGrid(source, { startHour: 12, endHour: 15 });
+    const { grid, hourLabels } = useWeekGrid(source, {
+      startHour: 12,
+      endHour: 15,
+    });
     expect(grid.value.range.start.toString()).toBe("2026-07-13");
     expect(hourLabels.value.map((entry) => entry.hour)).toEqual([12, 13, 14]);
     expect(hourLabels.value[1]?.label).toMatch(/1\s?PM/u);

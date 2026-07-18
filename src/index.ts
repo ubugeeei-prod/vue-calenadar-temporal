@@ -24,13 +24,22 @@ export {
 export type { CalendarMessages } from "./i18n/messages";
 export { englishMessages, mergeMessages } from "./i18n/messages";
 
-export type { MonthGrid, MonthGridDay, MonthGridOptions, MonthGridWeek } from "./month/month-grid";
+export type {
+  MonthGrid,
+  MonthGridDay,
+  MonthGridOptions,
+  MonthGridWeek,
+} from "./month/month-grid";
 export { buildMonthGrid } from "./month/month-grid";
 
 export type { WeekGrid, WeekGridDay, WeekGridOptions } from "./week/week-grid";
 export { buildWeekGrid } from "./week/week-grid";
 
-export type { YearGrid, YearGridMonth, YearGridOptions } from "./year/year-grid";
+export type {
+  YearGrid,
+  YearGridMonth,
+  YearGridOptions,
+} from "./year/year-grid";
 export { buildYearGrid } from "./year/year-grid";
 
 export type { DateRange, DayKey, DayOfWeek, MonthKey } from "./shared/date";
@@ -68,7 +77,11 @@ export {
   normalizeEvents,
 } from "./events/event";
 
-export type { EventLaneLayout, EventLaneOptions, EventLaneSegment } from "./events/lanes";
+export type {
+  EventLaneLayout,
+  EventLaneOptions,
+  EventLaneSegment,
+} from "./events/lanes";
 export { isLaneEvent, layoutEventLanes } from "./events/lanes";
 
 export type { TimeGridOptions, TimeGridPlacement } from "./events/time-grid";
@@ -94,10 +107,17 @@ export {
 export type { ControllableState } from "./shared/controllable";
 export { useControllableState } from "./shared/controllable";
 
-export type { UseCalendarOptions, UseCalendarReturn } from "./calendar/useCalendar";
+export type {
+  UseCalendarOptions,
+  UseCalendarReturn,
+} from "./calendar/useCalendar";
 export { useCalendar } from "./calendar/useCalendar";
 
-export type { GridIntentEffect, GridKeyEventLike, GridKeyIntent } from "./calendar/keyboard";
+export type {
+  GridIntentEffect,
+  GridKeyEventLike,
+  GridKeyIntent,
+} from "./calendar/keyboard";
 export { applyGridIntent, resolveGridKey } from "./calendar/keyboard";
 
 export type {
@@ -116,7 +136,11 @@ export type {
 } from "./week/useWeekGrid";
 export { useWeekGrid } from "./week/useWeekGrid";
 
-export type { LabeledYearGridMonth, UseYearGridReturn, YearGridSource } from "./year/useYearGrid";
+export type {
+  LabeledYearGridMonth,
+  UseYearGridReturn,
+  YearGridSource,
+} from "./year/useYearGrid";
 export { useYearGrid } from "./year/useYearGrid";
 
 export type {
@@ -127,7 +151,11 @@ export type {
 export { useCalendarEvents } from "./events/useCalendarEvents";
 
 export type { CalendarContext } from "./calendar/context";
-export { CalendarContextKey, provideCalendarContext, useCalendarContext } from "./calendar/context";
+export {
+  CalendarContextKey,
+  provideCalendarContext,
+  useCalendarContext,
+} from "./calendar/context";
 
 export type { RovingFocus } from "./shared/focus";
 export { useRovingFocus } from "./shared/focus";
@@ -145,7 +173,10 @@ export { default as CalendarYearView } from "./year/CalendarYearView.vue";
 export type { NowIndicator, UseNowIndicatorOptions } from "./week/now";
 export { axisFraction, useNowIndicator } from "./week/now";
 
-export type { UseDatePickerOptions, UseDatePickerReturn } from "./date-picker/useDatePicker";
+export type {
+  UseDatePickerOptions,
+  UseDatePickerReturn,
+} from "./date-picker/useDatePicker";
 export { useDatePicker } from "./date-picker/useDatePicker";
 
 export type { DatePickerContext } from "./date-picker/context";

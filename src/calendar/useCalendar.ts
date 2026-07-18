@@ -13,13 +13,28 @@ import {
 import type { CalendarMessages } from "../i18n/messages";
 import { mergeMessages } from "../i18n/messages";
 import type { DateRange, DayOfWeek } from "../shared/date";
-import { clampDate, currentDate, isBetween, systemTimeZone } from "../shared/date";
+import {
+  clampDate,
+  currentDate,
+  isBetween,
+  systemTimeZone,
+} from "../shared/date";
 import { useControllableState } from "../shared/controllable";
 import type { CalendarView } from "../shared/view";
 import type { Temporal } from "../temporal";
 import { canShiftPeriod, periodRange, shiftPeriod } from "./calendar";
-import type { DateSelectionMode, DateSelectionValue, RangeDateValue } from "./selection";
-import { pickRange, rangeEdge, rangePreview, selectionContains, toggleMultiple } from "./selection";
+import type {
+  DateSelectionMode,
+  DateSelectionValue,
+  RangeDateValue,
+} from "./selection";
+import {
+  pickRange,
+  rangeEdge,
+  rangePreview,
+  selectionContains,
+  toggleMultiple,
+} from "./selection";
 
 // --- Types & Signatures ---
 
@@ -82,7 +97,9 @@ export type UseCalendarReturn<Mode extends DateSelectionMode = "single"> = {
   // --- guards ---
   readonly isDateDisabled: (date: Temporal.PlainDate) => boolean;
   readonly isSelected: (date: Temporal.PlainDate) => boolean;
-  readonly rangeEdgeOf: (date: Temporal.PlainDate) => "start" | "end" | "both" | null;
+  readonly rangeEdgeOf: (
+    date: Temporal.PlainDate,
+  ) => "start" | "end" | "both" | null;
   // --- actions ---
   readonly setView: (view: CalendarView) => void;
   readonly focusDate: (date: Temporal.PlainDate) => void;
@@ -113,14 +130,18 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
 
   // --- configuration ---
   const locale = computed(() => resolveLocale(toValue(options.locale)));
-  const timeZone = computed(() => toValue(options.timeZone) ?? systemTimeZone());
+  const timeZone = computed(
+    () => toValue(options.timeZone) ?? systemTimeZone(),
+  );
   const firstDayOfWeek = computed(
     () => toValue(options.firstDayOfWeek) ?? localeFirstDayOfWeek(locale.value),
   );
   const weekendDays = computed(
     () => toValue(options.weekendDays) ?? localeWeekendDays(locale.value),
   );
-  const direction = computed(() => toValue(options.direction) ?? localeTextDirection(locale.value));
+  const direction = computed(
+    () => toValue(options.direction) ?? localeTextDirection(locale.value),
+  );
   const messages = computed(() => mergeMessages(toValue(options.messages)));
   const minDate = computed(() => toValue(options.minDate));
   const maxDate = computed(() => toValue(options.maxDate));
@@ -141,7 +162,11 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
   );
 
   const focused = shallowRef(
-    clampDate(options.initialFocusedDate ?? setupDate, minDate.value, maxDate.value),
+    clampDate(
+      options.initialFocusedDate ?? setupDate,
+      minDate.value,
+      maxDate.value,
+    ),
   );
   const pendingRangeStart = shallowRef<Temporal.PlainDate | null>(null);
   const hovered = shallowRef<Temporal.PlainDate | null>(null);
@@ -153,8 +178,10 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
 
   const title = computed(() => {
     const view = viewState.state.value;
-    if (view === "month") return formatYearMonth(locale.value, focused.value.toPlainYearMonth());
-    if (view === "year") return formatPlainDate(locale.value, focused.value, { year: "numeric" });
+    if (view === "month")
+      return formatYearMonth(locale.value, focused.value.toPlainYearMonth());
+    if (view === "year")
+      return formatPlainDate(locale.value, focused.value, { year: "numeric" });
     const range = visibleRange.value;
     return formatPlainDateRange(locale.value, range.start, range.end, {
       year: "numeric",
@@ -184,7 +211,9 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
     ),
   );
 
-  const previewRange = computed(() => rangePreview(pendingRangeStart.value, hovered.value));
+  const previewRange = computed(() =>
+    rangePreview(pendingRangeStart.value, hovered.value),
+  );
 
   // --- guards ---
   function isDateDisabled(date: Temporal.PlainDate): boolean {
@@ -202,7 +231,9 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
     return selectionContains(selectedState.state.value, date);
   }
 
-  function rangeEdgeOf(date: Temporal.PlainDate): "start" | "end" | "both" | null {
+  function rangeEdgeOf(
+    date: Temporal.PlainDate,
+  ): "start" | "end" | "both" | null {
     return selectionMode === "range"
       ? rangeEdge(selectedState.state.value as RangeDateValue, date)
       : null;
@@ -221,8 +252,11 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
     if (isDateDisabled(date)) return;
     focusDate(date);
     if (selectionMode === "multiple") {
-      const current = selectedState.state.value as readonly Temporal.PlainDate[];
-      selectedState.setState(toggleMultiple(current, date) as DateSelectionValue<Mode>);
+      const current = selectedState.state
+        .value as readonly Temporal.PlainDate[];
+      selectedState.setState(
+        toggleMultiple(current, date) as DateSelectionValue<Mode>,
+      );
       return;
     }
     if (selectionMode === "range") {

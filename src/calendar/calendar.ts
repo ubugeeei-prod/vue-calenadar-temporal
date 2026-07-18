@@ -69,8 +69,20 @@ export const canShiftPeriod: canShiftPeriod = (
   minDate,
   maxDate,
 ) => {
-  const target = periodRange(view, shiftPeriod(view, date, delta), firstDayOfWeek);
-  if (minDate !== undefined && Temporal.PlainDate.compare(target.end, minDate) < 0) return false;
-  if (maxDate !== undefined && Temporal.PlainDate.compare(target.start, maxDate) > 0) return false;
+  const target = periodRange(
+    view,
+    shiftPeriod(view, date, delta),
+    firstDayOfWeek,
+  );
+  if (
+    minDate !== undefined &&
+    Temporal.PlainDate.compare(target.end, minDate) < 0
+  )
+    return false;
+  if (
+    maxDate !== undefined &&
+    Temporal.PlainDate.compare(target.start, maxDate) > 0
+  )
+    return false;
   return true;
 };

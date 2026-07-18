@@ -1,5 +1,10 @@
 import type { DateRange, DayKey } from "../shared/date";
-import { dayKey, daysInRange, orderedRange, systemTimeZone } from "../shared/date";
+import {
+  dayKey,
+  daysInRange,
+  orderedRange,
+  systemTimeZone,
+} from "../shared/date";
 import { Temporal } from "../temporal";
 
 // --- Types & Signatures ---
@@ -33,7 +38,9 @@ export type CalendarEventLike = {
 };
 
 /** An event resolved to wall-clock time in the display time zone. */
-export type NormalizedEvent<TEvent extends CalendarEventLike = CalendarEventLike> = {
+export type NormalizedEvent<
+  TEvent extends CalendarEventLike = CalendarEventLike,
+> = {
   readonly event: TEvent;
   readonly id: string | number;
   readonly allDay: boolean;
@@ -60,10 +67,8 @@ export type NormalizeEventsOptions = {
   readonly defaultEventDurationMinutes?: number;
 };
 
-export type EventsByDay<TEvent extends CalendarEventLike = CalendarEventLike> = ReadonlyMap<
-  DayKey,
-  readonly NormalizedEvent<TEvent>[]
->;
+export type EventsByDay<TEvent extends CalendarEventLike = CalendarEventLike> =
+  ReadonlyMap<DayKey, readonly NormalizedEvent<TEvent>[]>;
 
 export type normalizeEvent = <TEvent extends CalendarEventLike>(
   event: TEvent,
@@ -73,7 +78,10 @@ export type normalizeEvents = <TEvent extends CalendarEventLike>(
   events: readonly TEvent[],
   options?: NormalizeEventsOptions,
 ) => readonly NormalizedEvent<TEvent>[];
-export type compareEventsForDay = (a: NormalizedEvent, b: NormalizedEvent) => number;
+export type compareEventsForDay = (
+  a: NormalizedEvent,
+  b: NormalizedEvent,
+) => number;
 export type indexEventsByDay = <TEvent extends CalendarEventLike>(
   events: readonly NormalizedEvent<TEvent>[],
   range: DateRange,
@@ -101,7 +109,9 @@ const kindOf = (value: CalendarEventDateInput): DateTimeKind => {
   if (value instanceof Temporal.PlainDateTime) return "date-time";
   if (value instanceof Temporal.ZonedDateTime) return "zoned";
   if (value instanceof Temporal.Instant) return "instant";
-  const shape = value as Partial<Record<"timeZoneId" | "epochNanoseconds" | "hour", unknown>>;
+  const shape = value as Partial<
+    Record<"timeZoneId" | "epochNanoseconds" | "hour", unknown>
+  >;
   if (shape.timeZoneId !== undefined) return "zoned";
   if (shape.epochNanoseconds !== undefined) return "instant";
   if (shape.hour !== undefined) return "date-time";
@@ -112,19 +122,30 @@ const kindOf = (value: CalendarEventDateInput): DateTimeKind => {
 const toWallClock = (
   value: CalendarEventDateInput,
   timeZone: string,
-): { readonly dateTime: Temporal.PlainDateTime; readonly dateOnly: boolean } => {
+): {
+  readonly dateTime: Temporal.PlainDateTime;
+  readonly dateOnly: boolean;
+} => {
   switch (kindOf(value)) {
     case "instant": {
       const instant =
-        value instanceof Temporal.Instant ? value : Temporal.Instant.from(value.toString());
-      return { dateTime: instant.toZonedDateTimeISO(timeZone).toPlainDateTime(), dateOnly: false };
+        value instanceof Temporal.Instant
+          ? value
+          : Temporal.Instant.from(value.toString());
+      return {
+        dateTime: instant.toZonedDateTimeISO(timeZone).toPlainDateTime(),
+        dateOnly: false,
+      };
     }
     case "zoned": {
       const zoned =
         value instanceof Temporal.ZonedDateTime
           ? value
           : Temporal.ZonedDateTime.from(value.toString());
-      return { dateTime: zoned.withTimeZone(timeZone).toPlainDateTime(), dateOnly: false };
+      return {
+        dateTime: zoned.withTimeZone(timeZone).toPlainDateTime(),
+        dateOnly: false,
+      };
     }
     case "date-time": {
       const dateTime =
@@ -135,7 +156,9 @@ const toWallClock = (
     }
     case "date": {
       const date =
-        value instanceof Temporal.PlainDate ? value : Temporal.PlainDate.from(value.toString());
+        value instanceof Temporal.PlainDate
+          ? value
+          : Temporal.PlainDate.from(value.toString());
       return { dateTime: date.toPlainDateTime(MIDNIGHT), dateOnly: true };
     }
   }
@@ -143,10 +166,12 @@ const toWallClock = (
 
 export const normalizeEvent: normalizeEvent = (event, options) => {
   const timeZone = options?.timeZone ?? systemTimeZone();
-  const defaultDuration = options?.defaultEventDurationMinutes ?? DEFAULT_DURATION_MINUTES;
+  const defaultDuration =
+    options?.defaultEventDurationMinutes ?? DEFAULT_DURATION_MINUTES;
 
   const start = toWallClock(event.start, timeZone);
-  const end = event.end === undefined ? undefined : toWallClock(event.end, timeZone);
+  const end =
+    event.end === undefined ? undefined : toWallClock(event.end, timeZone);
   const allDay = event.allDay ?? start.dateOnly;
 
   if (allDay) {
@@ -167,15 +192,19 @@ export const normalizeEvent: normalizeEvent = (event, options) => {
   }
 
   const startDateTime = start.dateTime;
-  const rawEnd = end?.dateTime ?? startDateTime.add({ minutes: defaultDuration });
+  const rawEnd =
+    end?.dateTime ?? startDateTime.add({ minutes: defaultDuration });
   const ordered = Temporal.PlainDateTime.compare(rawEnd, startDateTime) < 0;
   const startAt = ordered ? rawEnd : startDateTime;
   const endAt = ordered ? startDateTime : rawEnd;
 
   const startDate = startAt.toPlainDate();
   const endsAtMidnight =
-    endAt.toPlainTime().equals(MIDNIGHT) && Temporal.PlainDateTime.compare(endAt, startAt) > 0;
-  const endDate = endsAtMidnight ? endAt.toPlainDate().subtract({ days: 1 }) : endAt.toPlainDate();
+    endAt.toPlainTime().equals(MIDNIGHT) &&
+    Temporal.PlainDateTime.compare(endAt, startAt) > 0;
+  const endDate = endsAtMidnight
+    ? endAt.toPlainDate().subtract({ days: 1 })
+    : endAt.toPlainDate();
 
   return {
     event,
@@ -208,7 +237,9 @@ export const compareEventsForDay: compareEventsForDay = (a, b) => {
   return String(a.id) < String(b.id) ? -1 : 1;
 };
 
-export const indexEventsByDay: indexEventsByDay = <TEvent extends CalendarEventLike>(
+export const indexEventsByDay: indexEventsByDay = <
+  TEvent extends CalendarEventLike,
+>(
   events: readonly NormalizedEvent<TEvent>[],
   range: DateRange,
 ) => {
@@ -221,8 +252,12 @@ export const indexEventsByDay: indexEventsByDay = <TEvent extends CalendarEventL
       continue;
     }
     const visible = orderedRange(
-      Temporal.PlainDate.compare(event.startDate, range.start) < 0 ? range.start : event.startDate,
-      Temporal.PlainDate.compare(event.endDate, range.end) > 0 ? range.end : event.endDate,
+      Temporal.PlainDate.compare(event.startDate, range.start) < 0
+        ? range.start
+        : event.startDate,
+      Temporal.PlainDate.compare(event.endDate, range.end) > 0
+        ? range.end
+        : event.endDate,
     );
     for (const day of daysInRange(visible)) {
       const key = dayKey(day);
@@ -235,4 +270,5 @@ export const indexEventsByDay: indexEventsByDay = <TEvent extends CalendarEventL
   return index;
 };
 
-export const eventsOnDay: eventsOnDay = (index, date) => index.get(dayKey(date)) ?? [];
+export const eventsOnDay: eventsOnDay = (index, date) =>
+  index.get(dayKey(date)) ?? [];

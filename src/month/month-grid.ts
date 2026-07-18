@@ -1,5 +1,12 @@
 import type { DateRange, DayKey, DayOfWeek } from "../shared/date";
-import { dayKey, daysFrom, endOfWeek, isSameDay, isWeekend, startOfWeek } from "../shared/date";
+import {
+  dayKey,
+  daysFrom,
+  endOfWeek,
+  isSameDay,
+  isWeekend,
+  startOfWeek,
+} from "../shared/date";
 import type { Temporal } from "../temporal";
 
 // --- Types & Signatures ---
@@ -52,7 +59,13 @@ const FIXED_WEEK_COUNT = 6;
 const ISO_THURSDAY = 4;
 
 export const buildMonthGrid: buildMonthGrid = (options) => {
-  const { month, today, firstDayOfWeek, weekendDays, fixedWeekCount = false } = options;
+  const {
+    month,
+    today,
+    firstDayOfWeek,
+    weekendDays,
+    fixedWeekCount = false,
+  } = options;
 
   const firstOfMonth = month.toPlainDate({ day: 1 });
   const lastOfMonth = month.toPlainDate({ day: month.daysInMonth });
@@ -60,7 +73,9 @@ export const buildMonthGrid: buildMonthGrid = (options) => {
   const naturalEnd = endOfWeek(lastOfMonth, firstDayOfWeek);
 
   const naturalDayCount = gridStart.until(naturalEnd).days + 1;
-  const dayCount = fixedWeekCount ? DAYS_PER_WEEK * FIXED_WEEK_COUNT : naturalDayCount;
+  const dayCount = fixedWeekCount
+    ? DAYS_PER_WEEK * FIXED_WEEK_COUNT
+    : naturalDayCount;
   const days = daysFrom(gridStart, dayCount);
 
   const weeks: MonthGridWeek[] = [];

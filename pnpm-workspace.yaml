@@ -4,3 +4,9 @@ packages:
 overrides:
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vitest: 4.1.10
+
+# Keep pnpm 11's release-age guard, but Vue prereleases are consumed fresh
+# (Vapor Mode tracking) and are trusted first-party dependencies here.
+minimumReleaseAgeExclude:
+  - vue
+  - "@vue/*"

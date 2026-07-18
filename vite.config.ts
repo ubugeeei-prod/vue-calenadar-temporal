@@ -21,8 +21,26 @@ export default defineConfig({
     ignorePatterns: ["dist/**"],
   },
   fmt: {
+    printWidth: 80,
     trailingComma: "all",
     singleQuote: false,
     semi: true,
+  },
+  run: {
+    tasks: {
+      lint: {
+        command: "vize lint src",
+      },
+      typecheck: {
+        command: "vize check src",
+      },
+      build: {
+        command: "vp build && vue-tsc -p tsconfig.build.json",
+      },
+      ready: {
+        command:
+          "vp fmt && vp check && vp run lint && vp run typecheck && vp test run && vp run build",
+      },
+    },
   },
 });

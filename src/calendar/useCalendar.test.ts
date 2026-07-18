@@ -66,7 +66,10 @@ describe("useCalendar — view and navigation", () => {
   });
 
   it("stops navigation at min/max bounds", () => {
-    const calendar = useCalendar({ ...baseOptions, minDate: date("2026-07-01") });
+    const calendar = useCalendar({
+      ...baseOptions,
+      minDate: date("2026-07-01"),
+    });
     expect(calendar.canGoPrevious.value).toBe(false);
     calendar.previous();
     expect(calendar.focusedDate.value.toString()).toBe("2026-07-18");
@@ -124,7 +127,10 @@ describe("useCalendar — selection", () => {
     const calendar = useCalendar({ ...baseOptions, selectionMode: "multiple" });
     calendar.select(date("2026-07-18"));
     calendar.select(date("2026-07-10"));
-    expect(calendar.selected.value.map(String)).toEqual(["2026-07-10", "2026-07-18"]);
+    expect(calendar.selected.value.map(String)).toEqual([
+      "2026-07-10",
+      "2026-07-18",
+    ]);
     calendar.select(date("2026-07-18"));
     expect(calendar.selected.value.map(String)).toEqual(["2026-07-10"]);
   });

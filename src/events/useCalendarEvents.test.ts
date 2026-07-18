@@ -27,7 +27,10 @@ describe("useCalendarEvents", () => {
     // The generic event type flows through normalization untouched.
     expect(bound.eventsOn(date("2026-07-15"))[0]?.event.color).toBe("peach");
 
-    events.value = [...events.value, { id: "spa", start: date("2026-07-15"), color: "mint" }];
+    events.value = [
+      ...events.value,
+      { id: "spa", start: date("2026-07-15"), color: "mint" },
+    ];
     expect(bound.eventsOn(date("2026-07-15"))).toHaveLength(2);
 
     // Events outside the visible month are indexed out.
@@ -50,12 +53,14 @@ describe("useCalendarEvents", () => {
     );
 
     expect(bound.laneEvents.value.map((event) => event.id)).toEqual(["conf"]);
-    expect(bound.timedEventsOn(date("2026-07-15")).map((event) => event.id)).toEqual([
-      "standup",
-      "review",
-    ]);
+    expect(
+      bound.timedEventsOn(date("2026-07-15")).map((event) => event.id),
+    ).toEqual(["standup", "review"]);
 
-    const lanes = bound.lanesFor({ start: date("2026-07-13"), end: date("2026-07-19") });
+    const lanes = bound.lanesFor({
+      start: date("2026-07-13"),
+      end: date("2026-07-19"),
+    });
     expect(lanes.segments).toHaveLength(1);
     expect(lanes.segments[0]?.span).toBe(3);
 

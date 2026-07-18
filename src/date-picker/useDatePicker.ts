@@ -1,9 +1,19 @@
 import type { ComputedRef, MaybeRefOrGetter } from "vue";
 import { computed, toValue } from "vue";
-import type { DateSelectionMode, DateSelectionValue } from "../calendar/selection";
-import type { UseCalendarOptions, UseCalendarReturn } from "../calendar/useCalendar";
+import type {
+  DateSelectionMode,
+  DateSelectionValue,
+} from "../calendar/selection";
+import type {
+  UseCalendarOptions,
+  UseCalendarReturn,
+} from "../calendar/useCalendar";
 import { useCalendar } from "../calendar/useCalendar";
-import { formatPlainDate, formatPlainDateList, formatPlainDateRange } from "../i18n/locale";
+import {
+  formatPlainDate,
+  formatPlainDateList,
+  formatPlainDateRange,
+} from "../i18n/locale";
 import { useControllableState } from "../shared/controllable";
 import type { Temporal } from "../temporal";
 
@@ -51,8 +61,9 @@ export function useDatePicker<Mode extends DateSelectionMode = "single">(
   );
 
   // `Array.isArray` alone does not narrow readonly arrays out of a union.
-  const isDateList = (value: DateSelectionValue): value is readonly Temporal.PlainDate[] =>
-    Array.isArray(value);
+  const isDateList = (
+    value: DateSelectionValue,
+  ): value is readonly Temporal.PlainDate[] => Array.isArray(value);
 
   function maybeCloseAfter(value: DateSelectionValue<Mode>): void {
     if (!(options.closeOnSelect ?? true)) return;
@@ -74,9 +85,12 @@ export function useDatePicker<Mode extends DateSelectionMode = "single">(
     const format = options.displayFormat ?? { dateStyle: "medium" };
     if (value === null) return "";
     if (isDateList(value)) {
-      return value.length === 0 ? "" : formatPlainDateList(locale, value, format);
+      return value.length === 0
+        ? ""
+        : formatPlainDateList(locale, value, format);
     }
-    if ("start" in value) return formatPlainDateRange(locale, value.start, value.end, format);
+    if ("start" in value)
+      return formatPlainDateRange(locale, value.start, value.end, format);
     return formatPlainDate(locale, value, format);
   });
 
@@ -92,5 +106,12 @@ export function useDatePicker<Mode extends DateSelectionMode = "single">(
     openState.setState(false);
   }
 
-  return { calendar, open: openState.state, formattedValue, setOpen, toggle, close };
+  return {
+    calendar,
+    open: openState.state,
+    formattedValue,
+    setOpen,
+    toggle,
+    close,
+  };
 }

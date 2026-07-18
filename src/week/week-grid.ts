@@ -1,5 +1,11 @@
 import type { DateRange, DayKey, DayOfWeek } from "../shared/date";
-import { dayKey, daysFrom, isSameDay, isWeekend, startOfWeek } from "../shared/date";
+import {
+  dayKey,
+  daysFrom,
+  isSameDay,
+  isWeekend,
+  startOfWeek,
+} from "../shared/date";
 import type { Temporal } from "../temporal";
 
 // --- Types & Signatures ---
@@ -59,7 +65,8 @@ export const buildWeekGrid: buildWeekGrid = (options) => {
   } = options;
 
   const count = Math.max(1, Math.trunc(dayCount));
-  const start = count === DAYS_PER_WEEK ? startOfWeek(anchor, firstDayOfWeek) : anchor;
+  const start =
+    count === DAYS_PER_WEEK ? startOfWeek(anchor, firstDayOfWeek) : anchor;
   const dates = daysFrom(start, count);
 
   const days = dates.map((date) => ({
@@ -70,9 +77,18 @@ export const buildWeekGrid: buildWeekGrid = (options) => {
     isWeekend: isWeekend(date, weekendDays),
   }));
 
-  const firstHour = Math.min(Math.max(0, Math.trunc(startHour)), HOURS_PER_DAY - 1);
-  const lastHour = Math.min(Math.max(firstHour + 1, Math.trunc(endHour)), HOURS_PER_DAY);
-  const hours = Array.from({ length: lastHour - firstHour }, (_, offset) => firstHour + offset);
+  const firstHour = Math.min(
+    Math.max(0, Math.trunc(startHour)),
+    HOURS_PER_DAY - 1,
+  );
+  const lastHour = Math.min(
+    Math.max(firstHour + 1, Math.trunc(endHour)),
+    HOURS_PER_DAY,
+  );
+  const hours = Array.from(
+    { length: lastHour - firstHour },
+    (_, offset) => firstHour + offset,
+  );
 
   const end = dates[dates.length - 1] ?? start;
   return {

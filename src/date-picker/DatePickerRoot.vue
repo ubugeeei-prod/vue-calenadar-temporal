@@ -9,7 +9,10 @@
 import { shallowRef, useId } from "vue";
 import type { CalendarContext } from "../calendar/context";
 import { provideCalendarContext } from "../calendar/context";
-import type { DateSelectionMode, DateSelectionValue } from "../calendar/selection";
+import type {
+  DateSelectionMode,
+  DateSelectionValue,
+} from "../calendar/selection";
 import type { CalendarEventLike } from "../events/event";
 import { useCalendarEvents } from "../events/useCalendarEvents";
 import type { TextDirection } from "../i18n/locale";
@@ -99,7 +102,10 @@ const picker = useDatePicker<Mode>({
   isDateDisabled: (date) => isDateDisabled?.(date) ?? false,
 });
 
-const boundEvents = useCalendarEvents<TEvent>(picker.calendar, () => events ?? []);
+const boundEvents = useCalendarEvents<TEvent>(
+  picker.calendar,
+  () => events ?? [],
+);
 
 // The popup hosts plain Calendar parts: the picker's calendar IS the context.
 provideCalendarContext({
