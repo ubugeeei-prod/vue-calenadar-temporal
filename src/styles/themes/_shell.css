@@ -19,12 +19,15 @@
  * how loud they are.
  */
 @layer vct.theme {
+  /*
+   * Dark mode follows the *app*, not the OS: `light-dark()` resolves
+   * against the inherited `color-scheme`. Declare it once at your app root
+   * (e.g. `:root { color-scheme: light dark }` to follow the system, or
+   * `dark` to force) and every theme flips with correct contrast.
+   */
   [data-vct="root"],
   [data-vct="date-picker"],
   [data-vct="date-picker-content"] {
-    /* `light-dark()` in the token sheets only engages with a scheme. */
-    color-scheme: light dark;
-
     color: var(--vct-text);
     font-family: var(--vct-font);
     font-size: 0.875rem;
@@ -57,8 +60,8 @@
     background: none;
     color: inherit;
     font: inherit;
-    border-radius: 999px;
-    padding: 0.35rem 0.8rem;
+    border-radius: var(--vct-radius-small);
+    padding: 0.35rem 0.7rem;
     cursor: pointer;
     transition:
       background-color var(--vct-duration-fast) var(--vct-ease-out),

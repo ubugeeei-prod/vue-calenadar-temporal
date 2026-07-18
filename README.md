@@ -149,7 +149,9 @@ any theme:
 
 Every theme is a token sheet over one shared shell: custom-property
 overrides (`--vct-accent`, `--vct-radius`, `--vct-ease-out`, …) restyle any
-of them, and light/dark is automatic via `color-scheme` + `light-dark()`.
+of them. Dark mode follows **your app's** `color-scheme` — declare
+`:root { color-scheme: light dark }` (system) or `dark` (forced) once and
+every theme flips with correct contrast.
 Headless usage: skip the CSS entirely and style the `data-vct="…"` /
 `data-*` state attributes yourself.
 

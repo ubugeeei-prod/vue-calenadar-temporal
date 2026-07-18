@@ -29,8 +29,8 @@
     --vct-card-filter: none;
     --vct-shadow: 0 1px 2px oklch(0.2 0.01 260 / 0.04);
 
-    --vct-radius: 12px;
-    --vct-radius-small: 6px;
+    --vct-radius: 10px;
+    --vct-radius-small: 5px;
     --vct-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
     --vct-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
