@@ -52,7 +52,7 @@ jobs:
           node-version: "24"
           cache: true
       - run: vp install --frozen-lockfile
-      - run: vp test --project unit
+      - run: vp test --project unit --project unit-calendars
 
   test-browser:
     runs-on: blacksmith-32vcpu-ubuntu-2404
