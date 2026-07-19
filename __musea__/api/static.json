@@ -90,6 +90,24 @@
           "template": "<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ar-EG\">\n      <CalendarMonthView />\n    </CalendarRoot>",
           "isDefault": false,
           "skipVrt": false
+        },
+        {
+          "name": "Hebrew calendar",
+          "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"he-IL\"\n      calendar=\"hebrew\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>",
+          "isDefault": false,
+          "skipVrt": false
+        },
+        {
+          "name": "Japanese era (令和)",
+          "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"ja-JP\"\n      calendar=\"japanese\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>",
+          "isDefault": false,
+          "skipVrt": false
+        },
+        {
+          "name": "Islamic (Umm al-Qura)",
+          "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"ar-SA-u-ca-islamic-umalqura\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>",
+          "isDefault": false,
+          "skipVrt": false
         }
       ],
       "hasScriptSetup": true,
@@ -190,7 +208,10 @@
       "With events": "/vue-calenadar-temporal/__musea__/preview/564e61ee35f8c37e26cd.html",
       "Week numbers, Japanese": "/vue-calenadar-temporal/__musea__/preview/95eca3577c4c1446678e.html",
       "Range selection": "/vue-calenadar-temporal/__musea__/preview/7093eab84c88fc0a959b.html",
-      "RTL (Arabic)": "/vue-calenadar-temporal/__musea__/preview/416b5a62097d5d3165b2.html"
+      "RTL (Arabic)": "/vue-calenadar-temporal/__musea__/preview/416b5a62097d5d3165b2.html",
+      "Hebrew calendar": "/vue-calenadar-temporal/__musea__/preview/2ffb2c2dc121d15384c7.html",
+      "Japanese era (令和)": "/vue-calenadar-temporal/__musea__/preview/41f79e5938eac3abb8dd.html",
+      "Islamic (Umm al-Qura)": "/vue-calenadar-temporal/__musea__/preview/1547f46d6e3eff297197.html"
     },
     "/home/runner/_work/vue-calenadar-temporal/vue-calenadar-temporal/src/week/CalendarWeekView.art.vue": {
       "Full week": "/vue-calenadar-temporal/__musea__/preview/9540c373b991134d1122.html",
@@ -231,6 +252,12 @@
           },
           {
             "name": "locale",
+            "control": "text",
+            "required": false,
+            "options": []
+          },
+          {
+            "name": "calendar",
             "control": "text",
             "required": false,
             "options": []
@@ -321,8 +348,8 @@
           }
         ],
         "groups": [],
-        "json": "{\n  \"title\": \"Date picker\",\n  \"controls\": [\n    {\n      \"name\": \"selectionMode\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"modelValue\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"open\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"locale\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"timeZone\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"firstDayOfWeek\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"weekendDays\",\n      \"control\": \"array\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"direction\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"messages\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"today\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"initialFocusedDate\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"initialOpen\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"closeOnSelect\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"displayFormat\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"minDate\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"maxDate\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"isDateDisabled\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"events\",\n      \"control\": \"array\",\n      \"required\": false,\n      \"options\": []\n    }\n  ]\n}",
-        "typescript": "export interface DatePickerProps {\n  selectionMode?: string;\n  modelValue?: string;\n  open?: boolean;\n  locale?: string;\n  timeZone?: string;\n  firstDayOfWeek?: string;\n  weekendDays?: unknown[];\n  direction?: string;\n  messages?: string;\n  today?: string;\n  initialFocusedDate?: string;\n  initialOpen?: boolean;\n  closeOnSelect?: boolean;\n  displayFormat?: string;\n  minDate?: string;\n  maxDate?: string;\n  isDateDisabled?: string;\n  events?: unknown[];\n}\n"
+        "json": "{\n  \"title\": \"Date picker\",\n  \"controls\": [\n    {\n      \"name\": \"selectionMode\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"modelValue\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"open\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"locale\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"calendar\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"timeZone\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"firstDayOfWeek\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"weekendDays\",\n      \"control\": \"array\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"direction\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"messages\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"today\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"initialFocusedDate\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"initialOpen\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"closeOnSelect\",\n      \"control\": \"boolean\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"displayFormat\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"minDate\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"maxDate\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"isDateDisabled\",\n      \"control\": \"text\",\n      \"required\": false,\n      \"options\": []\n    },\n    {\n      \"name\": \"events\",\n      \"control\": \"array\",\n      \"required\": false,\n      \"options\": []\n    }\n  ]\n}",
+        "typescript": "export interface DatePickerProps {\n  selectionMode?: string;\n  modelValue?: string;\n  open?: boolean;\n  locale?: string;\n  calendar?: string;\n  timeZone?: string;\n  firstDayOfWeek?: string;\n  weekendDays?: unknown[];\n  direction?: string;\n  messages?: string;\n  today?: string;\n  initialFocusedDate?: string;\n  initialOpen?: boolean;\n  closeOnSelect?: boolean;\n  displayFormat?: string;\n  minDate?: string;\n  maxDate?: string;\n  isDateDisabled?: string;\n  events?: unknown[];\n}\n"
       },
       "analysis": {
         "props": [
@@ -344,6 +371,11 @@
           {
             "name": "locale",
             "type": "string | Intl.Locale",
+            "required": false
+          },
+          {
+            "name": "calendar",
+            "type": "string",
             "required": false
           },
           {
@@ -456,7 +488,7 @@
     },
     "/home/runner/_work/vue-calenadar-temporal/vue-calenadar-temporal/src/month/CalendarMonthView.art.vue": {
       "source": {
-        "source": "<script setup lang=\"ts\">\nimport CalendarHeader from \"../calendar/CalendarHeader.vue\";\nimport CalendarNextButton from \"../calendar/CalendarNextButton.vue\";\nimport CalendarPrevButton from \"../calendar/CalendarPrevButton.vue\";\nimport CalendarRoot from \"../calendar/CalendarRoot.vue\";\nimport CalendarTitle from \"../calendar/CalendarTitle.vue\";\nimport CalendarTodayButton from \"../calendar/CalendarTodayButton.vue\";\nimport { Temporal } from \"../temporal\";\nimport CalendarMonthView from \"./CalendarMonthView.vue\";\n\ndefineArt(\"./CalendarMonthView.vue\", {\n  title: \"Month view\",\n  category: \"Views\",\n  tags: [\"calendar\", \"month\", \"events\"],\n});\n\nconst today = Temporal.PlainDate.from(\"2026-07-18\");\n\nconst events = [\n  {\n    id: \"conf\",\n    title: \"Design conference\",\n    start: Temporal.PlainDate.from(\"2026-07-14\"),\n    end: Temporal.PlainDate.from(\"2026-07-16\"),\n  },\n  {\n    id: \"standup\",\n    title: \"Standup\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T09:00\"),\n  },\n  {\n    id: \"review\",\n    title: \"Design review\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T13:00\"),\n  },\n  {\n    id: \"retro\",\n    title: \"Retro\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T17:00\"),\n  },\n  {\n    id: \"trip\",\n    title: \"Kyoto trip\",\n    start: Temporal.PlainDate.from(\"2026-07-24\"),\n    end: Temporal.PlainDate.from(\"2026-07-27\"),\n  },\n];\n</script>\n\n<art>\n  <variant name=\"Default\" default>\n    <CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"en-US\">\n      <CalendarHeader>\n        <CalendarTitle />\n        <CalendarTodayButton />\n        <CalendarPrevButton />\n        <CalendarNextButton />\n      </CalendarHeader>\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"With events\">\n    <CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :events=\"events\"\n      locale=\"en-US\"\n    >\n      <CalendarMonthView :max-event-lanes=\"3\" />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"Week numbers, Japanese\">\n    <CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ja-JP\">\n      <CalendarMonthView show-week-numbers fixed-week-count />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"Range selection\">\n    <CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      selection-mode=\"range\"\n      locale=\"en-US\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"RTL (Arabic)\">\n    <CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ar-EG\">\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n</art>\n",
+        "source": "<script setup lang=\"ts\">\nimport CalendarHeader from \"../calendar/CalendarHeader.vue\";\nimport CalendarNextButton from \"../calendar/CalendarNextButton.vue\";\nimport CalendarPrevButton from \"../calendar/CalendarPrevButton.vue\";\nimport CalendarRoot from \"../calendar/CalendarRoot.vue\";\nimport CalendarTitle from \"../calendar/CalendarTitle.vue\";\nimport CalendarTodayButton from \"../calendar/CalendarTodayButton.vue\";\nimport { Temporal } from \"../temporal\";\nimport CalendarMonthView from \"./CalendarMonthView.vue\";\n\ndefineArt(\"./CalendarMonthView.vue\", {\n  title: \"Month view\",\n  category: \"Views\",\n  tags: [\"calendar\", \"month\", \"events\"],\n});\n\nconst today = Temporal.PlainDate.from(\"2026-07-18\");\n\nconst events = [\n  {\n    id: \"conf\",\n    title: \"Design conference\",\n    start: Temporal.PlainDate.from(\"2026-07-14\"),\n    end: Temporal.PlainDate.from(\"2026-07-16\"),\n  },\n  {\n    id: \"standup\",\n    title: \"Standup\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T09:00\"),\n  },\n  {\n    id: \"review\",\n    title: \"Design review\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T13:00\"),\n  },\n  {\n    id: \"retro\",\n    title: \"Retro\",\n    start: Temporal.PlainDateTime.from(\"2026-07-15T17:00\"),\n  },\n  {\n    id: \"trip\",\n    title: \"Kyoto trip\",\n    start: Temporal.PlainDate.from(\"2026-07-24\"),\n    end: Temporal.PlainDate.from(\"2026-07-27\"),\n  },\n];\n</script>\n\n<art>\n  <variant name=\"Default\" default>\n    <CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"en-US\">\n      <CalendarHeader>\n        <CalendarTitle />\n        <CalendarTodayButton />\n        <CalendarPrevButton />\n        <CalendarNextButton />\n      </CalendarHeader>\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"With events\">\n    <CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      :events=\"events\"\n      locale=\"en-US\"\n    >\n      <CalendarMonthView :max-event-lanes=\"3\" />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"Week numbers, Japanese\">\n    <CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ja-JP\">\n      <CalendarMonthView show-week-numbers fixed-week-count />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"Range selection\">\n    <CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      selection-mode=\"range\"\n      locale=\"en-US\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"RTL (Arabic)\">\n    <CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ar-EG\">\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"Hebrew calendar\">\n    <CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"he-IL\"\n      calendar=\"hebrew\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"Japanese era (令和)\">\n    <CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"ja-JP\"\n      calendar=\"japanese\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n\n  <variant name=\"Islamic (Umm al-Qura)\">\n    <CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"ar-SA-u-ca-islamic-umalqura\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>\n  </variant>\n</art>\n",
         "path": "/home/runner/_work/vue-calenadar-temporal/vue-calenadar-temporal/src/month/CalendarMonthView.art.vue"
       },
       "palette": {
@@ -532,10 +564,10 @@
         ]
       },
       "docs": {
-        "markdown": "# Month view\n\n| | |\n|---|---|\n| **Category** | `Views` |\n| **Tags** | `calendar` `month` `events` |\n| **Variants** | 5 |\n\n## Table of Contents\n\n- [Default](#default) *(default)*\n- [With events](#with-events)\n- [Week numbers, Japanese](#week-numbers-japanese)\n- [Range selection](#range-selection)\n- [RTL (Arabic)](#rtl-arabic)\n\n## Variants\n\n### Default `default`\n\n```vue\n<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"en-US\">\n  <CalendarHeader>\n    <CalendarTitle />\n    <CalendarTodayButton />\n    <CalendarPrevButton />\n    <CalendarNextButton />\n  </CalendarHeader>\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n### With events\n\n```vue\n<CalendarRoot\n  :today=\"today\"\n  :initial-focused-date=\"today\"\n  :events=\"events\"\n  locale=\"en-US\"\n>\n  <CalendarMonthView :max-event-lanes=\"3\" />\n</CalendarRoot>\n```\n\n---\n\n### Week numbers, Japanese\n\n```vue\n<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ja-JP\">\n  <CalendarMonthView show-week-numbers fixed-week-count />\n</CalendarRoot>\n```\n\n---\n\n### Range selection\n\n```vue\n<CalendarRoot\n  :today=\"today\"\n  :initial-focused-date=\"today\"\n  selection-mode=\"range\"\n  locale=\"en-US\"\n>\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n### RTL (Arabic)\n\n```vue\n<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ar-EG\">\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n## Source\n\n```\n./CalendarMonthView.vue\n```\n\n",
+        "markdown": "# Month view\n\n| | |\n|---|---|\n| **Category** | `Views` |\n| **Tags** | `calendar` `month` `events` |\n| **Variants** | 8 |\n\n## Table of Contents\n\n- [Default](#default) *(default)*\n- [With events](#with-events)\n- [Week numbers, Japanese](#week-numbers-japanese)\n- [Range selection](#range-selection)\n- [RTL (Arabic)](#rtl-arabic)\n- [Hebrew calendar](#hebrew-calendar)\n- [Japanese era (令和)](#japanese-era-令和)\n- [Islamic (Umm al-Qura)](#islamic-umm-al-qura)\n\n## Variants\n\n### Default `default`\n\n```vue\n<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"en-US\">\n  <CalendarHeader>\n    <CalendarTitle />\n    <CalendarTodayButton />\n    <CalendarPrevButton />\n    <CalendarNextButton />\n  </CalendarHeader>\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n### With events\n\n```vue\n<CalendarRoot\n  :today=\"today\"\n  :initial-focused-date=\"today\"\n  :events=\"events\"\n  locale=\"en-US\"\n>\n  <CalendarMonthView :max-event-lanes=\"3\" />\n</CalendarRoot>\n```\n\n---\n\n### Week numbers, Japanese\n\n```vue\n<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ja-JP\">\n  <CalendarMonthView show-week-numbers fixed-week-count />\n</CalendarRoot>\n```\n\n---\n\n### Range selection\n\n```vue\n<CalendarRoot\n  :today=\"today\"\n  :initial-focused-date=\"today\"\n  selection-mode=\"range\"\n  locale=\"en-US\"\n>\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n### RTL (Arabic)\n\n```vue\n<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ar-EG\">\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n### Hebrew calendar\n\n```vue\n<CalendarRoot\n  :today=\"today\"\n  :initial-focused-date=\"today\"\n  locale=\"he-IL\"\n  calendar=\"hebrew\"\n>\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n### Japanese era (令和)\n\n```vue\n<CalendarRoot\n  :today=\"today\"\n  :initial-focused-date=\"today\"\n  locale=\"ja-JP\"\n  calendar=\"japanese\"\n>\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n### Islamic (Umm al-Qura)\n\n```vue\n<CalendarRoot\n  :today=\"today\"\n  :initial-focused-date=\"today\"\n  locale=\"ar-SA-u-ca-islamic-umalqura\"\n>\n  <CalendarMonthView />\n</CalendarRoot>\n```\n\n---\n\n## Source\n\n```\n./CalendarMonthView.vue\n```\n\n",
         "filename": "month-view.md",
         "title": "Month view",
-        "variantCount": 5,
+        "variantCount": 8,
         "category": "Views"
       },
       "a11y": {
@@ -560,6 +592,21 @@
           "incomplete": 0
         },
         "RTL (Arabic)": {
+          "violations": [],
+          "passes": 0,
+          "incomplete": 0
+        },
+        "Hebrew calendar": {
+          "violations": [],
+          "passes": 0,
+          "incomplete": 0
+        },
+        "Japanese era (令和)": {
+          "violations": [],
+          "passes": 0,
+          "incomplete": 0
+        },
+        "Islamic (Umm al-Qura)": {
           "violations": [],
           "passes": 0,
           "incomplete": 0

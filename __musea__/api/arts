@@ -89,6 +89,24 @@
         "template": "<CalendarRoot :today=\"today\" :initial-focused-date=\"today\" locale=\"ar-EG\">\n      <CalendarMonthView />\n    </CalendarRoot>",
         "isDefault": false,
         "skipVrt": false
+      },
+      {
+        "name": "Hebrew calendar",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"he-IL\"\n      calendar=\"hebrew\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      },
+      {
+        "name": "Japanese era (令和)",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"ja-JP\"\n      calendar=\"japanese\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
+      },
+      {
+        "name": "Islamic (Umm al-Qura)",
+        "template": "<CalendarRoot\n      :today=\"today\"\n      :initial-focused-date=\"today\"\n      locale=\"ar-SA-u-ca-islamic-umalqura\"\n    >\n      <CalendarMonthView />\n    </CalendarRoot>",
+        "isDefault": false,
+        "skipVrt": false
       }
     ],
     "hasScriptSetup": true,
