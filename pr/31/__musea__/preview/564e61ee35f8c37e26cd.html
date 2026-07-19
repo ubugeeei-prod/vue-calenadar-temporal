@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Month view - With events</title>
+  <script>window.__MUSEA_BASE_PATH__="/vue-calenadar-temporal/pr/31/__musea__";</script>
+  <style>html,body{width:100%;height:100%;margin:0}body{font-family:system-ui,sans-serif;background:#fff;padding:1rem;overflow:auto;box-sizing:border-box}.musea-variant{min-height:calc(100vh - 2rem)}.musea-error{color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:1rem;font-size:.875rem}.musea-loading{color:#6b7280;font-size:.875rem}.musea-bg-checkerboard{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%)!important;background-size:20px 20px!important;background-position:0 0,0 10px,10px -10px,-10px 0!important}</style>
+</head>
+<body>
+  <div id="app" class="musea-variant" data-art="/home/runner/_work/vue-calenadar-temporal/vue-calenadar-temporal/src/month/CalendarMonthView.art.vue" data-variant="With events">
+    <div class="musea-loading">Loading component...</div>
+  </div>
+  <script type="module">
+    import "../../assets/musea-static-runtime-CV58Milo.js";
+    Promise.resolve().then(() => {
+      const loadMuseaPreview = window.__MUSEA_LOAD_PREVIEW__;
+      if (typeof loadMuseaPreview !== "function") {
+        throw new Error("Musea preview runtime failed to load");
+      }
+      return loadMuseaPreview("564e61ee35f8c37e26cd");
+    }).catch((error) => {
+      const el = document.getElementById("app");
+      if (el) el.textContent = error instanceof Error ? error.message : String(error);
+    });
+  </script>
+</body>
+</html>
