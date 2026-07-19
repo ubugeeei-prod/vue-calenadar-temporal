@@ -1,9 +1,30 @@
 /**
  * vue-calendar-temporal — themes/glass.css (opt-in, the default sample)
  *
- * Glassmorphism: translucent frosted cards over whatever your app paints
- * behind them, a saturated accent, soft deep shadows. Looks best on a
- * gradient or imagery backdrop. Automatic light/dark via `light-dark()`.
+ * A pane of frosted glass over the app's own backdrop. Every value has a
+ * reason:
+ *
+ * - INK 275°. One blue-violet ink; every gray on the surface is this ink
+ *   at an alpha, so translucency never turns the neutrals muddy or
+ *   mismatched between schemes.
+ * - ACCENT 276°, L 0.51. The calm-focus register for a productivity
+ *   surface, ≈6.4:1 against white for AA on filled elements, and 250°
+ *   away from now-red so "today" and "now" can never be confused.
+ * - FROST 0.68 + blur 20 + saturate 1.4. 0.68 is the floor where 4.5:1
+ *   body-text contrast survives any backdrop; the saturation boost gives
+ *   back the chroma the white veil steals from whatever shows through.
+ * - LIGHT ENTERS FROM ABOVE. Real glass has a bright top edge: a white
+ *   inner highlight on the top, and a border of *light*, not dark —
+ *   translucent surfaces outlined in gray read as dirty.
+ * - SHADOW = DISTANCE. A contact line (1px, 6%) plus a wide, offset
+ *   ambient (32px blur, −16px spread, 10%): two layers because real
+ *   shadows are two phenomena. Deep enough to lift a pane, too shallow to
+ *   float it — floating is reserved for the popover.
+ * - MOTION LIKE MASS. The pane's easing starts fast and settles long
+ *   (glass gliding on felt); the popover alone may overshoot ~2%.
+ *
+ * Automatic light/dark via `light-dark()` — driven by the app's
+ * `color-scheme`, see the shell.
  */
 @import "./_shell.css";
 
@@ -11,51 +32,63 @@
   [data-vct="root"],
   [data-vct="date-picker"],
   [data-vct="date-picker-content"] {
-    --vct-accent: light-dark(oklch(0.55 0.19 278), oklch(0.75 0.15 278));
-    --vct-on-accent: light-dark(oklch(0.99 0 0), oklch(0.18 0.03 278));
-    --vct-surface: light-dark(oklch(0.98 0.005 270), oklch(0.2 0.015 270));
-    --vct-surface-raised: light-dark(oklch(1 0 0), oklch(0.25 0.02 270));
-    --vct-text: light-dark(oklch(0.22 0.018 275), oklch(0.95 0.01 275));
+    --vct-accent: light-dark(oklch(0.51 0.17 276), oklch(0.76 0.13 276));
+    --vct-on-accent: light-dark(oklch(0.99 0 0), oklch(0.18 0.03 276));
+    --vct-surface: light-dark(oklch(0.98 0.005 275), oklch(0.2 0.015 275));
+    --vct-surface-raised: light-dark(oklch(1 0 0), oklch(0.25 0.02 275));
+    --vct-text: light-dark(oklch(0.21 0.02 275), oklch(0.95 0.008 275));
+
+    /* The ink ladder: 45% muted labels, 12% committed borders, 7% row
+       rules (columns derive 30% weaker in the shell), 5% hover wash. */
     --vct-text-muted: color-mix(in oklch, var(--vct-text), transparent 45%);
-    --vct-hairline: color-mix(in oklch, var(--vct-text), transparent 86%);
-    --vct-line: color-mix(in oklch, var(--vct-text), transparent 91%);
-    --vct-hover: light-dark(oklch(1 0 0 / 0.55), oklch(1 0 0 / 0.07));
-    --vct-range: color-mix(in oklch, var(--vct-accent), transparent 86%);
+    --vct-hairline: color-mix(in oklch, var(--vct-text), transparent 88%);
+    --vct-line: color-mix(in oklch, var(--vct-text), transparent 93%);
+    --vct-hover: color-mix(in oklch, var(--vct-text), transparent 95%);
+
+    /* Selection washes at 88% keep black text readable over them. */
+    --vct-range: color-mix(in oklch, var(--vct-accent), transparent 88%);
     --vct-today: var(--vct-accent);
-    --vct-now: light-dark(oklch(0.62 0.19 25), oklch(0.7 0.17 25));
+    /* The only other chroma on the surface — urgency stays scarce. */
+    --vct-now: light-dark(oklch(0.6 0.19 25), oklch(0.7 0.17 25));
 
-    --vct-card-bg: light-dark(oklch(1 0 0 / 0.66), oklch(0.25 0.02 270 / 0.55));
+    --vct-card-bg: light-dark(oklch(1 0 0 / 0.68), oklch(0.25 0.02 275 / 0.55));
     --vct-card-border: 1px solid
-      light-dark(oklch(1 0 0 / 0.65), oklch(1 0 0 / 0.12));
+      light-dark(oklch(1 0 0 / 0.6), oklch(1 0 0 / 0.12));
     --vct-card-filter: blur(20px) saturate(1.4);
-    --vct-shadow: 0 8px 28px -10px
-      light-dark(oklch(0.3 0.05 278 / 0.25), oklch(0 0 0 / 0.5));
+    --vct-shadow:
+      0 1px 2px oklch(0.25 0.03 276 / 0.06),
+      0 12px 32px -16px oklch(0.25 0.03 276 / 0.1);
 
+    /* 12px slab, 6px controls: one radius family, one half-step apart, so
+       curvature never argues with itself. */
     --vct-radius: 12px;
     --vct-radius-small: 6px;
+    /* The native stack: a calendar should feel like the OS it lives on,
+       and numeral rendering is what platform faces do best. */
     --vct-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-    --vct-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-    --vct-ease-pop: cubic-bezier(0.32, 1.36, 0.5, 1);
-    --vct-duration-fast: 120ms;
+    /* Fast attack, long settle — mass with friction. */
+    --vct-ease-out: cubic-bezier(0.2, 0.7, 0.1, 1);
+    /* ~2% overshoot for arrivals only. */
+    --vct-ease-pop: cubic-bezier(0.3, 1.25, 0.4, 1);
+    --vct-duration-fast: 90ms;
     --vct-duration: 200ms;
-    --vct-duration-slow: 320ms;
+    --vct-duration-slow: 260ms;
   }
 
-  /* The glass edge: a light inner highlight on every frosted surface. */
+  /* The top light edge that makes the frost read as glass. */
   [data-vct="month-grid"],
   [data-vct="week-grid"],
   [data-vct="year-month"],
   [data-vct="date-picker-content"] {
     box-shadow:
       var(--vct-shadow),
-      inset 0 1px 0 light-dark(oklch(1 0 0 / 0.55), oklch(1 0 0 / 0.09));
+      inset 0 1px 0 light-dark(oklch(1 0 0 / 0.6), oklch(1 0 0 / 0.09));
   }
 
-  /* Frosted pills for spanning events; timed blocks get a glass tint too. */
+  /* Timed blocks frost their own pane so text stays sharp over events
+     behind the translucent card. */
   [data-vct="time-event"] {
-    background: color-mix(in oklch, var(--vct-accent), transparent 82%);
-    color: color-mix(in oklch, var(--vct-accent), var(--vct-text) 20%);
     backdrop-filter: blur(8px);
   }
 }

@@ -1,9 +1,26 @@
 /**
  * vue-calendar-temporal — themes/_shell.css (internal)
  *
- * The component skin every theme shares: typography, gridlines, alignment,
- * chips, focus, motion. Themes import this and then only speak in tokens —
- * a theme is a token sheet plus a few material-specific overrides.
+ * The reasoning, once, for every theme:
+ *
+ * A calendar is a table of numerals. The numerals are the product; the rest
+ * is frame. So the shell is built on four commitments:
+ *
+ * 1. ONE INK. Every gray — labels, lines, hovers — is the text ink at a
+ *    measured alpha, so the whole surface stays hue-locked and adapts to
+ *    light/dark and translucency without a second palette.
+ * 2. LINES ENCODE READING DIRECTION. Vertical rules exist so a weekday
+ *    column can be scanned top-to-bottom; horizontal rules carry the week
+ *    rhythm. Reading order dominates, so rows are drawn slightly stronger
+ *    than columns, and both stay ≥10× lighter than text — rails, not cage.
+ * 3. Z-DEPTH IS MEANING. Shadow depth encodes stacking order only: resting
+ *    cards sit (contact + faint ambient), the popover floats (one step
+ *    deeper). Nothing gains shadow on hover — inline data doesn't levitate.
+ * 4. MOTION IS PHYSICS, NOT DECOR. State changes use a fast-attack,
+ *    long-settle curve (a heavy pane sliding on felt); only the popover's
+ *    entrance may overshoot, because arrival deserves a breath. Color
+ *    hovers run at ~90ms — under the threshold where motion is *seen*
+ *    rather than felt.
  *
  * Token contract every theme must define on the roots:
  *   colors    --vct-accent --vct-on-accent --vct-surface --vct-surface-raised
@@ -13,25 +30,27 @@
  *   shape     --vct-radius --vct-radius-small --vct-font
  *   motion    --vct-ease-out --vct-ease-pop
  *             --vct-duration-fast --vct-duration --vct-duration-slow
- *
- * Alignment rule: weekday headers and day numerals are both centered — one
- * axis, no ragged columns. Gridlines are real (`--vct-line`); themes choose
- * how loud they are.
  */
 @layer vct.theme {
   /*
    * Dark mode follows the *app*, not the OS: `light-dark()` resolves
    * against the inherited `color-scheme`. Declare it once at your app root
-   * (e.g. `:root { color-scheme: light dark }` to follow the system, or
-   * `dark` to force) and every theme flips with correct contrast.
+   * (`:root { color-scheme: light dark }` to follow the system, or `dark`
+   * to force) and every theme flips with correct contrast.
    */
   [data-vct="root"],
   [data-vct="date-picker"],
   [data-vct="date-picker-content"] {
+    /* Column rules derived from the theme's one line knob: 30% weaker than
+       rows, because vertical scanning needs a rail, not a wall. */
+    --vct-line-v: color-mix(in oklch, var(--vct-line), transparent 30%);
+
     color: var(--vct-text);
     font-family: var(--vct-font);
     font-size: 0.875rem;
     line-height: 1.45;
+    /* Numerals rack into columns everywhere or the grid shimmers. */
+    font-variant-numeric: tabular-nums;
   }
 
   /* -- chrome --------------------------------------------------------- */
@@ -39,16 +58,20 @@
   [data-vct="header"] {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    padding-block-end: 0.875rem;
+    gap: 0.25rem;
+    /* Chrome keeps 2× the grid's internal rhythm from the content so the
+       eye parses "controls" and "data" as separate bands. */
+    padding-block-end: 1rem;
   }
 
   [data-vct="title"] {
-    font-size: 1.25rem;
-    font-weight: 650;
+    /* The one display moment. 600, not bolder: heavier weights render as
+       synthetic bold in some stacks and shout over the numerals. Negative
+       tracking returns the optical density large sizes lose. */
+    font-size: 1.375rem;
+    font-weight: 600;
     letter-spacing: -0.02em;
     margin-inline-end: auto;
-    font-variant-numeric: tabular-nums;
   }
 
   [data-vct="prev-button"],
@@ -63,17 +86,20 @@
     border-radius: var(--vct-radius-small);
     padding: 0.35rem 0.7rem;
     cursor: pointer;
+    /* Color-only feedback at the felt-not-seen speed. */
     transition:
       background-color var(--vct-duration-fast) var(--vct-ease-out),
       border-color var(--vct-duration-fast) var(--vct-ease-out),
-      translate var(--vct-duration-fast) var(--vct-ease-out);
+      color var(--vct-duration-fast) var(--vct-ease-out),
+      scale var(--vct-duration-fast) var(--vct-ease-out);
 
     &:hover:not(:disabled) {
       background: var(--vct-hover);
     }
 
+    /* A press is compression, not travel: scale, never translate. */
     &:active:not(:disabled) {
-      translate: 0 1px;
+      scale: 0.97;
     }
 
     &:disabled {
@@ -82,6 +108,8 @@
     }
   }
 
+  /* Today and the trigger are *commitments* (they change state far away),
+     so they carry a hairline the ghost arrows don't. */
   [data-vct="today-button"],
   [data-vct="date-picker-trigger"] {
     border-color: var(--vct-hairline);
@@ -89,12 +117,13 @@
 
   [data-vct="prev-button"],
   [data-vct="next-button"] {
-    inline-size: 2.125rem;
-    block-size: 2.125rem;
+    inline-size: 2rem;
+    block-size: 2rem;
     display: inline-grid;
     place-items: center;
     padding: 0;
-    font-size: 1.05rem;
+    /* Glyphs rest muted and ink-up on hover: two channels of feedback
+       (wash + glyph) at zero added loudness. */
     color: var(--vct-text-muted);
 
     &:hover:not(:disabled) {
@@ -124,21 +153,24 @@
 
   [data-vct="weekday-columnheader"],
   [data-vct="weeknumber-columnheader"] {
-    padding-block: 0.55rem 0.45rem;
+    padding-block: 0.625rem 0.5rem;
     text-align: center;
-    font-size: 0.6875rem;
+    /* Axis labels are frame, not data: caps + wide tracking pushes them
+       into the "chrome" register (capitals need the extra air — they have
+       no ascender rhythm), and the muted ink keeps numerals in front. */
+    font-size: 0.65rem;
     font-weight: 500;
-    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--vct-text-muted);
   }
 
-  /* Real gridlines: rows and columns, tuned per theme via --vct-line. */
   [data-vct="month-grid"] [data-vct="week-row"] {
     border-block-start: 1px solid var(--vct-line);
   }
 
   [data-vct="day"] {
-    border-inline-start: 1px solid var(--vct-line);
+    border-inline-start: 1px solid var(--vct-line-v);
     gap: 0.125rem;
     transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
 
@@ -146,6 +178,8 @@
       border-inline-start: none;
     }
 
+    /* The wash covers the whole cell: the affordance is the area, and the
+       numeral must not move or restyle under the pointer. */
     &:hover {
       background: var(--vct-hover);
     }
@@ -164,40 +198,52 @@
   [data-vct="weeknumber"] {
     display: grid;
     place-items: center;
-    font-size: 0.6875rem;
+    font-size: 0.65rem;
     color: var(--vct-text-muted);
-    font-variant-numeric: tabular-nums;
-    border-inline-start: 1px solid var(--vct-line);
+    border-inline-start: 1px solid var(--vct-line-v);
 
     &:first-child {
       border-inline-start: none;
     }
   }
 
-  /* Centered numerals, same axis as the weekday headers above them. */
   [data-vct="day-number"] {
     display: inline-grid;
     place-items: center;
     align-self: center;
-    min-inline-size: 1.7rem;
-    block-size: 1.7rem;
+    /* 1.75rem: large enough to become today's beacon without pushing the
+       event area; the cell itself supplies the touch target. */
+    min-inline-size: 1.75rem;
+    block-size: 1.75rem;
     margin-block-start: 0.125rem;
+    /* A date is a point in time — the marker for one is a circle. */
     border-radius: 999px;
     font-size: 0.8125rem;
-    font-variant-numeric: tabular-nums;
     transition:
       background-color var(--vct-duration) var(--vct-ease-out),
-      color var(--vct-duration) var(--vct-ease-out);
+      color var(--vct-duration) var(--vct-ease-out),
+      box-shadow var(--vct-duration) var(--vct-ease-out);
   }
 
+  /* Neighbors exist for shape continuity only; weekends recede by ink,
+     not by tint — striped backgrounds would fight event scanning. */
   [data-vct="day"][data-outside] [data-vct="day-number"] {
-    opacity: 0.35;
+    opacity: 0.32;
   }
 
+  [data-vct="day"][data-weekend]:not([data-outside]) [data-vct="day-number"] {
+    color: color-mix(in oklch, var(--vct-text), transparent 22%);
+  }
+
+  /*
+   * The signature: today is the calendar's living point. A filled circle
+   * plus a soft same-hue halo — one glowing numeral, everything else calm.
+   */
   [data-vct="day"][data-today] [data-vct="day-number"] {
     background: var(--vct-today);
     color: var(--vct-on-accent);
     font-weight: 600;
+    box-shadow: 0 0 0 4px color-mix(in oklch, var(--vct-today), transparent 88%);
   }
 
   [data-vct="day"][data-range-edge] [data-vct="day-number"] {
@@ -206,7 +252,11 @@
     font-weight: 600;
   }
 
-  /* Timed events read as dot + text; all-day spans read as solid pills. */
+  /* -- events: dot + text for moments, pills for spans ----------------- */
+
+  /* A timed event is a *moment*: a dot marks it, text names it — ink stays
+     with the data. Only spans (all-day, multi-day) earn a filled bar,
+     because their shape IS their meaning. */
   [data-vct="event-chip"] {
     border: none;
     font: inherit;
@@ -216,7 +266,7 @@
     padding-inline: 0.45rem 0.3rem;
     border-radius: var(--vct-radius-small);
     background: none;
-    color: var(--vct-text);
+    color: color-mix(in oklch, var(--vct-text), transparent 11%);
     transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
 
     &::before {
@@ -227,6 +277,7 @@
       margin-inline-end: 0.3rem;
       border-radius: 999px;
       background: var(--vct-accent);
+      /* Optically centers the dot against the x-height. */
       vertical-align: 1px;
     }
 
@@ -244,9 +295,10 @@
       }
 
       &:hover {
-        filter: brightness(1.07);
+        filter: brightness(1.06);
       }
 
+      /* Squared ends say "continues" — the bar is cut, not finished. */
       &[data-continues-before] {
         border-start-start-radius: 0;
         border-end-start-radius: 0;
@@ -269,34 +321,36 @@
   /* -- week view ------------------------------------------------------ */
 
   [data-vct="week-day-header"] {
-    border-inline-start: 1px solid var(--vct-line);
+    border-inline-start: 1px solid var(--vct-line-v);
 
     &:nth-child(2) {
       border-inline-start: none;
     }
 
     & [data-vct="week-day-name"] {
-      font-size: 0.6875rem;
+      font-size: 0.65rem;
       font-weight: 500;
-      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       color: var(--vct-text-muted);
     }
 
     & [data-vct="week-day-number"] {
       display: inline-grid;
       place-items: center;
-      min-inline-size: 2rem;
-      block-size: 2rem;
+      min-inline-size: 2.125rem;
+      block-size: 2.125rem;
       border-radius: 999px;
       font-size: 1.0625rem;
       font-weight: 600;
-      font-variant-numeric: tabular-nums;
       transition: background-color var(--vct-duration) var(--vct-ease-out);
     }
 
     &[data-today] [data-vct="week-day-number"] {
       background: var(--vct-today);
       color: var(--vct-on-accent);
+      box-shadow: 0 0 0 4px
+        color-mix(in oklch, var(--vct-today), transparent 88%);
     }
   }
 
@@ -305,13 +359,14 @@
     padding-block: 0.3rem;
   }
 
+  /* The time gutter is an axis: right-aligned so every label's terminal
+     digit kisses the rail it measures. */
   [data-vct="gutter-label"],
   [data-vct="hour-label"] {
     text-align: end;
     padding-inline-end: 0.6rem;
-    font-size: 0.6875rem;
+    font-size: 0.65rem;
     color: var(--vct-text-muted);
-    font-variant-numeric: tabular-nums;
   }
 
   [data-vct="gutter-label"] {
@@ -319,6 +374,7 @@
   }
 
   [data-vct="hour-label"] {
+    /* Sits ON its line — labels measure boundaries, not slots. */
     transform: translateY(-0.55em);
   }
 
@@ -335,7 +391,7 @@
     transition: filter var(--vct-duration-fast) var(--vct-ease-out);
 
     &:hover {
-      filter: brightness(1.07);
+      filter: brightness(1.06);
     }
 
     &[data-continues-before] {
@@ -351,20 +407,19 @@
 
   [data-vct="time-grid"] {
     border-block-start: 1px solid var(--vct-line);
-    /* The hour labels sit on their lines (translated up); give the first
-       one headroom so it never clips under the header. */
+    /* Headroom for the first translated hour label. */
     padding-block-start: 0.625rem;
   }
 
   [data-vct="day-column"] {
-    border-inline-start: 1px solid var(--vct-line);
+    border-inline-start: 1px solid var(--vct-line-v);
   }
 
   [data-vct="hour-slot"] {
     appearance: none;
     border: none;
     background: none;
-    border-block-start: 1px solid var(--vct-line);
+    border-block-start: 1px solid var(--vct-line-v);
     cursor: pointer;
     transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
 
@@ -373,22 +428,19 @@
     }
   }
 
+  /* A timed block is a quantity of time: an accent veil with a hard spine
+     on the start edge — the spine marks *when it begins*, the veil shows
+     how long it lasts. Hover deepens the veil; no lift, no shadow. */
   [data-vct="time-event"] {
     border: none;
     font: inherit;
     border-radius: var(--vct-radius-small);
     border-inline-start: 3px solid var(--vct-accent);
-    background: color-mix(
-      in oklch,
-      var(--vct-accent),
-      var(--vct-surface-raised) 88%
-    );
-    color: color-mix(in oklch, var(--vct-accent), var(--vct-text) 25%);
+    background: color-mix(in oklch, var(--vct-accent), transparent 90%);
+    color: color-mix(in oklch, var(--vct-accent), var(--vct-text) 30%);
     padding: 0.25rem 0.45rem;
     gap: 0.0625rem;
-    transition:
-      box-shadow var(--vct-duration) var(--vct-ease-out),
-      translate var(--vct-duration) var(--vct-ease-out);
+    transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
 
     & [data-vct="time-event-title"] {
       font-size: 0.7375rem;
@@ -398,12 +450,10 @@
     & [data-vct="time-event-time"] {
       font-size: 0.675rem;
       opacity: 0.7;
-      font-variant-numeric: tabular-nums;
     }
 
     &:hover {
-      translate: 0 -1px;
-      box-shadow: var(--vct-shadow);
+      background: color-mix(in oklch, var(--vct-accent), transparent 82%);
     }
 
     &[data-clip-top] {
@@ -417,6 +467,7 @@
     }
   }
 
+  /* The only red on the surface: "now" is urgent in a way no style is. */
   [data-vct="now-line"] {
     border-block-start: 2px solid var(--vct-now);
 
@@ -463,6 +514,8 @@
 
   [data-vct="year-weekday"] {
     font-size: 0.59rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--vct-text-muted);
   }
 
@@ -474,7 +527,6 @@
     color: inherit;
     font: inherit;
     font-size: 0.71rem;
-    font-variant-numeric: tabular-nums;
     border-radius: 999px;
     cursor: pointer;
     transition: background-color var(--vct-duration-fast) var(--vct-ease-out);
@@ -519,13 +571,40 @@
     color: var(--vct-text-muted);
   }
 
-  /* Inside the popover the month view drops its card skin and gridlines —
-     one surface, one voice. */
+  [data-vct="date-picker-content"] {
+    padding: 0.875rem;
+    background: var(--vct-card-bg);
+    border: var(--vct-card-border);
+    border-radius: var(--vct-radius);
+    /* One step deeper than resting cards: the popover truly floats. */
+    box-shadow:
+      var(--vct-shadow),
+      0 24px 48px -24px oklch(0 0 0 / 0.18);
+    backdrop-filter: var(--vct-card-filter);
+
+    /* Arrival deserves a breath: fade + settle with a slight overshoot,
+       travelling ≤ 6px so the motion is felt, not watched. */
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    transition:
+      opacity var(--vct-duration) var(--vct-ease-out),
+      translate var(--vct-duration-slow) var(--vct-ease-pop),
+      scale var(--vct-duration-slow) var(--vct-ease-pop);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 -0.3rem;
+      scale: 0.985;
+    }
+  }
+
+  /* Inside the popover the month view is a *control*, not a document:
+     one surface, no nested card, no rails, tight cells. */
   [data-vct="date-picker-content"] {
     & [data-vct="month-grid"] {
-      /* Set on the descendant so it beats the theme's token sheet, which
-         re-declares --vct-line on the content root itself. */
       --vct-line: transparent;
+      --vct-line-v: transparent;
 
       background: none;
       border: none;
@@ -551,32 +630,10 @@
     }
   }
 
-  [data-vct="date-picker-content"] {
-    padding: 0.875rem;
-    background: var(--vct-card-bg);
-    border: var(--vct-card-border);
-    border-radius: var(--vct-radius);
-    box-shadow: var(--vct-shadow);
-    backdrop-filter: var(--vct-card-filter);
-
-    /* Enter softly: fade + settle, driven by @starting-style. */
-    opacity: 1;
-    translate: 0 0;
-    scale: 1;
-    transition:
-      opacity var(--vct-duration) var(--vct-ease-out),
-      translate var(--vct-duration-slow) var(--vct-ease-pop),
-      scale var(--vct-duration-slow) var(--vct-ease-pop);
-
-    @starting-style {
-      opacity: 0;
-      translate: 0 -0.35rem;
-      scale: 0.98;
-    }
-  }
-
   /* -- focus ---------------------------------------------------------- */
 
+  /* Focus is navigation, not decoration: a 2px accent ring drawn outside
+     the element, identical everywhere, so the eye tracks one signal. */
   [data-vct="day"]:focus-visible,
   [data-vct="event-chip"]:focus-visible,
   [data-vct="allday-event"]:focus-visible,
