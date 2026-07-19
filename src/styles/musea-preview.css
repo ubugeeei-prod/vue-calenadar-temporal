@@ -1,20 +1,21 @@
 /**
- * Gallery-only backdrop (not shipped): the glass theme refracts whatever
- * sits behind it, so the Musea preview panes get a soft gradient to
- * refract instead of a flat void.
+ * Gallery-only backdrop (not shipped). The glass theme refracts what's
+ * behind it, so the preview panes get a quiet aurora keyed to the theme's
+ * 275° ink — low chroma, large soft fields, nothing that competes with
+ * the calendar for attention.
  */
 body {
   min-height: 100vh;
   background:
     radial-gradient(
-      60rem 40rem at 85% -10%,
-      oklch(0.89 0.09 300 / 0.55),
-      transparent 60%
+      55rem 38rem at 82% -12%,
+      oklch(0.9 0.055 300 / 0.5),
+      transparent 62%
     ),
     radial-gradient(
-      50rem 36rem at -10% 110%,
-      oklch(0.9 0.08 200 / 0.5),
-      transparent 60%
+      48rem 34rem at -8% 108%,
+      oklch(0.91 0.05 220 / 0.45),
+      transparent 62%
     ),
-    linear-gradient(160deg, oklch(0.97 0.015 270), oklch(0.94 0.02 240));
+    linear-gradient(165deg, oklch(0.975 0.01 275), oklch(0.945 0.015 250));
 }

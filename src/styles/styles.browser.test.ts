@@ -61,7 +61,7 @@ describe("opt-in stylesheets", () => {
     const root = screen.baseElement.querySelector('[data-vct="root"]');
     const styles = getComputedStyle(root as Element);
     expect(styles.getPropertyValue("--vct-ease-out").trim()).toBe(
-      "cubic-bezier(0.22, 1, 0.36, 1)",
+      "cubic-bezier(0.2, 0.7, 0.1, 1)",
     );
     expect(styles.getPropertyValue("--vct-accent").trim()).not.toBe("");
   });
