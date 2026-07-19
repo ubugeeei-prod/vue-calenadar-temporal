@@ -37,6 +37,10 @@
       "types": "./dist/types/src/index.d.ts",
       "default": "./dist/vapor/index.js"
     },
+    "./full": {
+      "types": "./dist/types/src/index.d.ts",
+      "default": "./dist/full/index.js"
+    },
     "./style.css": "./dist/styles/style.css",
     "./styles/*": "./dist/styles/*",
     "./package.json": "./package.json"
@@ -99,6 +103,11 @@
         "temporal-polyfill-lite"
       ],
       "limit": "9 kB"
+    },
+    {
+      "name": "everything + full-calendar ponyfill (/full)",
+      "path": "dist/full/index.js",
+      "limit": "36 kB"
     }
   ],
   "engines": {

@@ -163,6 +163,29 @@ RTL direction (arrow keys invert), `Intl.ListFormat`ted multi-selections.
 UI strings live in a typed `CalendarMessages` catalog — override any subset,
 or wire it to vue-i18n.
 
+### Calendar systems
+
+Every calendar `Intl` + Temporal know is supported — Hebrew (13-month leap
+years included), Islamic variants, Japanese eras, Buddhist, Persian,
+Indian, Chinese/Dangi, Coptic, Ethiopic, ROC, …:
+
+```html
+<CalendarRoot locale="he-IL" calendar="hebrew" />
+<CalendarRoot locale="ar-SA-u-ca-islamic-umalqura" />
+<!-- via -u-ca- -->
+<CalendarRoot locale="ja-JP" calendar="japanese" />
+<!-- 令和8年7月 -->
+```
+
+Resolution: the `calendar` prop wins, else the locale's `-u-ca-` extension,
+else ISO 8601. **Size stays opt-in**: the default build bundles the lite
+ponyfill (ISO + Gregorian only); for other systems import from the
+full-calendar twin — same API, same types:
+
+```ts
+import { CalendarRoot } from "vue-calendar-temporal/full";
+```
+
 ## Accessibility
 
 APG grid pattern (roving tabindex, arrows / PageUp / PageDown / Shift /

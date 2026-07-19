@@ -8,6 +8,13 @@ import { defineConfig } from "vite-plus";
  * `vp run musea:build`.
  */
 export default defineConfig({
+  resolve: {
+    // The gallery demos every calendar system, so it links the
+    // all-calendars ponyfill — exactly what the published /full entry does.
+    alias: {
+      "temporal-polyfill-lite": "temporal-polyfill-lite/calendars-full",
+    },
+  },
   // Relative asset URLs so the gallery works under any preview subpath
   // (gh-pages serves it at /<repo>/pr/<number>/).
   base: "./",

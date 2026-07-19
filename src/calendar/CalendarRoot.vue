@@ -26,6 +26,7 @@ const {
   modelValue = undefined,
   view = undefined,
   locale = undefined,
+  calendar: calendarSystem = undefined,
   timeZone = undefined,
   firstDayOfWeek = undefined,
   weekendDays = undefined,
@@ -47,6 +48,12 @@ const {
   /** Current view (v-model:view). Omit for internal state. */
   view?: CalendarView;
   locale?: string | Intl.Locale;
+  /**
+   * Temporal calendar system (`"hebrew"`, `"islamic-umalqura"`, …).
+   * Defaults to the locale's `-u-ca-` extension, else ISO 8601. Non-ISO
+   * systems beyond `gregory` need the `vue-calendar-temporal/full` build.
+   */
+  calendar?: string;
   timeZone?: string;
   firstDayOfWeek?: DayOfWeek;
   weekendDays?: readonly DayOfWeek[];
@@ -78,6 +85,7 @@ defineSlots<{
 
 const calendar = useCalendar<Mode>({
   locale: () => locale,
+  calendar: () => calendarSystem,
   timeZone: () => timeZone,
   firstDayOfWeek: () => firstDayOfWeek,
   weekendDays: () => weekendDays,

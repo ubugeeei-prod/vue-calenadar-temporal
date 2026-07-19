@@ -17,7 +17,8 @@ export default defineConfig(({ mode }) => ({
     },
   ],
   build: {
-    outDir: mode === "vapor" ? "dist/vapor" : "dist",
+    outDir:
+      mode === "vapor" ? "dist/vapor" : mode === "full" ? "dist/full" : "dist",
     lib: {
       entry: "src/index.ts",
       formats: ["es"],
@@ -25,6 +26,15 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       external: ["vue", "temporal-polyfill-lite"],
       output: {
+        // The full-calendar build links the same external ponyfill package
+        // at its all-calendars entry — one flag, no source changes.
+        paths:
+          mode === "full"
+            ? {
+                "temporal-polyfill-lite":
+                  "temporal-polyfill-lite/calendars-full",
+              }
+            : undefined,
         // One output module per source module: consumers' bundlers can
         // tree-shake at file granularity (a DatePicker-only app never pays
         // for the week view).
@@ -42,7 +52,23 @@ export default defineConfig(({ mode }) => ({
           name: "unit",
           environment: "node",
           include: ["src/**/*.test.ts"],
-          exclude: ["src/**/*.browser.test.ts"],
+          exclude: ["src/**/*.browser.test.ts", "src/**/*.calendars.test.ts"],
+        },
+      },
+      {
+        extends: true,
+        // Non-ISO calendar coverage runs against the all-calendars ponyfill
+        // — the alias swaps the implementation for every module at once, so
+        // no cross-copy instances can meet.
+        resolve: {
+          alias: {
+            "temporal-polyfill-lite": "temporal-polyfill-lite/calendars-full",
+          },
+        },
+        test: {
+          name: "unit-calendars",
+          environment: "node",
+          include: ["src/**/*.calendars.test.ts"],
         },
       },
       {
@@ -102,7 +128,7 @@ export default defineConfig(({ mode }) => ({
         // SFCs (https://github.com/ubugeeei-prod/vize/issues/3065);
         // finalize-build.mjs asserts the output and patches those two files.
         command:
-          "vp build && vp build --mode vapor && (vize check src --declaration || true) && node tools/finalize-build.mjs",
+          "vp build && vp build --mode vapor && vp build --mode full && (vize check src --declaration || true) && node tools/finalize-build.mjs",
       },
       "musea:build": {
         command: "vp build --config vite.config.musea.ts",

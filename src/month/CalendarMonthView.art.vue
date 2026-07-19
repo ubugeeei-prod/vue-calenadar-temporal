@@ -93,4 +93,36 @@ const events = [
       <CalendarMonthView />
     </CalendarRoot>
   </variant>
+
+  <variant name="Hebrew calendar">
+    <CalendarRoot
+      :today="today"
+      :initial-focused-date="today"
+      locale="he-IL"
+      calendar="hebrew"
+    >
+      <CalendarMonthView />
+    </CalendarRoot>
+  </variant>
+
+  <variant name="Japanese era (令和)">
+    <CalendarRoot
+      :today="today"
+      :initial-focused-date="today"
+      locale="ja-JP"
+      calendar="japanese"
+    >
+      <CalendarMonthView />
+    </CalendarRoot>
+  </variant>
+
+  <variant name="Islamic (Umm al-Qura)">
+    <CalendarRoot
+      :today="today"
+      :initial-focused-date="today"
+      locale="ar-SA-u-ca-islamic-umalqura"
+    >
+      <CalendarMonthView />
+    </CalendarRoot>
+  </variant>
 </art>
