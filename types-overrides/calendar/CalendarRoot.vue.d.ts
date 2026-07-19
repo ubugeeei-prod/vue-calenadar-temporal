@@ -41,6 +41,12 @@ export type CalendarRootProps<
    */
   locale?: string | Intl.Locale;
   /**
+   * Temporal calendar system (`"hebrew"`, `"islamic-umalqura"`, …).
+   *
+   * @default the locale's `-u-ca-` extension, else "iso8601"
+   */
+  calendar?: string;
+  /**
    * IANA time zone used to resolve "today" and absolute event times.
    *
    * @default the system time zone

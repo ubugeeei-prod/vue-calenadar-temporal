@@ -41,6 +41,18 @@ import {
 export type UseCalendarOptions<Mode extends DateSelectionMode = "single"> = {
   /** BCP-47 tag or `Intl.Locale`. Defaults to the runtime locale. */
   readonly locale?: MaybeRefOrGetter<string | Intl.Locale | undefined>;
+  /**
+   * Temporal calendar system for the grids, titles, and day numerals —
+   * `"hebrew"`, `"islamic-umalqura"`, `"japanese"`, `"buddhist"`, ….
+   *
+   * Resolution: this option wins; otherwise a `-u-ca-` unicode extension on
+   * `locale` (e.g. `"he-IL-u-ca-hebrew"`); otherwise ISO 8601. Non-ISO
+   * calendars beyond `gregory` need the full-calendar build — import from
+   * `vue-calendar-temporal/full`.
+   *
+   * @default the locale's `-u-ca-` extension, else "iso8601"
+   */
+  readonly calendar?: MaybeRefOrGetter<string | undefined>;
   /** IANA time zone used to resolve "today" and absolute event times. */
   readonly timeZone?: MaybeRefOrGetter<string | undefined>;
   /** Defaults to the locale's first day of week. */
@@ -75,6 +87,7 @@ export type UseCalendarOptions<Mode extends DateSelectionMode = "single"> = {
 export type UseCalendarReturn<Mode extends DateSelectionMode = "single"> = {
   // --- resolved configuration ---
   readonly locale: ComputedRef<string>;
+  readonly calendar: ComputedRef<string>;
   readonly timeZone: ComputedRef<string>;
   readonly firstDayOfWeek: ComputedRef<DayOfWeek>;
   readonly weekendDays: ComputedRef<readonly DayOfWeek[]>;
@@ -129,7 +142,29 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
   const selectionMode: Mode = options.selectionMode ?? ("single" as Mode);
 
   // --- configuration ---
-  const locale = computed(() => resolveLocale(toValue(options.locale)));
+  const baseLocale = computed(() => resolveLocale(toValue(options.locale)));
+
+  const calendar = computed(() => {
+    const explicit = toValue(options.calendar);
+    if (explicit !== undefined) return explicit;
+
+    // `Intl.Locale#calendar` surfaces only an explicit -u-ca- extension —
+    // exactly the "the caller asked for it" signal we want. Region
+    // defaults stay ISO so week numbers don't silently vanish.
+    return new Intl.Locale(baseLocale.value).calendar ?? "iso8601";
+  });
+
+  /**
+   * The working locale carries the calendar as `-u-ca-`, so every cached
+   * `Intl` formatter downstream renders in the right system for free.
+   */
+  const locale = computed(() =>
+    calendar.value === "iso8601"
+      ? baseLocale.value
+      : new Intl.Locale(baseLocale.value, {
+          calendar: calendar.value,
+        }).toString(),
+  );
   const timeZone = computed(
     () => toValue(options.timeZone) ?? systemTimeZone(),
   );
@@ -147,7 +182,9 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
   const maxDate = computed(() => toValue(options.maxDate));
 
   const setupDate = currentDate(toValue(options.timeZone));
-  const today = computed(() => toValue(options.today) ?? setupDate);
+  const today = computed(() =>
+    (toValue(options.today) ?? setupDate).withCalendar(calendar.value),
+  );
 
   // --- state ---
   const viewState = useControllableState<CalendarView>(
@@ -168,12 +205,21 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
       maxDate.value,
     ),
   );
+
+  /** Focus, materialized in the display calendar for the grids. */
+  const focusedInCalendar = computed(() =>
+    focused.value.withCalendar(calendar.value),
+  );
   const pendingRangeStart = shallowRef<Temporal.PlainDate | null>(null);
   const hovered = shallowRef<Temporal.PlainDate | null>(null);
 
   // --- derived ---
   const visibleRange = computed(() =>
-    periodRange(viewState.state.value, focused.value, firstDayOfWeek.value),
+    periodRange(
+      viewState.state.value,
+      focusedInCalendar.value,
+      firstDayOfWeek.value,
+    ),
   );
 
   const title = computed(() => {
@@ -294,6 +340,7 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
 
   return {
     locale,
+    calendar,
     timeZone,
     firstDayOfWeek,
     weekendDays,
@@ -302,7 +349,7 @@ export function useCalendar<Mode extends DateSelectionMode = "single">(
     selectionMode,
     today,
     view: viewState.state,
-    focusedDate: computed(() => focused.value),
+    focusedDate: focusedInCalendar,
     selected: selectedState.state,
     pendingRangeStart: computed(() => pendingRangeStart.value),
     hoveredDate: computed(() => hovered.value),

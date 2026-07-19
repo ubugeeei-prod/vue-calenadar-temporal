@@ -172,12 +172,15 @@ export const currentDate: currentDate = (timeZone) =>
     : Temporal.Now.plainDateISO(timeZone);
 
 /**
- * Whether two dates fall on the same calendar day.
+ * Whether two dates mark the same day.
  *
- * Value equality — two distinct `PlainDate` instances for 2026-07-18 are
- * the same day.
+ * Calendar-independent: a Hebrew-calendar date and an ISO date that name
+ * the same day of history are the same day (`equals` would say no, because
+ * it also compares the calendar). Selection state can therefore live in
+ * one calendar while the grid renders another.
  */
-export const isSameDay: isSameDay = (a, b) => a.equals(b);
+export const isSameDay: isSameDay = (a, b) =>
+  Temporal.PlainDate.compare(a, b) === 0;
 
 /**
  * Whether two dates fall in the same month of the same year.

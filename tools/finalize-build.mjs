@@ -20,6 +20,8 @@ const OVERRIDES_ROOT = path.resolve("types-overrides");
 const STYLES_SOURCE = path.resolve("src/styles");
 const STYLES_TARGET = path.resolve("dist/styles");
 
+const REQUIRED_DIST = ["../../full/index.js", "../../vapor/index.js"];
+
 const REQUIRED = [
   "index.d.ts",
   "calendar/CalendarRoot.vue.d.ts",
@@ -107,6 +109,15 @@ async function copyStyles() {
   }
 
   console.log(`[finalize-build] stylesheets minified: ${totalBytes} B total`);
+}
+
+for (const relative of REQUIRED_DIST) {
+  try {
+    await stat(path.join(TYPES_ROOT, relative));
+  } catch {
+    console.error(`[finalize-build] missing build output: ${relative}`);
+    process.exit(1);
+  }
 }
 
 await assertRequiredOutput();
